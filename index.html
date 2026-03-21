@@ -1,0 +1,2075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCF Canada — 12-Week CLB 5 Study Plan</title>
+<style>
+  :root {
+    --blue: #1a56db;
+    --blue-light: #e8f0fe;
+    --green: #057a55;
+    --green-light: #def7ec;
+    --yellow: #c27803;
+    --yellow-light: #fdf6b2;
+    --red: #c81e1e;
+    --red-light: #fde8e8;
+    --purple: #6c2bd9;
+    --purple-light: #edebfe;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --dark: #111827;
+    --card-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: var(--dark); }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #1a56db 0%, #6c2bd9 100%); color: white; padding: 28px 32px; }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .header p { opacity: 0.85; font-size: 14px; }
+  .header-stats { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .stat-chip { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 500; }
+
+  /* Progress Bar */
+  .progress-section { background: white; padding: 20px 32px; border-bottom: 1px solid #e5e7eb; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray); margin-bottom: 8px; }
+  .progress-bar { height: 10px; background: #e5e7eb; border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #1a56db, #6c2bd9); border-radius: 10px; transition: width 0.4s ease; }
+
+  /* Navigation */
+  .week-nav { background: white; border-bottom: 1px solid #e5e7eb; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }
+  .week-nav::-webkit-scrollbar { height: 3px; }
+  .week-nav::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  .week-btn { padding: 14px 12px; border: none; background: none; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--gray); white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; position: relative; }
+  .week-btn:hover { color: var(--blue); }
+  .week-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .week-btn.completed { color: var(--green); }
+  .week-btn.completed::after { content: '✓'; position: absolute; top: 8px; right: 4px; font-size: 10px; color: var(--green); }
+
+  /* Main content */
+  .main { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Phase badge */
+  .phase-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+  .phase-foundation { background: var(--green-light); color: var(--green); }
+  .phase-building { background: var(--yellow-light); color: var(--yellow); }
+  .phase-readiness { background: var(--red-light); color: var(--red); }
+
+  /* Week header card */
+  .week-header { background: white; border-radius: 12px; padding: 24px; box-shadow: var(--card-shadow); margin-bottom: 20px; }
+  .week-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .week-theme { color: var(--gray); font-size: 15px; margin-bottom: 16px; }
+  .week-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .meta-tag { background: var(--blue-light); color: var(--blue); padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; }
+  .meta-tag.video { background: var(--purple-light); color: var(--purple); }
+  .meta-tag.grammar { background: var(--gray-light); color: var(--dark); }
+
+  /* Section cards */
+  .card { background: white; border-radius: 12px; padding: 20px; box-shadow: var(--card-shadow); margin-bottom: 16px; }
+  .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-title .icon { font-size: 18px; }
+
+  /* Day accordion */
+  .day-section { border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+  .day-header { padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: var(--gray-light); transition: background 0.2s; user-select: none; }
+  .day-header:hover { background: #e9ecf0; }
+  .day-header.completed-day { background: var(--green-light); }
+  .day-name { font-weight: 600; font-size: 14px; flex: 1; }
+  .day-time { font-size: 12px; color: var(--gray); }
+  .day-check { font-size: 16px; margin-left: auto; }
+  .day-tasks { padding: 16px; display: none; border-top: 1px solid #e5e7eb; }
+  .day-tasks.open { display: block; }
+
+  /* Task items */
+  .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; transition: background 0.15s; cursor: pointer; }
+  .task-item:hover { background: var(--gray-light); }
+  .task-item.done { opacity: 0.6; }
+  .task-item.done .task-text { text-decoration: line-through; }
+  .task-checkbox { width: 20px; height: 20px; border: 2px solid #d1d5db; border-radius: 5px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .task-item.done .task-checkbox { background: var(--green); border-color: var(--green); }
+  .task-checkbox::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; display: none; }
+  .task-item.done .task-checkbox::after { display: block; }
+  .task-time-badge { background: var(--blue-light); color: var(--blue); border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+  .task-text { font-size: 13px; line-height: 1.5; }
+
+  /* Vocabulary section */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .vocab-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: all 0.2s; position: relative; }
+  .vocab-card:hover { border-color: var(--blue); background: var(--blue-light); }
+  .vocab-card.revealed .vocab-translation { display: block; }
+  .vocab-card.revealed { background: var(--green-light); border-color: var(--green); }
+  .vocab-french { font-weight: 600; font-size: 14px; }
+  .vocab-translation { font-size: 12px; color: var(--gray); margin-top: 2px; display: none; }
+  .vocab-hint { font-size: 10px; color: var(--gray); text-align: right; margin-top: 4px; }
+
+  /* Quiz section */
+  .quiz-container { }
+  .quiz-prompt { font-size: 22px; font-weight: 700; text-align: center; padding: 24px; background: var(--blue-light); border-radius: 10px; margin-bottom: 16px; color: var(--blue); }
+  .quiz-input { width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 16px; outline: none; text-align: center; transition: border-color 0.2s; }
+  .quiz-input:focus { border-color: var(--blue); }
+  .quiz-input.correct { border-color: var(--green); background: var(--green-light); }
+  .quiz-input.wrong { border-color: var(--red); background: var(--red-light); }
+  .quiz-buttons { display: flex; gap: 10px; margin-top: 12px; justify-content: center; }
+  .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #1447c7; }
+  .btn-secondary { background: var(--gray-light); color: var(--dark); }
+  .btn-secondary:hover { background: #e5e7eb; }
+  .btn-success { background: var(--green); color: white; }
+  .quiz-score { text-align: center; font-size: 14px; color: var(--gray); margin-top: 8px; }
+  .quiz-feedback { text-align: center; font-size: 14px; padding: 8px; border-radius: 6px; margin-top: 8px; font-weight: 500; }
+  .quiz-feedback.correct { background: var(--green-light); color: var(--green); }
+  .quiz-feedback.wrong { background: var(--red-light); color: var(--red); }
+  .quiz-progress-bar { height: 6px; background: #e5e7eb; border-radius: 6px; margin-top: 10px; }
+  .quiz-progress-fill { height: 100%; background: var(--green); border-radius: 6px; transition: width 0.3s; }
+
+  /* TCF Prompts */
+  .tcf-prompt { background: var(--yellow-light); border-left: 4px solid var(--yellow); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 12px; }
+  .tcf-prompt-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--yellow); margin-bottom: 6px; }
+  .tcf-prompt-text { font-size: 14px; font-weight: 500; }
+  .tcf-tip { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; }
+  .tcf-tip-label { font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Checklist */
+  .checklist-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+  .checklist-item:last-child { border-bottom: none; }
+
+  /* Complete week button */
+  .complete-week-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #057a55, #065f46); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .complete-week-btn:hover { opacity: 0.9; }
+  .complete-week-btn.completed { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+  /* Reset button */
+  .reset-btn { background: none; border: 1px solid #e5e7eb; color: var(--gray); padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+  .reset-btn:hover { background: var(--gray-light); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; }
+    .main { padding: 16px 10px; }
+    .vocab-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
+  .tab-btn { padding: 10px 18px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .onboarding-card { background: linear-gradient(135deg, #1a56db, #6c2bd9); color: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .onboarding-card h3 { font-size: 18px; margin-bottom: 8px; }
+  .onboarding-card p { opacity: 0.9; font-size: 14px; line-height: 1.6; }
+  .golden-rules { background: var(--yellow-light); border-radius: 10px; padding: 16px 20px; margin-top: 16px; }
+  .golden-rules h4 { color: var(--yellow); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .rule-item { font-size: 13px; padding: 5px 0; display: flex; gap: 8px; align-items: flex-start; }
+
+  .hidden { display: none; }
+  .week-complete-banner { background: var(--green-light); border: 1px solid #a7f3d0; border-radius: 10px; padding: 16px; text-align: center; color: var(--green); font-weight: 600; margin-bottom: 16px; }
+  /* Links */
+  .ext-link { color: var(--blue); font-weight: 600; text-decoration: none; border-bottom: 1px dashed currentColor; font-size: inherit; }
+  .ext-link:hover { opacity: 0.75; }
+  .res-bar { display: flex; flex-wrap: wrap; gap: 7px; padding: 12px 14px; background: #f5f3ff; border: 1px solid #e0d9ff; border-radius: 10px; margin-bottom: 16px; align-items: center; }
+  .res-bar-label { font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 2px; flex-basis: 100%; }
+  .res-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 20px; font-size: 12px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; white-space: nowrap; }
+  .res-chip:hover { opacity: 0.8; }
+  .res-chip.video { background: #fce7f3; color: #9d174d; }
+  .res-chip.doc   { background: var(--blue-light); color: #1e40af; }
+  .res-chip.pdf   { background: var(--red-light); color: #991b1b; }
+  .res-chip.ext   { background: var(--green-light); color: #065f46; }
+  /* Sync bar */
+  .sync-bar { background: #0f172a; padding: 8px 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sync-bar span { color: #94a3b8; font-size: 12px; }
+  .sync-btn { padding: 5px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: opacity 0.2s; }
+  .sync-btn:hover { opacity: 0.85; }
+  .sync-btn.export { background: #22c55e; color: white; }
+  .sync-btn.import { background: #3b82f6; color: white; }
+  .sync-btn.settings { background: #8b5cf6; color: white; margin-left: auto; }
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 14px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: white; z-index: 1; }
+  .modal-header h3 { font-size: 17px; font-weight: 700; }
+  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--gray); line-height: 1; }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer { padding: 14px 24px; border-top: 1px solid #e5e7eb; display: flex; gap: 10px; justify-content: flex-end; background: #f9fafb; border-radius: 0 0 14px 14px; }
+  .modal-section { margin-bottom: 20px; }
+  .modal-section h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); margin-bottom: 10px; }
+  .drive-input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .drive-input-label { font-size: 12px; color: var(--dark); font-weight: 500; min-width: 120px; flex-shrink: 0; }
+  .drive-input { flex: 1; padding: 7px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 12px; outline: none; }
+  .drive-input:focus { border-color: var(--blue); }
+  .drive-input.has-link { border-color: var(--green); background: var(--green-light); }
+  .info-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #1e40af; line-height: 1.5; margin-bottom: 16px; }
+  .info-box strong { display: block; margin-bottom: 4px; }
+  /* Toast */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 2000; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🇫🇷 TCF Canada — CLB 5 Study Plan</h1>
+  <p>Starter to CLB 5 · Pass TCF with Esme · 12 Weeks · 12 Hours/Week</p>
+  <div class="header-stats">
+    <div class="stat-chip">📅 12 Weeks</div>
+    <div class="stat-chip">🎬 12 Video Tutorials</div>
+    <div class="stat-chip">📚 24 Coaching Sessions</div>
+    <div class="stat-chip">🎯 Target: CLB 5</div>
+    <a id="onboard-link" href="#" target="_blank" class="stat-chip" style="background:rgba(255,255,255,0.25);text-decoration:none;">▶ Watch Onboarding Video</a>
+  </div>
+</div>
+
+<!-- Sync Bar -->
+<div class="sync-bar">
+  <span>📲 Cross-device sync:</span>
+  <button class="sync-btn export" onclick="exportProgress()">⬆ Export Progress</button>
+  <button class="sync-btn import" onclick="importProgress()">⬇ Import Progress</button>
+  <button class="sync-btn settings" onclick="openSettings()">⚙️ Google Drive Links</button>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)closeSettings()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>⚙️ Configure Google Drive Links</h3>
+      <button class="modal-close" onclick="closeSettings()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="info-box">
+        <strong>Why do this?</strong>
+        When you open this dashboard on your phone or any device other than your home computer, the local file links won't work. Paste your Google Drive share links here once, and they'll work everywhere — on mobile, tablet, any browser.
+        <br><br>In Google Drive: right-click each file → <em>Share</em> → <em>Anyone with the link</em> → copy the link.
+      </div>
+      <div class="modal-section">
+        <h4>🎬 Videos</h4>
+        <div id="drive-video-inputs"></div>
+      </div>
+      <div class="modal-section">
+        <h4>📄 Documents &amp; Resources</h4>
+        <div id="drive-doc-inputs"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="clearDriveLinks()">Clear All</button>
+      <button class="btn btn-primary" onclick="saveDriveLinks()">Save Links</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<div class="progress-section">
+  <div class="progress-label">
+    <span>Overall Progress</span>
+    <span id="progress-text">0 / 12 weeks complete</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
+</div>
+
+<div class="week-nav" id="week-nav">
+  <!-- Buttons added by JS -->
+</div>
+
+<div class="main">
+  <div id="week-content"></div>
+</div>
+
+<script>
+// ============================================================
+// RESOURCE PATHS & LINKS
+// ============================================================
+const B = 'computer:///sessions/serene-optimistic-pascal/mnt/Edison%20Espinoza';
+const V = {
+  onboard: `${B}/TCF%20Videos/Onboarding%20Intro%20video.mp4`,
+  v1:  `${B}/TCF%20Videos/Video%201.mp4`,
+  v2:  `${B}/TCF%20Videos/Video%202.mp4`,
+  v3:  `${B}/TCF%20Videos/Video%203.mp4`,
+  v4:  `${B}/TCF%20Videos/Video%204.mp4`,
+  v5:  `${B}/TCF%20Videos/Video%205.mp4`,
+  v6:  `${B}/TCF%20Videos/Video%206.mp4`,
+  v7:  `${B}/TCF%20Videos/Video%207%20Listening%20Masterclass.mp4`,
+  v8:  `${B}/TCF%20Videos/Video%208%20Reading%20Made%20Simple.mp4`,
+  v910:`${B}/TCF%20Videos/Video%209%2610%20Writing%20TCF%20Masterclass.mp4`,
+  v11: `${B}/TCF%20Videos/Video%2011%20TCF%20Speaking%20Masterclass.mp4`,
+};
+const D = {
+  vocab:    `${B}/Digital%20Study%20Resources/TCF_CLB5_Vital_Verbs_and_Vocabulary-2.pdf`,
+  verbs:    `${B}/Digital%20Study%20Resources/clb5_verbs_worksheet.docx`,
+  reflexive:`${B}/Digital%20Study%20Resources/french_reflexive_verbs.docx`,
+  speaking: `${B}/Digital%20Study%20Resources/CLB5%20TEF%20Speaking%20template.docx`,
+  plan:     `${B}/Personalised%20Study%20Plan/12%20Week%20Personalised%20TCF%20Study%20Plan.docx`,
+  coaching: `${B}/12%20Week%20Programme%20Plan%20%26%20Lessons/12-WEEK%20TCF%20GROUP%20COACHING%20PLAN.docx`,
+  slides:   `${B}/12%20Week%20Programme%20Plan%20%26%20Lessons/12-Week-French-TCF%20Course.pptx`,
+};
+const EXT = {
+  tv5:      'https://apprendre.tv5monde.com/',
+  rfi:      'https://savoirs.rfi.fr/',
+  bdf:      'https://www.bonjourdefrance.com/',
+  anki:     'https://ankiweb.net/',
+  quizlet:  'https://quizlet.com/',
+  duolingo: 'https://www.duolingo.com/',
+  speechling:'https://speechling.com/',
+  tcfsite:  'https://www.france-education-international.fr/en/tool/tcf-canada',
+  youtube:  'https://www.youtube.com/',
+  lapresse: 'https://www.lapresse.ca/',
+  lemonde:  'https://www.lemonde.fr/',
+  indeed:   'https://www.indeed.fr/',
+};
+
+// Per-week resources bar (shown above daily tasks)
+const weekRes = {
+  1:  [ {l:'▶ Video 1',    h:V.v1,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'} ],
+  2:  [ {l:'▶ Video 2',    h:V.v2,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'} ],
+  3:  [ {l:'▶ Video 3',    h:V.v3,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'} ],
+  4:  [ {l:'▶ Video 4',    h:V.v4,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'} ],
+  5:  [ {l:'▶ Video 5',    h:V.v5,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'} ],
+  6:  [ {l:'▶ Video 6',    h:V.v6,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'} ],
+  7:  [ {l:'▶ Video 7 – Listening', h:V.v7,  c:'video'}, {l:'📄 Reflexive Verbs Doc',h:D.reflexive,c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab,c:'pdf'} ],
+  8:  [ {l:'▶ Video 8 – Reading',   h:V.v8,  c:'video'}, {l:'📘 Vocab & Verbs PDF',  h:D.vocab,   c:'pdf'} ],
+  9:  [ {l:'▶ Video 9&10 – Writing',h:V.v910,c:'video'}, {l:'📝 Speaking Template',  h:D.speaking,c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab,c:'pdf'} ],
+  10: [ {l:'▶ Video 9&10 – Writing',h:V.v910,c:'video'}, {l:'📝 Speaking Template',  h:D.speaking,c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab,c:'pdf'} ],
+  11: [ {l:'▶ Video 11 – Speaking', h:V.v11, c:'video'}, {l:'📝 Speaking Template',  h:D.speaking,c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab,c:'pdf'} ],
+  12: [ {l:'📝 Speaking Template',  h:D.speaking,c:'doc'}, {l:'📘 Vocab & Verbs PDF', h:D.vocab,   c:'pdf'}, {l:'📋 Full Study Plan',   h:D.plan,    c:'doc'} ],
+};
+
+function linkify(t) {
+  return t
+    .replace(/TV5Monde/g,       `<a href="${EXT.tv5}"       target="_blank" class="ext-link">TV5Monde ↗</a>`)
+    .replace(/tv5monde\.com\/apprendre/g, `<a href="${EXT.tv5}" target="_blank" class="ext-link">tv5monde.com/apprendre ↗</a>`)
+    .replace(/RFI Savoirs/g,    `<a href="${EXT.rfi}"       target="_blank" class="ext-link">RFI Savoirs ↗</a>`)
+    .replace(/savoirs\.rfi\.fr/g,`<a href="${EXT.rfi}"      target="_blank" class="ext-link">savoirs.rfi.fr ↗</a>`)
+    .replace(/bonjourdefrance\.com/g,`<a href="${EXT.bdf}"  target="_blank" class="ext-link">bonjourdefrance.com ↗</a>`)
+    .replace(/Bonjour de France/g,`<a href="${EXT.bdf}"     target="_blank" class="ext-link">Bonjour de France ↗</a>`)
+    .replace(/\bAnki\b/g,       `<a href="${EXT.anki}"      target="_blank" class="ext-link">Anki ↗</a>`)
+    .replace(/ankiweb\.net/g,   `<a href="${EXT.anki}"      target="_blank" class="ext-link">ankiweb.net ↗</a>`)
+    .replace(/\bQuizlet\b/g,    `<a href="${EXT.quizlet}"   target="_blank" class="ext-link">Quizlet ↗</a>`)
+    .replace(/\bDuolingo\b/g,   `<a href="${EXT.duolingo}"  target="_blank" class="ext-link">Duolingo ↗</a>`)
+    .replace(/\bSpeechling\b/g, `<a href="${EXT.speechling}"target="_blank" class="ext-link">Speechling ↗</a>`)
+    .replace(/france-education-international\.fr/g,`<a href="${EXT.tcfsite}" target="_blank" class="ext-link">france-education-international.fr ↗</a>`)
+    .replace(/\bYouTube\b/g,    `<a href="${EXT.youtube}"   target="_blank" class="ext-link">YouTube ↗</a>`)
+    .replace(/lapresse\.ca/g,   `<a href="${EXT.lapresse}"  target="_blank" class="ext-link">lapresse.ca ↗</a>`)
+    .replace(/lemonde\.fr/g,    `<a href="${EXT.lemonde}"   target="_blank" class="ext-link">lemonde.fr ↗</a>`)
+    .replace(/indeed\.fr/g,     `<a href="${EXT.indeed}"    target="_blank" class="ext-link">indeed.fr ↗</a>`);
+}
+
+function buildResBar(weekNum) {
+  const files = weekRes[weekNum];
+  if (!files) return '';
+  // Map each chip's href through resolveLink so Drive links override computer:// links
+  const keyMap = {
+    'v1':'v1','v2':'v2','v3':'v3','v4':'v4','v5':'v5','v6':'v6',
+    'v7':'v7','v8':'v8','v910':'v910','v11':'v11',
+    'vocab':'vocab','verbs':'verbs','reflexive':'reflexive',
+    'speaking':'speaking','plan':'plan'
+  };
+  const chips = files.map(f => {
+    // Detect which driveKey this chip uses by matching the href to V/D
+    let driveKey = null;
+    for (const [k, v] of Object.entries({...V,...D})) { if (v === f.h) { driveKey = k; break; } }
+    const href = driveKey ? resolveLink(f.h, driveKey) : f.h;
+    const dl = getDriveLinks();
+    const hasDrive = driveKey && dl[driveKey];
+    const badge = hasDrive ? ' 🔗' : '';
+    return `<a href="${href}" target="_blank" class="res-chip ${f.c}" title="${hasDrive ? 'Google Drive link' : 'Local file'}">${f.l}${badge}</a>`;
+  }).join('');
+  return `<div class="res-bar"><span class="res-bar-label">📁 Your Files & Resources</span>${chips}
+    <a href="${EXT.tv5}"        target="_blank" class="res-chip ext">🌐 TV5Monde</a>
+    <a href="${EXT.rfi}"        target="_blank" class="res-chip ext">🎧 RFI Savoirs</a>
+    <a href="${EXT.bdf}"        target="_blank" class="res-chip ext">📖 Bonjour de France</a>
+    <a href="${EXT.anki}"       target="_blank" class="res-chip ext">🃏 Anki</a>
+    <a href="${EXT.tcfsite}"    target="_blank" class="res-chip ext">🎯 TCF Canada Samples</a>
+  </div>`;
+}
+
+// ============================================================
+// DATA
+// ============================================================
+const weeks = [
+  {
+    number: 1,
+    title: "Bonjour! Foundations of French",
+    theme: "Introductions & the Alphabet",
+    phase: "foundation",
+    phaseLabel: "Foundation Phase — CLB 1–2",
+    video: "Video 1: The French Sound System — Pronunciation That Actually Clicks",
+    grammar: "Subject pronouns + être | Greetings, numbers 1–100, nationalities",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 1 on Google Drive: 'The French Sound System'. Pause and repeat each pronunciation example aloud." },
+          { time: "30 min", text: "Study this week's 30 vocabulary words. Read each French word aloud, then cover the English and test yourself." },
+          { time: "20 min", text: "Anki / Quizlet: Create your Week 1 flashcard deck with all 30 words. Do your first review pass." },
+          { time: "10 min", text: "Listen to a short French greeting dialogue on YouTube (search: 'dialogues en français débutant'). Repeat phrases." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "20 min", text: "Study the verb être (to be): je suis, tu es, il/elle est, nous sommes, vous êtes, ils/elles sont. Write it from memory 3 times." },
+          { time: "20 min", text: "Go to bonjourdefrance.com → Grammar → Verbs → Être. Read the lesson and complete 2 exercises." },
+          { time: "30 min", text: "TCF SPEAKING PRACTICE — Task A (Oral): Record yourself introducing yourself in French (1.5 min). Use être + subject pronouns." },
+          { time: "20 min", text: "Vocabulary review: Cover the French column and write the French for all 30 words. Score yourself." },
+          { time: "10 min", text: "Anki review: complete today's due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "25 min", text: "TV5Monde (tv5monde.com/apprendre) → Débutant A1 → find a listening activity about greetings or introductions." },
+          { time: "20 min", text: "Numbers 1–100: practise counting out loud. Write the French for: 15, 27, 43, 56, 78, 91." },
+          { time: "25 min", text: "TCF READING PRACTICE: Read a short French introduction text and answer comprehension questions." },
+          { time: "20 min", text: "Vocabulary review: Anki due cards + re-test yourself on any words you got wrong yesterday." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "TCF WRITING PRACTICE — Task 1: Write a short message (60–70 words) introducing yourself to a French pen pal." },
+          { time: "20 min", text: "Grammar focus: Numbers as full words. Write out in French: twenty-two, thirty-five, forty-eight, sixty-three, eighty-one." },
+          { time: "20 min", text: "Go to RFI Savoirs (savoirs.rfi.fr) → find an A1 listening activity. Listen twice and write 3 key words you caught." },
+          { time: "20 min", text: "Vocabulary: Final review of all 30 words before Friday's mini-test. Use the cover-test-check method." },
+          { time: "10 min", text: "Anki due cards review." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "TCF SPEAKING PRACTICE — TCF Oral Task 1 (Monologue): PROMPT: 'Présentez-vous.' Record yourself for 1.5 minutes. Replay and self-evaluate." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover the French column completely. Write the French for all 20 test words. Score yourself out of 20." },
+          { time: "25 min", text: "Reading consolidation: Find a very short French text on TV5Monde. Identify 5 words you know and 3 you don't. Look up the 3 new ones." },
+          { time: "20 min", text: "Reflection journal: Write 3–4 sentences in French about your week. Use être and vocabulary you've learned." },
+          { time: "10 min", text: "Anki due cards. Well done — you've completed Week 1!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch any part of Video 1 that you found challenging. Focus especially on the nasal sounds." },
+          { time: "20 min", text: "Duolingo or Quizlet: Complete 2 French sessions at beginner level. Focus on greetings and introductions." },
+          { time: "20 min", text: "BONUS — Cultural connection: Watch a 5-minute YouTube video about daily life in France or Québec in English or with French subtitles." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "bonjour", en: "hello / good morning" },
+      { fr: "bonsoir", en: "good evening" },
+      { fr: "au revoir", en: "goodbye" },
+      { fr: "s'il te plaît", en: "please (informal)" },
+      { fr: "s'il vous plaît", en: "please (formal)" },
+      { fr: "merci", en: "thank you" },
+      { fr: "excusez-moi", en: "excuse me (formal)" },
+      { fr: "je suis", en: "I am" },
+      { fr: "il / elle est", en: "he / she is" },
+      { fr: "vous êtes", en: "you are (formal/plural)" },
+      { fr: "tu es", en: "you are (informal)" },
+      { fr: "je m'appelle...", en: "my name is..." },
+      { fr: "canadien(ne)", en: "Canadian" },
+      { fr: "anglais(e)", en: "English" },
+      { fr: "professeur", en: "teacher" },
+      { fr: "une femme", en: "a woman" },
+      { fr: "la ville", en: "the city" },
+      { fr: "j'habite à...", en: "I live in..." },
+      { fr: "enchanté(e)", en: "pleased to meet you" },
+      { fr: "très bien, merci", en: "very well, thank you" }
+    ],
+    tcfWriting: "Write a short profile (60–70 words) about yourself for a French language exchange website.",
+    tcfSpeaking: "TCF Oral Task 1 — 'Présentez-vous.' (1.5 minutes). Structure: name → age → nationality → city → job → one hobby.",
+    examTip: "Use the structure: name → age → nationality → city → job → one hobby. Speak clearly and don't rush!"
+  },
+  {
+    number: 2,
+    title: "Ma Famille et Mes Amis",
+    theme: "Family & Relationships",
+    phase: "foundation",
+    phaseLabel: "Foundation Phase — CLB 1–2",
+    video: "Video 2: Être & Avoir — The Two Verbs That Run the French Language",
+    grammar: "Avoir + articles + adjective agreement | Family, physical descriptions, relationships",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 2 on Google Drive: 'Être & Avoir'. Pause after each conjugation and write it down." },
+          { time: "30 min", text: "Study all 30 vocabulary words. Focus on family members first (10 words), then descriptive adjectives (10 words), then relationships (10 words)." },
+          { time: "20 min", text: "Add all 30 words to your Anki/Quizlet deck. Include the article (le/la/les) with each noun." },
+          { time: "10 min", text: "Draw your own family tree in French — label every person with their relationship name." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "20 min", text: "Study avoir conjugation: j'ai, tu as, il/elle a, nous avons, vous avez, ils/elles ont. Write it 3 times from memory." },
+          { time: "20 min", text: "Articles revision: un/une (indefinite) vs le/la/les (definite). Rule: use le/la/les for specific things. Write 6 examples." },
+          { time: "30 min", text: "Adjective agreement: French adjectives change by gender/number. Practise with: grand/grande, petit/petite, gentil/gentille." },
+          { time: "20 min", text: "Vocabulary review: Cover French column, write French for all 30 words. Score yourself." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "25 min", text: "TV5Monde → A1 → find a family-themed listening activity. Complete it. Write down 5 new words you hear." },
+          { time: "25 min", text: "TCF READING PRACTICE: Read the text 'Je m'appelle Karim. J'ai une grande famille...' and answer comprehension questions." },
+          { time: "20 min", text: "Possessive adjectives practice: Complete sentences with mon/ma/mes, ton/ta/tes, son/sa/ses." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "90 min",
+        tasks: [
+          { time: "35 min", text: "TCF WRITING PRACTICE — Task 1: Write a short message (65–75 words) to a French friend describing your family." },
+          { time: "25 min", text: "Bonjour de France → Grammar → Adjectives → complete 2 exercises on adjective agreement." },
+          { time: "20 min", text: "Speaking preparation: Plan your family description using the words: Il/Elle s'appelle..., Il/Elle a...ans, Il/Elle est..." },
+          { time: "10 min", text: "Vocabulary review: Anki due cards. Focus on adjective pairs (masculine/feminine)." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "TCF SPEAKING PRACTICE — Task 2: PROMPT: 'Décrivez un membre de votre famille.' Record for 2 minutes using avoir + adjectives." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover French column. Write all 30 words from memory. Score: __ /20. Target: 16+." },
+          { time: "25 min", text: "Consolidation: Write a paragraph (60–80 words) called 'Ma famille idéale'. Use avoir, être and adjectives." },
+          { time: "10 min", text: "Anki due cards. Week 2 complete!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch Video 2 focusing on avoir. Write out the full conjugation 3 times from memory." },
+          { time: "20 min", text: "Duolingo: 2 sessions on family vocabulary and descriptions." },
+          { time: "20 min", text: "BONUS: Find a French celebrity. Read their biography in French (Wikipedia in French). Identify family vocabulary." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "le père / la mère", en: "father / mother" },
+      { fr: "le mari / la femme", en: "husband / wife" },
+      { fr: "le fils / la fille", en: "son / daughter" },
+      { fr: "le frère / la sœur", en: "brother / sister" },
+      { fr: "les enfants", en: "the children" },
+      { fr: "les grands-parents", en: "grandparents" },
+      { fr: "j'ai", en: "I have" },
+      { fr: "il / elle a", en: "he / she has" },
+      { fr: "mon / ma / mes", en: "my (m./f./pl.)" },
+      { fr: "son / sa / ses", en: "his/her (m./f./pl.)" },
+      { fr: "ton / ta / tes", en: "your (m./f./pl.)" },
+      { fr: "petit(e)", en: "small / short" },
+      { fr: "jeune", en: "young" },
+      { fr: "gentil(le)", en: "kind / nice" },
+      { fr: "drôle", en: "funny" },
+      { fr: "les cheveux blonds", en: "blonde hair" },
+      { fr: "un ami / une amie", en: "a friend (m./f.)" },
+      { fr: "marié(e)", en: "married" },
+      { fr: "il / elle a l'air", en: "he/she seems / looks" },
+      { fr: "la famille nombreuse", en: "large family" }
+    ],
+    tcfWriting: "Write a short paragraph (65–75 words) about your family for a French language partner website.",
+    tcfSpeaking: "TCF Oral Task 2 — 'Décrivez un membre de votre famille.' (2 minutes). Structure: name → age → appearance → personality → job → relationship.",
+    examTip: "Structure: name → age → appearance → personality → job → what you like doing together."
+  },
+  {
+    number: 3,
+    title: "Au Quotidien",
+    theme: "Daily Routines & Time",
+    phase: "foundation",
+    phaseLabel: "Foundation Phase — CLB 1–2",
+    video: "Video 3: Daily Routine in French — Build Sentences from Day 1",
+    grammar: "Regular -ER verbs, negation (ne...pas), question words | Daily activities, time expressions",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 3 on Google Drive: 'Daily Routine in French'. Follow along and say EVERY sentence aloud after the speaker." },
+          { time: "30 min", text: "Study 30 vocabulary words. Group them: VERBS (1–12), TIME (13–20), FREQUENCY (21–30)." },
+          { time: "20 min", text: "Add all 30 words to Anki. For verbs, add the 'je' form conjugation on the back of the card." },
+          { time: "10 min", text: "-ER verb rule: Remove -ER, add: -e, -es, -e, -ons, -ez, -ent. Write the full conjugation of 'parler' from memory." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "Conjugate these 5 verbs in full (all 6 forms): parler, écouter, regarder, aimer, habiter." },
+          { time: "20 min", text: "Negation: ne...pas. Rule: ne goes before the verb, pas goes after. Write 8 negative sentences about your routine." },
+          { time: "25 min", text: "Bonjour de France → -ER verbs → complete 2 exercises. Check answers carefully." },
+          { time: "20 min", text: "Time practice: Write the French for these times: 7:00, 9:30, 12:15, 3:45, 6:30, 11:00." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "25 min", text: "TV5Monde → A1 → find a daily routine listening activity. Complete it. Try to identify 5 verbs you know." },
+          { time: "30 min", text: "TCF READING PRACTICE: Read 'Je m'appelle Laura. Je me lève à 7 heures...' and answer true/false questions." },
+          { time: "15 min", text: "Frequency adverbs: Write a sentence for each one — toujours, souvent, parfois, rarement, jamais." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "35 min", text: "TCF WRITING PRACTICE — Task 1: PROMPT: A French friend asks you to describe a typical day. Write 70–80 words." },
+          { time: "25 min", text: "Question words practice: Quand (when), où (where), qui (who), qu'est-ce que (what). Write 2 questions with each." },
+          { time: "20 min", text: "Speaking preparation: Plan your oral answer for tomorrow using these questions: Quand est-ce que tu te lèves? Qu'est-ce que tu manges?" },
+          { time: "10 min", text: "Vocabulary review: Anki due cards. Focus on frequency adverbs — essential for TCF." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "TCF SPEAKING PRACTICE — Task 1 (Monologue): PROMPT: 'Décrivez votre journée typique.' Record for 1.5–2 minutes." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover French column. Write all 30 words. Score: __ /20. Target: 16+." },
+          { time: "25 min", text: "Consolidation: RFI Savoirs → find a short audio about someone's daily life. Listen twice." },
+          { time: "10 min", text: "Anki due cards. Week 3 done!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch Video 3. This time, pause after every sentence and say it from memory before pressing play again." },
+          { time: "20 min", text: "Duolingo: 2 sessions focused on daily activities and time." },
+          { time: "20 min", text: "BONUS: Find a French vlogger on YouTube who films their morning routine ('ma routine matinale'). Watch with French subtitles." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "se lever", en: "to get up" },
+      { fr: "se doucher", en: "to shower" },
+      { fr: "s'habiller", en: "to get dressed" },
+      { fr: "manger", en: "to eat" },
+      { fr: "travailler", en: "to work" },
+      { fr: "parler", en: "to speak" },
+      { fr: "écouter", en: "to listen" },
+      { fr: "regarder", en: "to watch" },
+      { fr: "aimer", en: "to like / love" },
+      { fr: "habiter", en: "to live" },
+      { fr: "rentrer", en: "to come/go back home" },
+      { fr: "le matin", en: "the morning" },
+      { fr: "l'après-midi", en: "the afternoon" },
+      { fr: "le soir", en: "the evening" },
+      { fr: "il est ... heures", en: "it is ... o'clock" },
+      { fr: "et quart", en: "quarter past" },
+      { fr: "toujours", en: "always" },
+      { fr: "souvent", en: "often" },
+      { fr: "parfois", en: "sometimes" },
+      { fr: "jamais", en: "never" },
+      { fr: "le week-end", en: "the weekend" },
+      { fr: "quand", en: "when" }
+    ],
+    tcfWriting: "Describe your typical day in 70–80 words to a French friend.",
+    tcfSpeaking: "TCF Oral Task 1 — 'Décrivez votre journée typique.' (1.5 minutes). Use time words: le matin, l'après-midi, le soir.",
+    examTip: "Use time words: le matin, l'après-midi, le soir. Use connectors: d'abord, ensuite, puis, finalement."
+  },
+  {
+    number: 4,
+    title: "En Ville",
+    theme: "Places in the City & Directions",
+    phase: "foundation",
+    phaseLabel: "Foundation Phase — CLB 1–2",
+    video: "Video 4: Getting Around in French — Directions, Transport & the Verb Aller",
+    grammar: "Aller, near future (aller + infinitif), prepositions of place | City places, directions, transport",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 4 on Google Drive: 'Getting Around in French'. As you watch, sketch a simple city map with labels in French." },
+          { time: "30 min", text: "Study all 30 vocabulary words. Learn aller conjugation perfectly — it's used constantly in French." },
+          { time: "20 min", text: "Anki: Add all 30 words. For place nouns, include the article (la pharmacie, l'hôpital). Do first review pass." },
+          { time: "10 min", text: "Write 6 sentences with aller, one for each conjugated form. Example: 'Je vais à la bibliothèque.'" }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "90 min",
+        tasks: [
+          { time: "20 min", text: "Contractions with à: à + le = AU, à + la = À LA, à + l' = À L', à + les = AUX. Complete 10 contraction drills." },
+          { time: "20 min", text: "Near future (futur proche): aller (conjugated) + infinitive. Write 8 sentences: Je vais manger, Tu vas travailler..." },
+          { time: "30 min", text: "Bonjour de France → Aller / Near Future → complete 2 exercises." },
+          { time: "20 min", text: "Vocabulary: Cover column and write French for all 30 words. Pay special attention to prepositions of place." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "25 min", text: "TV5Monde → A1 → find a transport or city-themed listening activity. Focus on direction words: à droite, à gauche, tout droit." },
+          { time: "30 min", text: "TCF READING PRACTICE: Read a directions text 'Pour aller à la gare depuis l'hôtel...' and answer questions." },
+          { time: "15 min", text: "Prepositions practice: Write sentences using: près de, loin de, en face de, à côté de, au bout de la rue." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "90 min",
+        tasks: [
+          { time: "35 min", text: "TCF WRITING PRACTICE — Task 1: PROMPT: A friend is visiting your city for the first time. Write directions from the train station to your home (70–80 words)." },
+          { time: "25 min", text: "Near future practice: Write 10 sentences about what you are going to do next week." },
+          { time: "20 min", text: "Speaking prep: Prepare a 90-second description of your neighbourhood using: il y a, c'est près de / loin de." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "TCF SPEAKING PRACTICE — Task 2: PROMPT: 'Décrivez votre quartier.' Record for 2–2.5 minutes." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover French column. Write all 30 words. Score: __ /20. Target: 16+." },
+          { time: "25 min", text: "Consolidation: Find a map of a French city (Paris, Lyon, Montréal). Write 5 directions sentences using the map." },
+          { time: "10 min", text: "Anki due cards. Week 4 complete! You've finished Phase 1 — Foundation. Well done!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Review all Anki cards from Weeks 1–4. Any words below 80% accuracy — make a special list to review daily next week." },
+          { time: "20 min", text: "Write a short paragraph (50 words) summarising what you've learned in Weeks 1–4." },
+          { time: "20 min", text: "BONUS: Watch a short French YouTube video set in Paris or Montréal with French subtitles." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "aller", en: "to go" },
+      { fr: "je vais / tu vas", en: "I go / you go" },
+      { fr: "il / elle va", en: "he / she goes" },
+      { fr: "nous allons", en: "we go" },
+      { fr: "ils / elles vont", en: "they go" },
+      { fr: "vous allez", en: "you go (formal/plural)" },
+      { fr: "la pharmacie", en: "the pharmacy" },
+      { fr: "le supermarché", en: "the supermarket" },
+      { fr: "l'hôpital (m.)", en: "the hospital" },
+      { fr: "l'aéroport (m.)", en: "the airport" },
+      { fr: "la banque", en: "the bank" },
+      { fr: "la mairie", en: "the town hall" },
+      { fr: "le métro", en: "the metro/subway" },
+      { fr: "à droite", en: "on the right / turn right" },
+      { fr: "à gauche", en: "on the left / turn left" },
+      { fr: "tout droit", en: "straight ahead" },
+      { fr: "au bout de la rue", en: "at the end of the street" },
+      { fr: "près de", en: "near / close to" },
+      { fr: "à côté de", en: "next to" },
+      { fr: "je vais + infinitif", en: "I am going to + verb (near future)" }
+    ],
+    tcfWriting: "Write directions from the train station to your home and describe your neighbourhood (70–80 words).",
+    tcfSpeaking: "TCF Oral Task 2 — 'Décrivez votre quartier.' (2–2.5 minutes). Use: il y a, c'est près de / loin de, j'aime... parce que.",
+    examTip: "Use: il y a, c'est près de / loin de, j'aime... parce que. End with an opinion about your neighbourhood."
+  },
+  {
+    number: 5,
+    title: "À Table!",
+    theme: "Food, Shopping & Café Interactions",
+    phase: "building",
+    phaseLabel: "Building Phase — CLB 3–4",
+    video: "Video 5: Order Like a Local — French Food, Cafés & Shopping",
+    grammar: "Partitive articles (du/de la/des/de l'), vouloir/pouvoir/prendre | Food, drinks, quantities, restaurant",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 5 on Google Drive: 'Order Like a Local'. Follow along with the café dialogue — pause and repeat every line." },
+          { time: "30 min", text: "Study all 30 vocabulary words. Group by category: FOODS, DRINKS, SHOPPING WORDS, QUANTITY EXPRESSIONS." },
+          { time: "20 min", text: "Anki: Add all 30 words. For food items, write one example sentence on the back." },
+          { time: "10 min", text: "Partitive articles: du (masculine), de la (feminine), de l' (vowel), des (plural). Write 8 food sentences." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "Conjugate vouloir: je veux, tu veux, il veut, nous voulons, vous voulez, ils veulent. Memorise this irregular verb." },
+          { time: "25 min", text: "Conjugate pouvoir and prendre in full. These are essential for TCF dialogues about ordering and shopping." },
+          { time: "30 min", text: "Bonjour de France → Irregular verbs → vouloir/pouvoir. Complete 2 exercises." },
+          { time: "10 min", text: "Vocabulary review + Anki." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "25 min", text: "TV5Monde → A2 → find a food or shopping listening activity. Identify all food vocabulary you recognise." },
+          { time: "30 min", text: "TCF READING PRACTICE: Read a French restaurant menu and answer comprehension questions about dishes and prices." },
+          { time: "25 min", text: "Roleplay practice: Write a café dialogue — order a full meal using vouloir, pouvoir, prendre." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "35 min", text: "TCF WRITING PRACTICE — Task 1: PROMPT: Write a short message (60–70 words) to a friend about your favourite food and a recent café visit." },
+          { time: "25 min", text: "Quantity expressions: un kilo de, une bouteille de, beaucoup de, un peu de, assez de. Write 8 sentences." },
+          { time: "25 min", text: "Listening: YouTube 'commander au café en français' — listen and repeat the full dialogue." },
+          { time: "15 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "TCF SPEAKING — Task 2 Roleplay: You are at a French restaurant. Order a starter, main, dessert and drink. Record for 2 minutes." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover French column. Write all 20 test words. Score: __ /20. Target: 16+." },
+          { time: "25 min", text: "Write a short restaurant review (50–70 words) of an imaginary French restaurant." },
+          { time: "10 min", text: "Anki due cards. Week 5 complete!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch Video 5 café ordering section. Write out the full dialogue from memory." },
+          { time: "20 min", text: "Duolingo: 2 sessions on food and shopping vocabulary." },
+          { time: "20 min", text: "BONUS: Watch a French cooking YouTube video (e.g. 'une recette en français') with subtitles." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "le pain", en: "bread" },
+      { fr: "la viande", en: "meat" },
+      { fr: "les légumes (m.pl.)", en: "vegetables" },
+      { fr: "le lait", en: "milk" },
+      { fr: "le jus d'orange", en: "orange juice" },
+      { fr: "du / de la / des", en: "some (partitive articles)" },
+      { fr: "je prends", en: "I'll have / I'm taking" },
+      { fr: "je veux", en: "I want" },
+      { fr: "vous pouvez", en: "you can (formal)" },
+      { fr: "c'est combien?", en: "how much is it?" },
+      { fr: "un kilo de", en: "a kilo of" },
+      { fr: "beaucoup de", en: "a lot of" },
+      { fr: "le marché", en: "the market" },
+      { fr: "la boucherie", en: "the butcher's" },
+      { fr: "l'addition (f.)", en: "the bill" },
+      { fr: "une table pour deux", en: "a table for two" },
+      { fr: "je voudrais...", en: "I would like..." },
+      { fr: "s'il vous plaît", en: "please (formal/waiter)" },
+      { fr: "c'est délicieux", en: "it's delicious" },
+      { fr: "la carte", en: "the menu" }
+    ],
+    tcfWriting: "TCF Writing Task 1 (60–70 words): Write a short message to a friend about your food preferences.",
+    tcfSpeaking: "TCF Oral Task 2 — Roleplay at a French restaurant. Order a full meal for yourself and a friend.",
+    examTip: "Food and shopping dialogues are very common in TCF Listening Section A. Know your partitive articles cold."
+  },
+  {
+    number: 6,
+    title: "Passé Composé — Raconte ta Vie!",
+    theme: "Talking About the Past",
+    phase: "building",
+    phaseLabel: "Building Phase — CLB 3–4",
+    video: "Video 6: Passé Composé Explained Simply — Talk About the Past in French",
+    grammar: "Passé composé (avoir + être verbs) | Time markers: hier, la semaine dernière, activities",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 6: 'Passé Composé Explained Simply'. Take notes on the avoir vs être rule. Pause and repeat every example." },
+          { time: "30 min", text: "Study this week's vocabulary. Focus on TIME MARKERS — these are essential for TCF writing tasks." },
+          { time: "20 min", text: "Anki: Add all new vocabulary words. For verbs, add the past participle on the back." },
+          { time: "10 min", text: "Formation rule: SUBJECT + avoir/être (conjugated) + PAST PARTICIPLE. Write the passé composé of 6 regular verbs." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "Irregular past participles: être → été, avoir → eu, faire → fait, prendre → pris, venir → venu. Memorise all 10." },
+          { time: "25 min", text: "DR MRS VANDERTRAMPP verbs (use être): aller, venir, arriver, partir, entrer, sortir, naître, mourir... Write all 14 with their participles." },
+          { time: "30 min", text: "Bonjour de France → Passé composé → complete 2 exercises. Check carefully for avoir vs être." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "25 min", text: "TV5Monde → A2 → find a past events listening activity. Write down every time marker you hear." },
+          { time: "30 min", text: "TCF READING PRACTICE: Read a weekend story narrative and answer comprehension questions." },
+          { time: "25 min", text: "Error correction activity: Fix these 10 passé composé sentences that contain mistakes (avoir/être mix-ups)." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "TCF WRITING PRACTICE: PROMPT: Write about what you did last weekend (80 words). Use at least 6 passé composé verbs and 3 time markers." },
+          { time: "30 min", text: "Reflexive verbs in passé composé (always use être + agree): Je me suis levé(e), tu t'es habillé(e)... Write 8 sentences." },
+          { time: "20 min", text: "Speaking prep: Plan a 2-minute account of a memorable day using: D'abord..., Ensuite..., Puis..., Finalement..." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "TCF SPEAKING PRACTICE: PROMPT: 'Parlez d'une journée mémorable.' Record for 2 minutes. Use passé composé throughout." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover French column. Write all 20 test words. Score: __ /20." },
+          { time: "30 min", text: "Write a paragraph (80 words) about a memorable day — use at least 8 passé composé verbs." },
+          { time: "10 min", text: "Anki due cards. Week 6 complete!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch Video 6, especially the DR MRS VANDERTRAMPP section. Test yourself without notes." },
+          { time: "20 min", text: "Duolingo: 2 sessions focused on past tense." },
+          { time: "20 min", text: "BONUS: Write a short journal entry in French about what you did this week. Use passé composé throughout." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "hier", en: "yesterday" },
+      { fr: "avant-hier", en: "the day before yesterday" },
+      { fr: "la semaine dernière", en: "last week" },
+      { fr: "le week-end dernier", en: "last weekend" },
+      { fr: "j'ai mangé", en: "I ate" },
+      { fr: "j'ai fait", en: "I did / I made" },
+      { fr: "je suis allé(e)", en: "I went" },
+      { fr: "je suis arrivé(e)", en: "I arrived" },
+      { fr: "je me suis levé(e)", en: "I got up" },
+      { fr: "d'abord", en: "first of all" },
+      { fr: "ensuite", en: "then / next" },
+      { fr: "puis", en: "then / afterwards" },
+      { fr: "finalement", en: "finally" },
+      { fr: "j'ai pris", en: "I took" },
+      { fr: "j'ai vu", en: "I saw" },
+      { fr: "j'ai été", en: "I was (passé composé)" },
+      { fr: "c'était", en: "it was (imperfect)" },
+      { fr: "j'ai aimé", en: "I liked / enjoyed" },
+      { fr: "le matin", en: "in the morning" },
+      { fr: "le soir", en: "in the evening" }
+    ],
+    tcfWriting: "TCF Writing Task: Describe what you did last weekend (80 words). Use at least 6 passé composé verbs.",
+    tcfSpeaking: "TCF Oral Task 1 — 'Parlez d'une journée mémorable.' (2 minutes). Use passé composé throughout.",
+    examTip: "Passé composé is the most tested tense in TCF writing and oral tasks. Master avoir vs être rule completely."
+  },
+  {
+    number: 7,
+    title: "Comment tu te Sens?",
+    theme: "Health, Body & Feelings",
+    phase: "building",
+    phaseLabel: "Building Phase — CLB 3–4",
+    video: "Video 7: TCF Listening Masterclass — How to Score Higher Without Perfect French",
+    grammar: "Reflexive verbs, devoir + infinitif, avoir expressions | Body, health, emotions",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 7: 'TCF Listening Masterclass'. Take notes on the 3 core strategies: predict, gist, eliminate." },
+          { time: "30 min", text: "Study this week's vocabulary: body parts, health words, feelings, symptoms." },
+          { time: "20 min", text: "Anki: Add all new vocabulary. For body parts, draw a simple body diagram with French labels." },
+          { time: "10 min", text: "Reflexive verb rule: subject pronoun + reflexive pronoun + verb. Write: se lever, se sentir, se coucher in full." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "Avoir expressions: avoir mal à (to have pain in), avoir faim (hungry), avoir soif (thirsty), avoir peur (afraid), avoir chaud/froid. Write a sentence for each." },
+          { time: "25 min", text: "Devoir + infinitif (must/have to): Tu dois boire de l'eau. Write 8 advice sentences using devoir." },
+          { time: "30 min", text: "Bonjour de France → Reflexive verbs → complete 2 exercises." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "TCF LISTENING STRATEGY PRACTICE: Use the 3 strategies from Video 7 on 5 TCF-style listening questions. Predict, listen for gist, eliminate." },
+          { time: "25 min", text: "TCF READING: Read a medical appointment dialogue and answer comprehension questions about symptoms." },
+          { time: "25 min", text: "Roleplay practice: Write a doctor-patient dialogue using body vocabulary and avoir mal à expressions." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "35 min", text: "TCF WRITING PRACTICE: PROMPT: Write a short email to a doctor describing your symptoms and asking for an appointment (70–80 words)." },
+          { time: "25 min", text: "Emotional vocabulary practice: Write sentences using: je me sens bien/mal, je suis fatigué(e), je suis stressé(e), je suis content(e)." },
+          { time: "25 min", text: "Speaking prep: Plan a 2-minute description of how you're feeling and why, using avoir expressions and reflexive verbs." },
+          { time: "15 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "TCF SPEAKING: PROMPT: 'Décrivez comment vous vous sentez et expliquez pourquoi.' Record for 2 minutes." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Cover French column. Write all 20 test words. Score: __ /20." },
+          { time: "25 min", text: "Timed TCF Listening Practice: Do 10 MCQ listening questions — use the strategies from Video 7." },
+          { time: "15 min", text: "Anki due cards. Week 7 done!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch Video 7. This time, practise each of the 3 listening strategies with actual examples." },
+          { time: "20 min", text: "Duolingo: 2 sessions on health and body vocabulary." },
+          { time: "20 min", text: "BONUS: Watch a short French video about healthy living ('la santé en français') with subtitles." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "la tête", en: "the head" },
+      { fr: "le ventre", en: "the stomach/belly" },
+      { fr: "le dos", en: "the back" },
+      { fr: "j'ai mal à la tête", en: "I have a headache" },
+      { fr: "j'ai de la fièvre", en: "I have a fever" },
+      { fr: "je suis fatigué(e)", en: "I am tired" },
+      { fr: "je me sens", en: "I feel" },
+      { fr: "se coucher", en: "to go to bed" },
+      { fr: "se reposer", en: "to rest" },
+      { fr: "devoir", en: "must / have to" },
+      { fr: "vous devez", en: "you must (formal)" },
+      { fr: "avoir faim", en: "to be hungry" },
+      { fr: "avoir soif", en: "to be thirsty" },
+      { fr: "avoir peur", en: "to be afraid" },
+      { fr: "content(e)", en: "happy / pleased" },
+      { fr: "inquiet/inquiète", en: "worried" },
+      { fr: "le médecin", en: "the doctor" },
+      { fr: "un rendez-vous", en: "an appointment" },
+      { fr: "une ordonnance", en: "a prescription" },
+      { fr: "la pharmacie", en: "the pharmacy" }
+    ],
+    tcfWriting: "Write a short email to a doctor describing your symptoms and requesting an appointment (70–80 words).",
+    tcfSpeaking: "TCF Oral Task — 'Décrivez comment vous vous sentez et expliquez pourquoi.' (2 minutes).",
+    examTip: "Listening is often the weakest skill for beginners. Strategic listening (predict → gist → eliminate) can add 20–30 points."
+  },
+  {
+    number: 8,
+    title: "Le Monde du Travail",
+    theme: "Work, School & Studies",
+    phase: "building",
+    phaseLabel: "Building Phase — CLB 3–4",
+    video: "Video 8: TCF Reading Made Simple — Skim, Scan & Score",
+    grammar: "Faire, comparatives (plus...que, moins...que) | Jobs, studies, workplace, school",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 8: 'TCF Reading Made Simple'. Take notes on the 3 steps: read questions first → skim → scan for answers." },
+          { time: "30 min", text: "Study this week's vocabulary: professions, workplace, education, studies." },
+          { time: "20 min", text: "Anki: Add all vocabulary. For professions, note the gender forms (un/une ingénieur, un avocat/une avocate)." },
+          { time: "10 min", text: "Conjugate faire in full: je fais, tu fais, il fait, nous faisons, vous faites, ils font." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "25 min", text: "Comparatives: plus...que (more than), moins...que (less than), aussi...que (as much as). Write 10 comparative sentences comparing jobs." },
+          { time: "25 min", text: "Superlatives: le/la plus..., le/la moins.... Write 6 superlative sentences." },
+          { time: "30 min", text: "Bonjour de France → Comparatives → complete 2 exercises." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "TCF READING STRATEGY PRACTICE: Apply the Video 8 method to a sample TCF reading text. Read questions first, skim, then scan." },
+          { time: "25 min", text: "TCF READING: Read a job advertisement and answer comprehension questions." },
+          { time: "25 min", text: "Writing prep: Plan a 80–100 word cover letter using professions vocabulary and comparatives." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "TCF WRITING PRACTICE — Task 2: PROMPT: Write about your professional goals (80–100 words). What do you want to do and why?" },
+          { time: "25 min", text: "Listening drill: YouTube 'parler de son travail en français'. Write down 5 professions and 5 job-related phrases you hear." },
+          { time: "25 min", text: "Speaking prep: Plan your answer to 'Qu'est-ce que vous faites dans la vie?' — prepare a 2-minute response." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "TCF SPEAKING: PROMPT: 'Comparez deux professions. Laquelle préférez-vous et pourquoi?' Record 2 minutes." },
+          { time: "20 min", text: "WEEKLY VOCABULARY SELF-TEST: Score: __ /20. Target: 16+." },
+          { time: "30 min", text: "Timed TCF Reading Practice: Apply skim-scan method. 10 MCQ in 15 minutes." },
+          { time: "10 min", text: "Anki due cards. Week 8 done! Phase 2 complete!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Review Anki cards from Weeks 5–8. Identify your 10 weakest words and drill them." },
+          { time: "20 min", text: "Re-read your written tasks from weeks 5–8. Note any repeated errors — these are your priority to fix." },
+          { time: "20 min", text: "BONUS: Read a French job advert online (indeed.fr). How many words do you understand? Aim for 70%+." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "un(e) infirmier/infirmière", en: "nurse" },
+      { fr: "un(e) ingénieur(e)", en: "engineer" },
+      { fr: "un(e) avocat(e)", en: "lawyer" },
+      { fr: "le bureau", en: "the office" },
+      { fr: "le salaire", en: "the salary" },
+      { fr: "les études (f.pl.)", en: "studies" },
+      { fr: "je fais des études", en: "I am studying" },
+      { fr: "plus...que", en: "more...than" },
+      { fr: "moins...que", en: "less...than" },
+      { fr: "aussi...que", en: "as...as" },
+      { fr: "travailler à temps plein", en: "to work full-time" },
+      { fr: "le collègue", en: "the colleague" },
+      { fr: "une réunion", en: "a meeting" },
+      { fr: "je travaille depuis", en: "I have worked since" },
+      { fr: "une entreprise", en: "a company" },
+      { fr: "les études supérieures", en: "higher education" },
+      { fr: "un diplôme", en: "a degree/diploma" },
+      { fr: "je préfère", en: "I prefer" },
+      { fr: "selon moi", en: "in my opinion" },
+      { fr: "c'est mieux", en: "it's better" }
+    ],
+    tcfWriting: "TCF Writing Task 2 (80–100 words): Write about your professional goals and why.",
+    tcfSpeaking: "TCF Oral — 'Comparez deux professions. Laquelle préférez-vous et pourquoi?' (2 minutes).",
+    examTip: "CLB 5 reading requires understanding main ideas. With the skim-scan strategy, you can score even with limited vocabulary."
+  },
+  {
+    number: 9,
+    title: "TCF Sprint — Listening & Reading",
+    theme: "Exam Skills: Comprehension",
+    phase: "readiness",
+    phaseLabel: "TCF Readiness Phase — CLB 5",
+    video: "Video 9 & 10: TCF Writing Task 1 & 2 Masterclass",
+    grammar: "Review all tenses covered | Exam vocabulary: public services, social situations",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 9 (Writing Task 1) on Google Drive. Study the 3-part structure: opening → body → closing. Copy down all 10 sentence starters." },
+          { time: "30 min", text: "Review all Anki cards from Weeks 1–8. Sort by difficulty — focus your study time on your weakest words." },
+          { time: "30 min", text: "TCF Listening Strategy review: predict before listening, listen for gist, use process of elimination. Do 5 warm-up MCQ questions." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "Timed TCF Listening Section A simulation: 15 questions, 15 minutes. Strict exam conditions — no pausing." },
+          { time: "20 min", text: "Review your answers. For every wrong answer, identify WHY you got it wrong — distractor, missed word, or unknown vocab?" },
+          { time: "30 min", text: "Strategy drill: Identify distractor answer choices. Practise eliminating obviously wrong options quickly." },
+          { time: "20 min", text: "Anki + vocabulary review." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Timed TCF Reading Section A simulation: 15 questions, 20 minutes. Apply: read questions first → skim for structure → scan for answers." },
+          { time: "20 min", text: "Review wrong answers. For each, re-read the text and find where the answer was. Train your scanning eye." },
+          { time: "25 min", text: "Vocabulary in context: Read a French newspaper article (lemonde.fr or lapresse.ca — free articles). Identify the main idea in one sentence." },
+          { time: "15 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "TCF WRITING PRACTICE — Task 1 (Timed): Write an informal email about a recent event (60–80 words). Time yourself: 20 minutes." },
+          { time: "30 min", text: "Self-mark using CLB 5 criteria: task completion, vocabulary range, grammatical accuracy, coherence. Score yourself honestly." },
+          { time: "20 min", text: "Grammar review: passé composé, near future, comparatives — write 3 sentences each under timed conditions." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "TCF SPEAKING — Timed oral: PROMPT: 'Décrivez votre vie quotidienne au Canada.' Record for full 3 minutes. No stopping." },
+          { time: "20 min", text: "VOCABULARY SELF-TEST: Choose 20 words from Weeks 1–8 that you find hardest. Test yourself." },
+          { time: "30 min", text: "Full timed listening simulation: 29 questions, 25 minutes. Mark your answers afterwards." },
+          { time: "20 min", text: "Anki due cards. Week 9 done — you're in the final phase!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Review all your timed practice this week. What was your score? What types of questions do you miss most?" },
+          { time: "20 min", text: "Read a short authentic French text (news article, blog post). Aim to understand 80% without a dictionary." },
+          { time: "20 min", text: "Listen to 10 minutes of French audio (RFI Savoirs A2). Don't look at transcript first — train your ear." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "la mairie", en: "the town hall" },
+      { fr: "les services publics", en: "public services" },
+      { fr: "le permis de conduire", en: "the driver's licence" },
+      { fr: "la carte d'identité", en: "the ID card" },
+      { fr: "un formulaire", en: "a form" },
+      { fr: "remplir", en: "to fill in" },
+      { fr: "la caisse", en: "the checkout / cashier" },
+      { fr: "le logement", en: "housing / accommodation" },
+      { fr: "le loyer", en: "the rent" },
+      { fr: "les transports en commun", en: "public transport" },
+      { fr: "le quartier", en: "the neighbourhood" },
+      { fr: "chercher", en: "to look for" },
+      { fr: "trouver", en: "to find" },
+      { fr: "selon moi", en: "in my opinion" },
+      { fr: "à mon avis", en: "in my opinion" },
+      { fr: "il me semble que", en: "it seems to me that" },
+      { fr: "je pense que", en: "I think that" },
+      { fr: "par exemple", en: "for example" },
+      { fr: "c'est pourquoi", en: "that is why" },
+      { fr: "cependant", en: "however" }
+    ],
+    tcfWriting: "Timed Task 1 (20 min): Write an email to a friend about a recent event in your life (60–80 words).",
+    tcfSpeaking: "Timed Oral Task 1: 'Décrivez votre vie quotidienne au Canada.' (3 minutes — no stopping).",
+    examTip: "For TCF Listening: always read the answer choices BEFORE the audio plays. This activates your brain to listen for specific words."
+  },
+  {
+    number: 10,
+    title: "TCF Sprint — Writing",
+    theme: "Written Expression at CLB 5",
+    phase: "readiness",
+    phaseLabel: "TCF Readiness Phase — CLB 5",
+    video: "Video 9 & 10: TCF Writing Masterclass (Task 1 & Task 2)",
+    grammar: "Connectors, sentence variety, modal verbs review | Opinion language, everyday topics",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 10 (Writing Task 2) on Google Drive. Annotate the CLB 5 vs CLB 3 model answers side by side. What makes the difference?" },
+          { time: "30 min", text: "Connector words drill: d'abord, ensuite, puis, enfin, parce que, donc, mais, cependant, de plus. Write 2 sentences for each." },
+          { time: "30 min", text: "Analyse 2 model CLB 5 writing samples — underline connectors, opinion phrases, and varied vocabulary." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "TIMED Task 1 (20 minutes): Write an informal email about a personal situation. Start timing — stop at 20 min even if not finished." },
+          { time: "30 min", text: "Self-mark: Did you complete the task? Did you use appropriate vocabulary? Count your words (target 60–80)." },
+          { time: "20 min", text: "Opinion language practice: je pense que, à mon avis, selon moi, je crois que, il me semble que. Write 10 opinion sentences." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "40 min", text: "TIMED Task 2 (35 minutes): Write your opinion on a simple everyday topic (120+ words with connectors). Use the 3-paragraph structure." },
+          { time: "30 min", text: "Paragraph structure: Para 1 — Introduction + opinion. Para 2 — reasons + examples. Para 3 — conclusion + restate opinion." },
+          { time: "20 min", text: "Vocabulary enrichment: replace basic words with better alternatives. beau → magnifique, bon → excellent, dit → déclare." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "TIMED Task 1 second attempt: A different topic. 20 minutes, strict timing. Your score should improve from Tuesday." },
+          { time: "30 min", text: "Grammar review: Make sure every sentence has: subject, verb in correct tense, correct agreement. Check 10 sentences from your past writing." },
+          { time: "20 min", text: "Speaking prep: Prepare your opinion on the Task 2 topic from Wednesday — you'll use this for TCF Oral Task 3 tomorrow." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "35 min", text: "TCF SPEAKING — Oral Task 3 (defend a point of view, 4.5 minutes): Express and defend your opinion on a topic. Record the full time." },
+          { time: "20 min", text: "VOCABULARY SELF-TEST: 20 words from weeks 7–10. Score: __ /20. Target: 18+." },
+          { time: "30 min", text: "Review all writing tasks from this week. Rewrite one of them incorporating all feedback/improvements." },
+          { time: "15 min", text: "Anki due cards. Week 10 done!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Choose any writing task you've done this week and rewrite it from scratch without looking at your first version." },
+          { time: "20 min", text: "Read a French blog post or opinion article. Identify the connectors and opinion phrases the author uses." },
+          { time: "20 min", text: "BONUS: Record yourself reading your best writing task aloud. Listen back — does it sound natural?" }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "d'abord", en: "first of all" },
+      { fr: "ensuite / puis", en: "then / next" },
+      { fr: "enfin", en: "finally" },
+      { fr: "parce que", en: "because" },
+      { fr: "donc", en: "so / therefore" },
+      { fr: "cependant", en: "however" },
+      { fr: "de plus", en: "moreover / furthermore" },
+      { fr: "en conclusion", en: "in conclusion" },
+      { fr: "je pense que", en: "I think that" },
+      { fr: "à mon avis", en: "in my opinion" },
+      { fr: "il me semble que", en: "it seems to me that" },
+      { fr: "je suis d'accord", en: "I agree" },
+      { fr: "je ne suis pas d'accord", en: "I disagree" },
+      { fr: "par exemple", en: "for example" },
+      { fr: "c'est vrai que", en: "it is true that" },
+      { fr: "il faut", en: "it is necessary to / one must" },
+      { fr: "on peut", en: "one can / we can" },
+      { fr: "surtout", en: "especially / above all" },
+      { fr: "en général", en: "in general" },
+      { fr: "selon moi", en: "according to me / in my view" }
+    ],
+    tcfWriting: "Timed Task 2 (35 min): Write your opinion on a simple everyday topic using a 3-paragraph structure (120+ words).",
+    tcfSpeaking: "TCF Oral Task 3 — Defend a point of view on an everyday topic (4.5 minutes). Use opinion phrases and connectors.",
+    examTip: "Most beginners lose marks on Task 2 because of poor structure — not vocabulary. Master the 3-paragraph structure."
+  },
+  {
+    number: 11,
+    title: "TCF Sprint — Oral Expression",
+    theme: "Spoken French at CLB 5",
+    phase: "readiness",
+    phaseLabel: "TCF Readiness Phase — CLB 5",
+    video: "Video 11: TCF Oral Expression — Sound Confident in French from Day 1",
+    grammar: "Subjective expressions, discourse markers | Opinions, reactions, hedging language",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 11: 'TCF Oral Expression'. Take notes on all 3 tasks. Write down every filler phrase and recovery strategy mentioned." },
+          { time: "30 min", text: "Filler phrases drill: euh, c'est-à-dire, donc, alors, bien, voilà, comment dire... Practise using each one in a sentence naturally." },
+          { time: "30 min", text: "30-second planning technique: Read a Task 1 prompt → plan for 30 seconds (key words only, NO full sentences) → speak for 3 minutes." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "100 min",
+        tasks: [
+          { time: "30 min", text: "TCF Oral Task 1 practice (x3 different prompts): 1) Décrivez votre logement 2) Parlez de vos loisirs 3) Décrivez votre ville. 3 minutes each." },
+          { time: "30 min", text: "Record Task 1 response #3 and listen back. Self-evaluate: fluency, vocabulary range, grammar accuracy, task completion." },
+          { time: "25 min", text: "Practise recovering from mistakes: 'Pardon, je veux dire...', 'Ce que je veux dire, c'est...', 'En fait...' Write 5 recovery phrases." },
+          { time: "15 min", text: "Anki due cards + vocab review." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "TCF Oral Task 2 practice: Describe a visual document (image/chart). Speak about what you see for 2 minutes. Use: on voit, il y a, selon le document..." },
+          { time: "30 min", text: "Agreement/disagreement vocabulary: Je suis (tout à fait) d'accord, Je ne suis pas du tout d'accord, C'est exact, Au contraire... Practise 10 responses." },
+          { time: "20 min", text: "Write out your top 10 'emergency phrases' for when you're stuck — memorise these for exam day." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "TCF Oral Task 3 preparation: Choose a controversial everyday topic. Prepare 3 arguments FOR and 3 AGAINST. Practise defending your position." },
+          { time: "30 min", text: "Full mock oral exam (self-directed): Task 1 (3 min) + Task 2 (2 min) + Task 3 (4.5 min) = 12 minutes total. Record everything." },
+          { time: "20 min", text: "Listen back to your full recording. Score each task: vocabulary (1–3), grammar (1–3), fluency (1–3), task completion (1–3)." },
+          { time: "10 min", text: "Anki due cards." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "100 min",
+        tasks: [
+          { time: "40 min", text: "Full mock Oral Expression section with instructor (or self-directed): 12 minutes, all 3 tasks, exam conditions. Record for review." },
+          { time: "20 min", text: "VOCABULARY SELF-TEST: 20 words from weeks 9–11. Score: __ /20. Target: 18+." },
+          { time: "30 min", text: "Speaking improvement session: Re-do your weakest task from the mock. Compare both recordings — is there improvement?" },
+          { time: "10 min", text: "Anki. Week 11 done — one week to go!" }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "60 min",
+        tasks: [
+          { time: "20 min", text: "Re-watch Video 11, focusing on the examiner tip section. What does CLB 5 French actually sound like?" },
+          { time: "20 min", text: "Record yourself on a completely new topic (a topic you haven't practised). This tests genuine fluency." },
+          { time: "20 min", text: "REST and recharge. You've worked incredibly hard. Light Anki review only." }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "euh... (filler)", en: "um / uh (French filler)" },
+      { fr: "c'est-à-dire", en: "that is to say / I mean" },
+      { fr: "donc", en: "so / well then" },
+      { fr: "voilà", en: "there you go / that's it" },
+      { fr: "comment dire...", en: "how to say... (filler)" },
+      { fr: "je veux dire", en: "I mean" },
+      { fr: "en fait", en: "actually / in fact" },
+      { fr: "à vrai dire", en: "to tell the truth" },
+      { fr: "on voit que", en: "we can see that" },
+      { fr: "il s'agit de", en: "it's about / it concerns" },
+      { fr: "selon le document", en: "according to the document" },
+      { fr: "je suis d'accord", en: "I agree" },
+      { fr: "au contraire", en: "on the contrary" },
+      { fr: "c'est exact", en: "that's correct / exactly" },
+      { fr: "tout à fait", en: "absolutely / completely" },
+      { fr: "personnellement", en: "personally" },
+      { fr: "il me semble que", en: "it seems to me that" },
+      { fr: "d'un côté... de l'autre", en: "on one hand... on the other" },
+      { fr: "pour finir", en: "to finish / in conclusion" },
+      { fr: "je maintiens que", en: "I maintain that" }
+    ],
+    tcfWriting: "Review and improve your two best writing tasks from weeks 9 & 10. Incorporate all connector feedback.",
+    tcfSpeaking: "Full mock Oral Expression section (12 minutes, all 3 tasks). Record and self-score using TCF rubric.",
+    examTip: "Oral fear is universal. Examiners reward communication — not perfection. Keep going even if you make mistakes."
+  },
+  {
+    number: 12,
+    title: "Mock Exam & Final Review",
+    theme: "Full TCF Canada Simulation",
+    phase: "readiness",
+    phaseLabel: "TCF Readiness Phase — CLB 5",
+    video: "Video 12: Full Mock TCF Debrief — What CLB 5 Looks Like End-to-End",
+    grammar: "Full review as needed | Review all thematic vocabulary sets",
+    days: [
+      {
+        name: "Monday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Watch Video 12: 'Full Mock TCF Debrief'. Annotate what earns CLB 5 vs CLB 4 in each section." },
+          { time: "30 min", text: "Final vocabulary review: Go through ALL Anki cards from all 12 weeks. Focus on your lowest-rated words." },
+          { time: "30 min", text: "Mental preparation: Read through the CLB 5 Success Checklist. Mark everything you can confidently do." }
+        ]
+      },
+      {
+        name: "Tuesday",
+        time: "120 min",
+        tasks: [
+          { time: "25 min", text: "FULL TIMED MOCK — Listening Section (29 questions, 25 minutes). Strict exam conditions: no pausing." },
+          { time: "60 min", text: "FULL TIMED MOCK — Reading Section (29 questions, 45 minutes). Apply skim-scan strategy throughout." },
+          { time: "35 min", text: "Mark and review answers with answer key. Calculate your score. Analyse error patterns." }
+        ]
+      },
+      {
+        name: "Wednesday",
+        time: "120 min",
+        tasks: [
+          { time: "60 min", text: "FULL TIMED MOCK — Writing Section (2 tasks, 60 minutes): Task 1 (20 min) + Task 2 (40 min). Strict exam conditions." },
+          { time: "12 min", text: "FULL TIMED MOCK — Oral Section (3 tasks, 12 minutes). Record everything. Exam conditions." },
+          { time: "30 min", text: "Self-debrief: Write down 3 strengths and 3 areas to improve from today's mock." }
+        ]
+      },
+      {
+        name: "Thursday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "Review mock exam mistakes from Tuesday and Wednesday. For each wrong answer, understand exactly why." },
+          { time: "30 min", text: "Targeted grammar revision: Focus on the 2 grammar points you struggled with most this week. Drill them." },
+          { time: "20 min", text: "Final oral practice: Record one last Task 3 on a topic you haven't practised. This tests real fluency." },
+          { time: "10 min", text: "Final Anki review: just the hardest 20 words." }
+        ]
+      },
+      {
+        name: "Friday",
+        time: "90 min",
+        tasks: [
+          { time: "30 min", text: "FINAL MOCK — Oral Section: Full 12-minute oral exam. Record and listen back. Compare to Week 1 recording!" },
+          { time: "30 min", text: "Re-read all your corrected writing samples from the course. Notice how much you've improved." },
+          { time: "20 min", text: "Exam day preparation: Plan your journey, prepare your documents, set your alarm. Know the exact format and timings." },
+          { time: "10 min", text: "Celebration! Look at Week 1 vs Week 12. You started from zero. You are ready for CLB 5." }
+        ]
+      },
+      {
+        name: "Weekend",
+        time: "30 min",
+        tasks: [
+          { time: "30 min", text: "REST. Review your vocabulary cards gently. Re-read your best writing samples. You are ready — trust the process!" }
+        ]
+      }
+    ],
+    vocab: [
+      { fr: "je suis prêt(e)", en: "I am ready" },
+      { fr: "l'examen", en: "the exam" },
+      { fr: "réussir", en: "to succeed / to pass" },
+      { fr: "le résultat", en: "the result" },
+      { fr: "le score", en: "the score" },
+      { fr: "la compréhension orale", en: "listening comprehension" },
+      { fr: "la compréhension écrite", en: "reading comprehension" },
+      { fr: "l'expression écrite", en: "written expression" },
+      { fr: "l'expression orale", en: "oral expression" },
+      { fr: "le niveau", en: "the level" },
+      { fr: "j'ai confiance en moi", en: "I am confident (in myself)" },
+      { fr: "bonne chance!", en: "good luck!" },
+      { fr: "félicitations!", en: "congratulations!" },
+      { fr: "j'ai réussi!", en: "I passed / I succeeded!" },
+      { fr: "c'est difficile mais possible", en: "it is difficult but possible" },
+      { fr: "je fais de mon mieux", en: "I am doing my best" },
+      { fr: "je suis capable", en: "I am capable" },
+      { fr: "la pratique", en: "practice" },
+      { fr: "chaque jour", en: "every day" },
+      { fr: "bravo!", en: "well done! / bravo!" }
+    ],
+    tcfWriting: "Final mock Writing Section: Task 1 (20 min) + Task 2 (40 min) under strict exam conditions.",
+    tcfSpeaking: "Final mock Oral Section: All 3 tasks, 12 minutes, exam conditions. Record and compare to Week 1!",
+    examTip: "You started from zero. In 12 weeks you've built the skills to pass TCF Canada at CLB 5. Trust your preparation!"
+  }
+];
+
+// ============================================================
+// STATE (localStorage for persistence)
+// ============================================================
+function getState() {
+  try { return JSON.parse(localStorage.getItem('tcf_state') || '{}'); } catch { return {}; }
+}
+function saveState(state) {
+  localStorage.setItem('tcf_state', JSON.stringify(state));
+}
+function getTaskKey(weekNum, dayIdx, taskIdx) {
+  return `w${weekNum}_d${dayIdx}_t${taskIdx}`;
+}
+function getWeekCompleteKey(weekNum) {
+  return `w${weekNum}_complete`;
+}
+
+// ============================================================
+// QUIZ STATE
+// ============================================================
+let quizState = {};
+
+// ============================================================
+// BUILD NAV
+// ============================================================
+function buildNav() {
+  const state = getState();
+  const nav = document.getElementById('week-nav');
+  nav.innerHTML = '';
+  weeks.forEach((w, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'week-btn' + (state[getWeekCompleteKey(w.number)] ? ' completed' : '');
+    btn.dataset.week = i;
+    btn.textContent = `W${w.number}`;
+    btn.title = w.title;
+    btn.onclick = () => showWeek(i);
+    nav.appendChild(btn);
+  });
+  updateActiveNav(0);
+}
+
+function updateActiveNav(idx) {
+  document.querySelectorAll('.week-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+
+// ============================================================
+// UPDATE PROGRESS
+// ============================================================
+function updateProgress() {
+  const state = getState();
+  const completed = weeks.filter(w => state[getWeekCompleteKey(w.number)]).length;
+  document.getElementById('progress-text').textContent = `${completed} / 12 weeks complete`;
+  document.getElementById('overall-progress').style.width = `${(completed / 12) * 100}%`;
+}
+
+// ============================================================
+// SHOW WEEK
+// ============================================================
+let currentWeekIdx = 0;
+function showWeek(idx) {
+  currentWeekIdx = idx;
+  updateActiveNav(idx);
+  const w = weeks[idx];
+  const state = getState();
+  const isComplete = !!state[getWeekCompleteKey(w.number)];
+
+  // Phase
+  const phaseClass = { foundation: 'phase-foundation', building: 'phase-building', readiness: 'phase-readiness' }[w.phase];
+  const phaseEmoji = { foundation: '📗', building: '📘', readiness: '📕' }[w.phase];
+
+  // Count tasks completed this week
+  let totalTasks = 0, doneTasks = 0;
+  w.days.forEach((day, di) => {
+    day.tasks.forEach((task, ti) => {
+      totalTasks++;
+      if (state[getTaskKey(w.number, di, ti)]) doneTasks++;
+    });
+  });
+
+  let html = `
+    <span class="phase-badge ${phaseClass}">${phaseEmoji} ${w.phaseLabel}</span>
+    ${isComplete ? `<div class="week-complete-banner">🎉 Week ${w.number} Complete! Great work, Edison!</div>` : ''}
+    <div class="week-header">
+      <h2>Week ${w.number}: ${w.title}</h2>
+      <div class="week-theme">Theme: ${w.theme}</div>
+      <div class="week-meta">
+        <span class="meta-tag video">🎬 ${w.video}</span>
+        <span class="meta-tag grammar">📖 ${w.grammar}</span>
+        <span class="meta-tag">${doneTasks}/${totalTasks} tasks done</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this, 'daily-${idx}')">📅 Daily Plan</button>
+      <button class="tab-btn" onclick="switchTab(this, 'vocab-${idx}')">📚 Vocabulary</button>
+      <button class="tab-btn" onclick="switchTab(this, 'quiz-${idx}')">✏️ Vocab Quiz</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tcf-${idx}')">🎯 TCF Practice</button>
+    </div>
+
+    <div class="tab-content active" id="daily-${idx}">
+      ${buildResBar(w.number)}
+      <div class="card">
+        <div class="card-title"><span class="icon">📅</span> Daily Study Tasks</div>
+        ${w.days.map((day, di) => buildDaySection(w, day, di, state)).join('')}
+        <button class="complete-week-btn ${isComplete ? 'completed' : ''}" onclick="toggleWeekComplete(${idx})" id="complete-btn-${idx}">
+          ${isComplete ? '✅ Week Marked Complete (click to undo)' : '🏁 Mark Week ' + w.number + ' as Complete'}
+        </button>
+      </div>
+    </div>
+
+    <div class="tab-content" id="vocab-${idx}">
+      ${buildVocabSection(w, idx)}
+    </div>
+
+    <div class="tab-content" id="quiz-${idx}">
+      ${buildQuizSection(w, idx)}
+    </div>
+
+    <div class="tab-content" id="tcf-${idx}">
+      ${buildTCFSection(w)}
+    </div>
+  `;
+
+  document.getElementById('week-content').innerHTML = html;
+
+  // Init quiz if not already
+  if (!quizState[idx]) initQuiz(idx);
+  renderQuiz(idx);
+}
+
+function buildDaySection(w, day, di, state) {
+  const allDone = day.tasks.every((_, ti) => state[getTaskKey(w.number, di, ti)]);
+  const doneCnt = day.tasks.filter((_, ti) => state[getTaskKey(w.number, di, ti)]).length;
+  const dayEmoji = { Monday: '🌅', Tuesday: '☀️', Wednesday: '🌤', Thursday: '🌞', Friday: '🎉', Weekend: '🌊' }[day.name] || '📅';
+  return `
+    <div class="day-section">
+      <div class="day-header ${allDone ? 'completed-day' : ''}" onclick="toggleDay(this)">
+        <span>${dayEmoji}</span>
+        <span class="day-name">${day.name}</span>
+        <span class="day-time">~${day.time}</span>
+        <span class="day-check">${allDone ? '✅' : `${doneCnt}/${day.tasks.length}`}</span>
+      </div>
+      <div class="day-tasks">
+        ${day.tasks.map((task, ti) => {
+          const key = getTaskKey(w.number, di, ti);
+          const done = !!state[key];
+          return `<div class="task-item ${done ? 'done' : ''}" onclick="toggleTask(${w.number}, ${di}, ${ti}, this)">
+            <div class="task-checkbox"></div>
+            <span class="task-time-badge">${task.time}</span>
+            <span class="task-text">${linkify(task.text)}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function buildVocabSection(w, idx) {
+  return `<div class="card">
+    <div class="card-title"><span class="icon">📚</span> Week ${w.number} Vocabulary <button class="reset-btn" onclick="revealAll(${idx})">Reveal All</button> <button class="reset-btn" onclick="hideAll(${idx})">Hide All</button></div>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:12px;">Click any card to reveal the English translation.</p>
+    <div class="vocab-grid" id="vocab-grid-${idx}">
+      ${w.vocab.map((v, vi) => `
+        <div class="vocab-card" id="vc-${idx}-${vi}" onclick="toggleVocab(${idx}, ${vi})">
+          <div class="vocab-french">${v.fr}</div>
+          <div class="vocab-translation">${v.en}</div>
+          <div class="vocab-hint">tap to reveal</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function buildQuizSection(w, idx) {
+  return `<div class="card">
+    <div class="card-title"><span class="icon">✏️</span> Vocabulary Quiz — Week ${w.number}</div>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Type the French translation for each English word. Target: 16/20 or above.</p>
+    <div id="quiz-area-${idx}">
+      <div class="quiz-prompt" id="quiz-prompt-${idx}">Loading...</div>
+      <input type="text" class="quiz-input" id="quiz-input-${idx}" placeholder="Type French here..." onkeydown="if(event.key==='Enter') checkAnswer(${idx})">
+      <div class="quiz-feedback hidden" id="quiz-feedback-${idx}"></div>
+      <div class="quiz-buttons">
+        <button class="btn btn-primary" onclick="checkAnswer(${idx})">Check ✓</button>
+        <button class="btn btn-secondary" onclick="skipQuestion(${idx})">Skip →</button>
+        <button class="btn btn-secondary" onclick="initQuiz(${idx});renderQuiz(${idx})">Restart 🔄</button>
+      </div>
+      <div class="quiz-score" id="quiz-score-${idx}"></div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-prog-${idx}" style="width:0%"></div></div>
+    </div>
+  </div>`;
+}
+
+function buildTCFSection(w) {
+  return `<div class="card">
+    <div class="card-title"><span class="icon">🎯</span> TCF Practice Tasks — Week ${w.number}</div>
+    <div class="tcf-prompt">
+      <div class="tcf-prompt-label">✏️ Writing Prompt</div>
+      <div class="tcf-prompt-text">${w.tcfWriting}</div>
+    </div>
+    <div class="tcf-prompt">
+      <div class="tcf-prompt-label">🗣 Speaking Prompt</div>
+      <div class="tcf-prompt-text">${w.tcfSpeaking}</div>
+    </div>
+    <div class="tcf-tip">
+      <div class="tcf-tip-label">💡 Examiner Tip</div>
+      ${w.examTip}
+    </div>
+    <div style="margin-top:16px;background:#f9fafb;border-radius:10px;padding:16px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">✅ CLB 5 Self-Evaluation Checklist</div>
+      ${[
+        'I completed the full task',
+        'I used correct vocabulary for the topic',
+        'My grammar was mostly accurate',
+        'I used connectors/discourse markers',
+        'I spoke/wrote for the required length',
+        'I can do this task without translating in my head'
+      ].map(item => `<div class="checklist-item"><span>☐</span><span style="font-size:13px">${item}</span></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+function toggleDay(header) {
+  const tasks = header.nextElementSibling;
+  tasks.classList.toggle('open');
+}
+
+function toggleTask(weekNum, di, ti, el) {
+  const state = getState();
+  const key = getTaskKey(weekNum, di, ti);
+  state[key] = !state[key];
+  saveState(state);
+  el.classList.toggle('done', state[key]);
+
+  // Update day header
+  const daySection = el.closest('.day-section');
+  const header = daySection.querySelector('.day-header');
+  const allTasks = daySection.querySelectorAll('.task-item');
+  const doneCount = Array.from(allTasks).filter(t => t.classList.contains('done')).length;
+  const check = header.querySelector('.day-check');
+  if (doneCount === allTasks.length) {
+    header.classList.add('completed-day');
+    check.textContent = '✅';
+  } else {
+    header.classList.remove('completed-day');
+    check.textContent = `${doneCount}/${allTasks.length}`;
+  }
+
+  // Update week meta
+  const w = weeks.find(x => x.number === weekNum);
+  let totalTasks = 0, doneTasks = 0;
+  w.days.forEach((day, dii) => {
+    day.tasks.forEach((task, tii) => {
+      totalTasks++;
+      if (state[getTaskKey(w.number, dii, tii)]) doneTasks++;
+    });
+  });
+  const metaTags = document.querySelectorAll('.meta-tag:not(.video):not(.grammar)');
+  if (metaTags.length) metaTags[metaTags.length - 1].textContent = `${doneTasks}/${totalTasks} tasks done`;
+}
+
+function toggleWeekComplete(idx) {
+  const w = weeks[idx];
+  const state = getState();
+  const key = getWeekCompleteKey(w.number);
+  state[key] = !state[key];
+  saveState(state);
+  buildNav();
+  updateProgress();
+  showWeek(idx);
+}
+
+function switchTab(btn, tabId) {
+  btn.closest('.tabs').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const container = btn.closest('.main') || document.getElementById('week-content');
+  container.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+
+  // Init quiz if switching to quiz tab
+  const idx = currentWeekIdx;
+  if (tabId.startsWith('quiz-')) {
+    if (!quizState[idx]) initQuiz(idx);
+    renderQuiz(idx);
+  }
+}
+
+// ============================================================
+// VOCAB REVEAL
+// ============================================================
+function toggleVocab(idx, vi) {
+  const card = document.getElementById(`vc-${idx}-${vi}`);
+  card.classList.toggle('revealed');
+}
+function revealAll(idx) {
+  const w = weeks[idx];
+  w.vocab.forEach((_, vi) => document.getElementById(`vc-${idx}-${vi}`)?.classList.add('revealed'));
+}
+function hideAll(idx) {
+  const w = weeks[idx];
+  w.vocab.forEach((_, vi) => document.getElementById(`vc-${idx}-${vi}`)?.classList.remove('revealed'));
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+function initQuiz(idx) {
+  const w = weeks[idx];
+  const shuffled = [...w.vocab].sort(() => Math.random() - 0.5);
+  quizState[idx] = { questions: shuffled, current: 0, correct: 0, total: 0, done: false };
+}
+
+function renderQuiz(idx) {
+  const qs = quizState[idx];
+  if (!qs) return;
+  const promptEl = document.getElementById(`quiz-prompt-${idx}`);
+  const inputEl = document.getElementById(`quiz-input-${idx}`);
+  const scoreEl = document.getElementById(`quiz-score-${idx}`);
+  const feedbackEl = document.getElementById(`quiz-feedback-${idx}`);
+  const progEl = document.getElementById(`quiz-prog-${idx}`);
+  if (!promptEl) return;
+
+  if (qs.done || qs.current >= qs.questions.length) {
+    const pct = Math.round((qs.correct / qs.questions.length) * 100);
+    promptEl.textContent = '🎉 Quiz Complete!';
+    inputEl.style.display = 'none';
+    feedbackEl.className = 'quiz-feedback ' + (pct >= 80 ? 'correct' : 'wrong');
+    feedbackEl.textContent = `Score: ${qs.correct}/${qs.questions.length} (${pct}%) — ${pct >= 80 ? '✅ Target reached! Well done!' : '📚 Keep practising — target is 80%'}`;
+    feedbackEl.classList.remove('hidden');
+    scoreEl.textContent = '';
+    progEl.style.width = '100%';
+    return;
+  }
+
+  const q = qs.questions[qs.current];
+  promptEl.textContent = q.en;
+  inputEl.value = '';
+  inputEl.className = 'quiz-input';
+  inputEl.style.display = 'block';
+  inputEl.focus();
+  feedbackEl.classList.add('hidden');
+  scoreEl.textContent = `Question ${qs.current + 1} of ${qs.questions.length} · Score: ${qs.correct}/${qs.total}`;
+  progEl.style.width = `${(qs.current / qs.questions.length) * 100}%`;
+}
+
+function normalise(str) {
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s\/\(\)\.]/g, "").trim();
+}
+
+function checkAnswer(idx) {
+  const qs = quizState[idx];
+  if (!qs || qs.done) return;
+  const inputEl = document.getElementById(`quiz-input-${idx}`);
+  const feedbackEl = document.getElementById(`quiz-feedback-${idx}`);
+  if (!inputEl) return;
+  const userAnswer = inputEl.value.trim();
+  if (!userAnswer) return;
+
+  const q = qs.questions[qs.current];
+  const correct = normalise(q.fr);
+  const userNorm = normalise(userAnswer);
+
+  // Accept partial match or exact
+  const isCorrect = userNorm === correct || correct.includes(userNorm) || userNorm.includes(correct.split('/')[0].trim());
+
+  qs.total++;
+  if (isCorrect) {
+    qs.correct++;
+    inputEl.className = 'quiz-input correct';
+    feedbackEl.className = 'quiz-feedback correct';
+    feedbackEl.textContent = `✓ Correct! "${q.fr}"`;
+  } else {
+    inputEl.className = 'quiz-input wrong';
+    feedbackEl.className = 'quiz-feedback wrong';
+    feedbackEl.textContent = `✗ The answer was: "${q.fr}"`;
+  }
+  feedbackEl.classList.remove('hidden');
+
+  qs.current++;
+  if (qs.current >= qs.questions.length) qs.done = true;
+
+  setTimeout(() => renderQuiz(idx), isCorrect ? 1000 : 2000);
+}
+
+function skipQuestion(idx) {
+  const qs = quizState[idx];
+  if (!qs || qs.done) return;
+  qs.current++;
+  if (qs.current >= qs.questions.length) qs.done = true;
+  renderQuiz(idx);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildNav();
+updateProgress();
+showWeek(0);
+// Wire onboarding link (needs V defined, which it is)
+document.getElementById('onboard-link').href = V.onboard;
+
+// Open first day automatically
+setTimeout(() => {
+  const firstDay = document.querySelector('.day-header');
+  if (firstDay) { firstDay.click(); }
+}, 100);
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, duration=2800) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ============================================================
+// EXPORT / IMPORT PROGRESS
+// ============================================================
+function exportProgress() {
+  try {
+    const state = getState();
+    const code = btoa(JSON.stringify(state));
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(() => showToast('✅ Progress copied! Paste it on your other device.'));
+    } else {
+      prompt('Copy this code and paste it on your other device:', code);
+    }
+  } catch(e) { showToast('❌ Export failed. Please try again.'); }
+}
+
+function importProgress() {
+  const code = prompt('Paste your progress code here (from your other device):');
+  if (!code || !code.trim()) return;
+  try {
+    const state = JSON.parse(atob(code.trim()));
+    saveState(state);
+    buildNav();
+    updateProgress();
+    showWeek(currentWeekIdx);
+    showToast('✅ Progress imported successfully!');
+  } catch(e) { showToast('❌ Invalid code. Make sure you copied it fully.'); }
+}
+
+// ============================================================
+// GOOGLE DRIVE LINKS SETTINGS
+// ============================================================
+const DRIVE_STORAGE_KEY = 'tcf_drive_links';
+
+const driveFields = [
+  // Videos
+  { key:'v1',   label:'Video 1 – Sound System',    group:'video' },
+  { key:'v2',   label:'Video 2 – Être & Avoir',     group:'video' },
+  { key:'v3',   label:'Video 3 – Daily Routine',    group:'video' },
+  { key:'v4',   label:'Video 4 – Getting Around',   group:'video' },
+  { key:'v5',   label:'Video 5 – Food & Cafés',     group:'video' },
+  { key:'v6',   label:'Video 6 – Passé Composé',    group:'video' },
+  { key:'v7',   label:'Video 7 – Listening',        group:'video' },
+  { key:'v8',   label:'Video 8 – Reading',          group:'video' },
+  { key:'v910', label:'Video 9&10 – Writing',       group:'video' },
+  { key:'v11',  label:'Video 11 – Speaking',        group:'video' },
+  { key:'onboard', label:'Onboarding Intro Video',  group:'video' },
+  // Docs
+  { key:'vocab',    label:'Vocab & Verbs PDF',          group:'doc' },
+  { key:'verbs',    label:'Verbs Worksheet (.docx)',     group:'doc' },
+  { key:'reflexive',label:'Reflexive Verbs (.docx)',     group:'doc' },
+  { key:'speaking', label:'Speaking Template (.docx)',   group:'doc' },
+  { key:'plan',     label:'12-Week Study Plan (.docx)',  group:'doc' },
+];
+
+function getDriveLinks() {
+  try { return JSON.parse(localStorage.getItem(DRIVE_STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+
+function resolveLink(localHref, driveKey) {
+  const dl = getDriveLinks();
+  if (dl[driveKey] && dl[driveKey].trim()) {
+    // Convert Google Drive view link to direct open link
+    const raw = dl[driveKey].trim();
+    return raw;
+  }
+  return localHref;
+}
+
+function openSettings() {
+  const dl = getDriveLinks();
+  // Build video inputs
+  const vEl = document.getElementById('drive-video-inputs');
+  vEl.innerHTML = driveFields.filter(f=>f.group==='video').map(f => `
+    <div class="drive-input-row">
+      <span class="drive-input-label">${f.label}</span>
+      <input class="drive-input ${dl[f.key] ? 'has-link' : ''}" id="di-${f.key}" type="url" placeholder="Paste Google Drive share link..." value="${dl[f.key]||''}">
+    </div>`).join('');
+  const dEl = document.getElementById('drive-doc-inputs');
+  dEl.innerHTML = driveFields.filter(f=>f.group==='doc').map(f => `
+    <div class="drive-input-row">
+      <span class="drive-input-label">${f.label}</span>
+      <input class="drive-input ${dl[f.key] ? 'has-link' : ''}" id="di-${f.key}" type="url" placeholder="Paste Google Drive share link..." value="${dl[f.key]||''}">
+    </div>`).join('');
+  document.getElementById('settings-modal').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+
+function saveDriveLinks() {
+  const dl = {};
+  driveFields.forEach(f => {
+    const val = (document.getElementById(`di-${f.key}`)?.value || '').trim();
+    if (val) dl[f.key] = val;
+  });
+  localStorage.setItem(DRIVE_STORAGE_KEY, JSON.stringify(dl));
+  closeSettings();
+  // Refresh current week to update resource bar
+  showWeek(currentWeekIdx);
+  const count = Object.keys(dl).length;
+  showToast(`✅ ${count} Drive link${count!==1?'s':''} saved! Resources bar updated.`);
+}
+
+function clearDriveLinks() {
+  if (!confirm('Remove all saved Google Drive links?')) return;
+  localStorage.removeItem(DRIVE_STORAGE_KEY);
+  closeSettings();
+  showWeek(currentWeekIdx);
+  showToast('🗑 Drive links cleared.');
+}
+</script>
+
+<!-- Onboarding section (shown before week 1 by default is week 1, but let's add a global intro) -->
+<script>
+// Add a small info bar at top of week-nav area if week 1
+window.addEventListener('DOMContentLoaded', () => {
+  const infoBar = document.createElement('div');
+  infoBar.style.cssText = 'background:#eff6ff;border-bottom:1px solid #bfdbfe;padding:10px 32px;font-size:13px;color:#1e40af;display:flex;align-items:center;gap:8px;';
+  infoBar.innerHTML = '💡 <strong>How to use:</strong> Click each day to expand tasks. Check off tasks as you complete them. Use the Vocab Quiz tab to test yourself. Progress saves automatically.';
+  document.querySelector('.progress-section').after(infoBar);
+});
+</script>
+</body>
+</html>
