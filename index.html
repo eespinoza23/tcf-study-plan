@@ -220,13 +220,13 @@
 <body>
 
 <div class="header">
-  <h1>🇫🇷 TCF Canada — CLB 5 Study Plan</h1>
-  <p id="header-subtitle">Starter to CLB 5 · Pass TCF with Esme · 12 Weeks · 12 Hours/Week</p>
+  <h1>🇨🇦 TCF Canada — CLB 5 Study Plan</h1>
+  <p id="header-subtitle">Starter to CLB 5 · 12 Weeks · 12 Hours/Week</p>
   <div class="header-stats">
-    <div class="stat-chip">📅 12 Weeks</div>
-    <div class="stat-chip">🎬 12 Video Tutorials</div>
-    <div class="stat-chip">📚 24 Coaching Sessions</div>
-    <div class="stat-chip">🎯 Target: CLB 5</div>
+    <div id="stat-weeks" class="stat-chip">📅 12 Weeks</div>
+    <div id="stat-videos" class="stat-chip">🎬 12 Video Tutorials</div>
+    <div id="stat-sessions" class="stat-chip">📚 24 Coaching Sessions</div>
+    <div id="stat-target" class="stat-chip">🎯 Target: CLB 5</div>
     <a id="onboard-link" href="#" target="_blank" class="stat-chip" style="background:rgba(255,255,255,0.25);text-decoration:none;">▶ Watch Onboarding Video</a>
   </div>
 </div>
@@ -294,7 +294,8 @@
 // ============================================================
 const T = {
   en: {
-    subtitle:'Starter to CLB 5 · Pass TCF with Esme · 12 Weeks · 12 Hours/Week',
+    subtitle:'Starter to CLB 5 · 12 Weeks · 12 Hours/Week',
+    statWeeks:'📅 12 Weeks', statVideos:'🎬 12 Video Tutorials', statSessions:'📚 24 Coaching Sessions', statTarget:'🎯 Target: CLB 5',
     onboarding:'▶ Watch Onboarding Video',
     syncLabel:'📲 Cross-device sync:',
     exportBtn:'⬆ Export Progress', importBtn:'⬇ Import Progress', settingsBtn:'⚙️ Google Drive Links',
@@ -341,7 +342,8 @@ const T = {
     clearLinksToast:'🗑 Drive links cleared.',
   },
   es: {
-    subtitle:'Principiante a CLB 5 · Pasa el TCF con Esme · 12 Semanas · 12 Horas/Semana',
+    subtitle:'Principiante a CLB 5 · 12 Semanas · 12 Horas/Semana',
+    statWeeks:'📅 12 Semanas', statVideos:'🎬 12 Tutoriales en Video', statSessions:'📚 24 Sesiones de Coaching', statTarget:'🎯 Meta: CLB 5',
     onboarding:'▶ Ver Video de Bienvenida',
     syncLabel:'📲 Sincronización:', exportBtn:'⬆ Exportar Progreso', importBtn:'⬇ Importar Progreso', settingsBtn:'⚙️ Links de Drive',
     langBtn:'🇬🇧 English',
@@ -2835,6 +2837,15 @@ function applyTranslations() {
   const sectionHeaders = document.querySelectorAll('#settings-modal .modal-section h4');
   if (sectionHeaders[0]) sectionHeaders[0].textContent = t.videoGroupLabel;
   if (sectionHeaders[1]) sectionHeaders[1].textContent = t.docGroupLabel;
+  // Header stat chips
+  const sw = document.getElementById('stat-weeks');
+  if (sw) sw.textContent = t.statWeeks;
+  const sv = document.getElementById('stat-videos');
+  if (sv) sv.textContent = t.statVideos;
+  const ss = document.getElementById('stat-sessions');
+  if (ss) ss.textContent = t.statSessions;
+  const st = document.getElementById('stat-target');
+  if (st) st.textContent = t.statTarget;
 }
 
 // ============================================================
