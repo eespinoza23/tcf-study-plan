@@ -210,6 +210,8 @@
   .date-complete-input { padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; outline: none; color: var(--dark); }
   .date-complete-input:focus { border-color: var(--blue); }
   .week-complete-banner .completed-date { font-size: 13px; font-weight: 400; opacity: 0.85; margin-top: 4px; }
+  /* Per-task date badge */
+  .task-date-badge { font-size: 10px; color: var(--green); background: var(--green-light); border-radius: 4px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; margin-top: 3px; }
   /* Toast */
   .toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 2000; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
@@ -219,7 +221,7 @@
 
 <div class="header">
   <h1>🇫🇷 TCF Canada — CLB 5 Study Plan</h1>
-  <p>Starter to CLB 5 · Pass TCF with Esme · 12 Weeks · 12 Hours/Week</p>
+  <p id="header-subtitle">Starter to CLB 5 · Pass TCF with Esme · 12 Weeks · 12 Hours/Week</p>
   <div class="header-stats">
     <div class="stat-chip">📅 12 Weeks</div>
     <div class="stat-chip">🎬 12 Video Tutorials</div>
@@ -323,6 +325,9 @@ const T = {
     writingLabel:'✏️ Writing Prompt', speakingLabel:'🗣 Speaking Prompt', tipLabel:'💡 Examiner Tip',
     checklistTitle:'✅ CLB 5 Self-Evaluation Checklist',
     checklist:['I completed the full task','I used correct vocabulary for the topic','My grammar was mostly accurate','I used connectors/discourse markers','I spoke/wrote for the required length','I can do this task without translating in my head'],
+    weekLabel:'Week', themeLabel:'Theme:',
+    tcfPracticeTitle:(n)=>`TCF Practice Tasks — Week ${n}`,
+    videosOnDrive:'📂 Videos on Drive', docsOnDrive:'📂 Docs on Drive',
     resBarLabel:'📁 Your Files & Resources',
     howToUse:'💡 <strong>How to use:</strong> Click each day to expand tasks. Check off tasks as you complete them. Use the Vocab Quiz tab to test yourself. Progress saves automatically.',
     settingsTitle:'⚙️ Configure Google Drive Links',
@@ -366,6 +371,9 @@ const T = {
     writingLabel:'✏️ Redacción', speakingLabel:'🗣 Expresión Oral', tipLabel:'💡 Consejo del Examinador',
     checklistTitle:'✅ Lista de Verificación CLB 5',
     checklist:['Completé la tarea completa','Usé vocabulario correcto para el tema','Mi gramática fue mayormente precisa','Usé conectores y marcadores del discurso','Hablé/escribí la longitud requerida','Puedo hacer esta tarea sin traducir en mi cabeza'],
+    weekLabel:'Semana', themeLabel:'Tema:',
+    tcfPracticeTitle:(n)=>`Tareas de Práctica TCF — Semana ${n}`,
+    videosOnDrive:'📂 Videos en Drive', docsOnDrive:'📂 Docs en Drive',
     resBarLabel:'📁 Tus Archivos y Recursos',
     howToUse:'💡 <strong>Cómo usar:</strong> Haz clic en cada día para ver las tareas. Márcalas al completarlas. Usa el Examen de Vocabulario para practicar. El progreso se guarda automáticamente.',
     settingsTitle:'⚙️ Configurar Links de Google Drive',
@@ -442,24 +450,26 @@ const weekRes = {
   12: [ {l:'📝 Speaking Template',  h:D.speaking,c:'doc'}, {l:'📘 Vocab & Verbs PDF', h:D.vocab,   c:'pdf'}, {l:'📋 Full Study Plan',   h:D.plan,    c:'doc'} ],
 };
 
-function linkify(t) {
-  return t
-    .replace(/TV5Monde/g,       `<a href="${EXT.tv5}"       target="_blank" class="ext-link">TV5Monde ↗</a>`)
+function linkify(str) {
+  // URL-based patterns FIRST — prevents name-patterns from inserting URLs that then re-match
+  return str
     .replace(/tv5monde\.com\/apprendre/g, `<a href="${EXT.tv5}" target="_blank" class="ext-link">tv5monde.com/apprendre ↗</a>`)
-    .replace(/RFI Savoirs/g,    `<a href="${EXT.rfi}"       target="_blank" class="ext-link">RFI Savoirs ↗</a>`)
-    .replace(/savoirs\.rfi\.fr/g,`<a href="${EXT.rfi}"      target="_blank" class="ext-link">savoirs.rfi.fr ↗</a>`)
-    .replace(/bonjourdefrance\.com/g,`<a href="${EXT.bdf}"  target="_blank" class="ext-link">bonjourdefrance.com ↗</a>`)
-    .replace(/Bonjour de France/g,`<a href="${EXT.bdf}"     target="_blank" class="ext-link">Bonjour de France ↗</a>`)
-    .replace(/\bAnki\b/g,       `<a href="${EXT.anki}"      target="_blank" class="ext-link">Anki ↗</a>`)
-    .replace(/ankiweb\.net/g,   `<a href="${EXT.anki}"      target="_blank" class="ext-link">ankiweb.net ↗</a>`)
-    .replace(/\bQuizlet\b/g,    `<a href="${EXT.quizlet}"   target="_blank" class="ext-link">Quizlet ↗</a>`)
-    .replace(/\bDuolingo\b/g,   `<a href="${EXT.duolingo}"  target="_blank" class="ext-link">Duolingo ↗</a>`)
-    .replace(/\bSpeechling\b/g, `<a href="${EXT.speechling}"target="_blank" class="ext-link">Speechling ↗</a>`)
-    .replace(/france-education-international\.fr/g,`<a href="${EXT.tcfsite}" target="_blank" class="ext-link">france-education-international.fr ↗</a>`)
-    .replace(/\bYouTube\b/g,    `<a href="${EXT.youtube}"   target="_blank" class="ext-link">YouTube ↗</a>`)
+    .replace(/savoirs\.rfi\.fr/g,         `<a href="${EXT.rfi}"  target="_blank" class="ext-link">savoirs.rfi.fr ↗</a>`)
+    .replace(/bonjourdefrance\.com/g,      `<a href="${EXT.bdf}"  target="_blank" class="ext-link">bonjourdefrance.com ↗</a>`)
+    .replace(/ankiweb\.net/g,              `<a href="${EXT.anki}" target="_blank" class="ext-link">ankiweb.net ↗</a>`)
+    .replace(/france-education-international\.fr/g, `<a href="${EXT.tcfsite}" target="_blank" class="ext-link">france-education-international.fr ↗</a>`)
     .replace(/lapresse\.ca/g,   `<a href="${EXT.lapresse}"  target="_blank" class="ext-link">lapresse.ca ↗</a>`)
     .replace(/lemonde\.fr/g,    `<a href="${EXT.lemonde}"   target="_blank" class="ext-link">lemonde.fr ↗</a>`)
-    .replace(/indeed\.fr/g,     `<a href="${EXT.indeed}"    target="_blank" class="ext-link">indeed.fr ↗</a>`);
+    .replace(/indeed\.fr/g,     `<a href="${EXT.indeed}"    target="_blank" class="ext-link">indeed.fr ↗</a>`)
+    // Name-based patterns after URL patterns — names never appear inside already-generated hrefs
+    .replace(/TV5Monde/g,          `<a href="${EXT.tv5}"        target="_blank" class="ext-link">TV5Monde ↗</a>`)
+    .replace(/RFI Savoirs/g,       `<a href="${EXT.rfi}"        target="_blank" class="ext-link">RFI Savoirs ↗</a>`)
+    .replace(/Bonjour de France/g, `<a href="${EXT.bdf}"        target="_blank" class="ext-link">Bonjour de France ↗</a>`)
+    .replace(/\bAnki\b/g,          `<a href="${EXT.anki}"       target="_blank" class="ext-link">Anki ↗</a>`)
+    .replace(/\bQuizlet\b/g,       `<a href="${EXT.quizlet}"    target="_blank" class="ext-link">Quizlet ↗</a>`)
+    .replace(/\bDuolingo\b/g,      `<a href="${EXT.duolingo}"   target="_blank" class="ext-link">Duolingo ↗</a>`)
+    .replace(/\bSpeechling\b/g,    `<a href="${EXT.speechling}" target="_blank" class="ext-link">Speechling ↗</a>`)
+    .replace(/\bYouTube\b/g,       `<a href="${EXT.youtube}"    target="_blank" class="ext-link">YouTube ↗</a>`);
 }
 
 function buildResBar(weekNum) {
@@ -487,8 +497,8 @@ function buildResBar(weekNum) {
     return `<a href="${href}" target="_blank" class="res-chip ${f.c}" title="${hasDrive ? 'Individual Drive link' : 'Opens Drive folder'}">${f.l}${badge}</a>`;
   }).join('');
   return `<div class="res-bar"><span class="res-bar-label">${t.resBarLabel}</span>
-    <a href="${GDRIVE_VIDEOS_FOLDER}" target="_blank" class="res-chip video" title="Your Google Drive videos folder">📂 Videos on Drive</a>
-    <a href="${GDRIVE_DOCS_FOLDER}"   target="_blank" class="res-chip doc"   title="Your Google Drive documents folder">📂 Docs on Drive</a>
+    <a href="${GDRIVE_VIDEOS_FOLDER}" target="_blank" class="res-chip video" title="Your Google Drive videos folder">${t.videosOnDrive}</a>
+    <a href="${GDRIVE_DOCS_FOLDER}"   target="_blank" class="res-chip doc"   title="Your Google Drive documents folder">${t.docsOnDrive}</a>
     ${chips}
     <a href="${EXT.tv5}"        target="_blank" class="res-chip ext">🌐 TV5Monde</a>
     <a href="${EXT.rfi}"        target="_blank" class="res-chip ext">🎧 RFI Savoirs</a>
@@ -1660,6 +1670,12 @@ function getWeekCompleteKey(weekNum) {
 function getWeekDateKey(weekNum) {
   return `w${weekNum}_completedDate`;
 }
+function getTaskDateKey(weekNum, dayIdx, taskIdx) {
+  return `w${weekNum}_d${dayIdx}_t${taskIdx}_date`;
+}
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
 
 // ============================================================
 // QUIZ STATE
@@ -1727,14 +1743,14 @@ function showWeek(idx) {
   });
 
   const completedDate = state[getWeekDateKey(w.number)] || '';
-  const todayStr = new Date().toISOString().split('T')[0];
+  const today = todayStr();
 
   let html = `
     <span class="phase-badge ${phaseClass}">${phaseEmoji} ${phaseLabel}</span>
     ${isComplete ? `<div class="week-complete-banner">${t.weekDone(w.number)}${completedDate ? `<div class="completed-date">${t.completedOn} ${completedDate}</div>` : ''}</div>` : ''}
     <div class="week-header">
-      <h2>Week ${w.number}: ${w.title}</h2>
-      <div class="week-theme">Theme: ${w.theme}</div>
+      <h2>${t.weekLabel} ${w.number}: ${w.title}</h2>
+      <div class="week-theme">${t.themeLabel} ${w.theme}</div>
       <div class="week-meta">
         <span class="meta-tag video">🎬 ${w.video}</span>
         <span class="meta-tag grammar">📖 ${w.grammar}</span>
@@ -1756,7 +1772,7 @@ function showWeek(idx) {
         ${w.days.map((day, di) => buildDaySection(w, day, di, state)).join('')}
         <div class="date-complete-row">
           <label for="date-complete-${idx}">${t.dateLabel}</label>
-          <input type="date" class="date-complete-input" id="date-complete-${idx}" value="${completedDate || todayStr}">
+          <input type="date" class="date-complete-input" id="date-complete-${idx}" value="${completedDate || today}">
         </div>
         <button class="complete-week-btn ${isComplete ? 'completed' : ''}" onclick="toggleWeekComplete(${idx})" id="complete-btn-${idx}">
           ${isComplete ? t.undoComplete : t.completeWeek(w.number)}
@@ -1801,10 +1817,11 @@ function buildDaySection(w, day, di, state) {
         ${day.tasks.map((task, ti) => {
           const key = getTaskKey(w.number, di, ti);
           const done = !!state[key];
+          const doneDate = state[getTaskDateKey(w.number, di, ti)] || '';
           return `<div class="task-item ${done ? 'done' : ''}" onclick="toggleTask(${w.number}, ${di}, ${ti}, this)">
             <div class="task-checkbox"></div>
             <span class="task-time-badge">${task.time}</span>
-            <span class="task-text">${linkify(task.text)}</span>
+            <span class="task-text">${linkify(task.text)}${done && doneDate ? `<span class="task-date-badge">✓ ${doneDate}</span>` : ''}</span>
           </div>`;
         }).join('')}
       </div>
@@ -1847,7 +1864,7 @@ function buildQuizSection(w, idx) {
 
 function buildTCFSection(w) {
   return `<div class="card">
-    <div class="card-title"><span class="icon">🎯</span> TCF Practice Tasks — Week ${w.number}</div>
+    <div class="card-title"><span class="icon">🎯</span> ${t.tcfPracticeTitle(w.number)}</div>
     <div class="tcf-prompt">
       <div class="tcf-prompt-label">${t.writingLabel}</div>
       <div class="tcf-prompt-text">${w.tcfWriting}</div>
@@ -1878,9 +1895,30 @@ function toggleDay(header) {
 function toggleTask(weekNum, di, ti, el) {
   const state = getState();
   const key = getTaskKey(weekNum, di, ti);
+  const dateKey = getTaskDateKey(weekNum, di, ti);
   state[key] = !state[key];
+  const now = todayStr();
+  if (state[key]) {
+    state[dateKey] = now;
+  } else {
+    delete state[dateKey];
+  }
   saveState(state);
   el.classList.toggle('done', state[key]);
+
+  // Update date badge in task text span
+  const textSpan = el.querySelector('.task-text');
+  if (textSpan) {
+    // Remove existing date badge if any
+    const existing = textSpan.querySelector('.task-date-badge');
+    if (existing) existing.remove();
+    if (state[key]) {
+      const badge = document.createElement('span');
+      badge.className = 'task-date-badge';
+      badge.textContent = `✓ ${now}`;
+      textSpan.appendChild(badge);
+    }
+  }
 
   // Update day header
   const daySection = el.closest('.day-section');
@@ -1906,7 +1944,7 @@ function toggleTask(weekNum, di, ti, el) {
     });
   });
   const metaTags = document.querySelectorAll('.meta-tag:not(.video):not(.grammar)');
-  if (metaTags.length) metaTags[metaTags.length - 1].textContent = `${doneTasks}/${totalTasks} tasks done`;
+  if (metaTags.length) metaTags[metaTags.length - 1].textContent = t.tasksDone(doneTasks, totalTasks);
 }
 
 function toggleWeekComplete(idx) {
@@ -2062,6 +2100,11 @@ function applyTranslations() {
   document.getElementById('modal-title').textContent = t.settingsTitle;
   document.getElementById('btn-clear').textContent = t.clearAll;
   document.getElementById('btn-save').textContent = t.saveLinks;
+  // Header subtitle and onboarding link
+  const subtitle = document.getElementById('header-subtitle');
+  if (subtitle) subtitle.textContent = t.subtitle;
+  const onboardLink = document.getElementById('onboard-link');
+  if (onboardLink) onboardLink.textContent = t.onboarding;
   // Progress label
   const plabel = document.getElementById('progress-label-main');
   if (plabel) plabel.textContent = t.progressLabel;
