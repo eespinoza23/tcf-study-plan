@@ -204,6 +204,12 @@
   .drive-input.has-link { border-color: var(--green); background: var(--green-light); }
   .info-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #1e40af; line-height: 1.5; margin-bottom: 16px; }
   .info-box strong { display: block; margin-bottom: 4px; }
+  /* Date completed */
+  .date-complete-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 4px; font-size: 13px; color: var(--gray); }
+  .date-complete-row label { font-weight: 500; white-space: nowrap; }
+  .date-complete-input { padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; outline: none; color: var(--dark); }
+  .date-complete-input:focus { border-color: var(--blue); }
+  .week-complete-banner .completed-date { font-size: 13px; font-weight: 400; opacity: 0.85; margin-top: 4px; }
   /* Toast */
   .toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 2000; opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
@@ -223,19 +229,20 @@
   </div>
 </div>
 
-<!-- Sync Bar -->
-<div class="sync-bar">
-  <span>📲 Cross-device sync:</span>
-  <button class="sync-btn export" onclick="exportProgress()">⬆ Export Progress</button>
-  <button class="sync-btn import" onclick="importProgress()">⬇ Import Progress</button>
-  <button class="sync-btn settings" onclick="openSettings()">⚙️ Google Drive Links</button>
+<!-- Sync Bar (content filled by JS after lang loads) -->
+<div class="sync-bar" id="sync-bar">
+  <span id="sync-label"></span>
+  <button class="sync-btn export" id="btn-export" onclick="exportProgress()"></button>
+  <button class="sync-btn import" id="btn-import" onclick="importProgress()"></button>
+  <button class="sync-btn settings" id="btn-settings" onclick="openSettings()"></button>
+  <button class="sync-btn" id="btn-lang" onclick="setLang(getLang()==='en'?'es':'en')" style="background:#f59e0b;color:#1c1917;margin-left:auto;"></button>
 </div>
 
 <!-- Settings Modal -->
 <div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)closeSettings()">
   <div class="modal">
     <div class="modal-header">
-      <h3>⚙️ Configure Google Drive Links</h3>
+      <h3 id="modal-title">⚙️ Configure Google Drive Links</h3>
       <button class="modal-close" onclick="closeSettings()">×</button>
     </div>
     <div class="modal-body">
@@ -254,8 +261,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="clearDriveLinks()">Clear All</button>
-      <button class="btn btn-primary" onclick="saveDriveLinks()">Save Links</button>
+      <button class="btn btn-secondary" id="btn-clear" onclick="clearDriveLinks()">Clear All</button>
+      <button class="btn btn-primary" id="btn-save" onclick="saveDriveLinks()">Save Links</button>
     </div>
   </div>
 </div>
@@ -265,7 +272,7 @@
 
 <div class="progress-section">
   <div class="progress-label">
-    <span>Overall Progress</span>
+    <span id="progress-label-main">Overall Progress</span>
     <span id="progress-text">0 / 12 weeks complete</span>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
@@ -280,6 +287,102 @@
 </div>
 
 <script>
+// ============================================================
+// LANGUAGE / TRANSLATIONS
+// ============================================================
+const T = {
+  en: {
+    subtitle:'Starter to CLB 5 · Pass TCF with Esme · 12 Weeks · 12 Hours/Week',
+    onboarding:'▶ Watch Onboarding Video',
+    syncLabel:'📲 Cross-device sync:',
+    exportBtn:'⬆ Export Progress', importBtn:'⬇ Import Progress', settingsBtn:'⚙️ Google Drive Links',
+    langBtn:'🇻🇪 Español',
+    progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
+    tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice',
+    days:{Monday:'Monday',Tuesday:'Tuesday',Wednesday:'Wednesday',Thursday:'Thursday',Friday:'Friday',Weekend:'Weekend'},
+    dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
+    phases:{foundation:'Foundation Phase — CLB 1–2',building:'Building Phase — CLB 3–4',readiness:'TCF Readiness Phase — CLB 5'},
+    dailyTitle:'📅 Daily Study Tasks',
+    tasksDone:(d,t)=>`${d}/${t} tasks done`,
+    completeWeek:(n)=>`🏁 Mark Week ${n} as Complete`,
+    weekDone:(n)=>`✅ Week ${n} Complete! Great work, Edison!`,
+    undoComplete:'✅ Week Marked Complete (click to undo)',
+    completedOn:'Completed on:', dateLabel:'Date:',
+    revealAll:'Reveal All', hideAll:'Hide All', tapReveal:'tap to reveal',
+    vocabTitle:(n)=>`Week ${n} Vocabulary`,
+    vocabSubtitle:'Click any card to reveal the English translation.',
+    quizTitle:(n)=>`Vocabulary Quiz — Week ${n}`,
+    quizSubtitle:'Type the French translation for each English word. Target: 16/20 or above.',
+    quizPlaceholder:'Type French here...',
+    checkBtn:'Check ✓', skipBtn:'Skip →', restartBtn:'Restart 🔄',
+    quizDone:'🎉 Quiz Complete!',
+    quizScore:(c,t,p)=>`Score: ${c}/${t} (${p}%)`,
+    quizPass:'✅ Target reached! Well done!', quizFail:'📚 Keep practising — target is 80%',
+    questionOf:(c,t)=>`Question ${c} of ${t}`, scoreLabel:(c,t)=>`Score: ${c}/${t}`,
+    correctMsg:(fr)=>`✓ Correct! "${fr}"`, wrongMsg:(fr)=>`✗ The answer was: "${fr}"`,
+    writingLabel:'✏️ Writing Prompt', speakingLabel:'🗣 Speaking Prompt', tipLabel:'💡 Examiner Tip',
+    checklistTitle:'✅ CLB 5 Self-Evaluation Checklist',
+    checklist:['I completed the full task','I used correct vocabulary for the topic','My grammar was mostly accurate','I used connectors/discourse markers','I spoke/wrote for the required length','I can do this task without translating in my head'],
+    resBarLabel:'📁 Your Files & Resources',
+    howToUse:'💡 <strong>How to use:</strong> Click each day to expand tasks. Check off tasks as you complete them. Use the Vocab Quiz tab to test yourself. Progress saves automatically.',
+    settingsTitle:'⚙️ Configure Google Drive Links',
+    settingsInfo:'<strong>✅ Your video folder is already linked!</strong> The "📂 Videos on Drive" button in every week opens your Google Drive videos folder directly.<br><br>For even quicker access, paste individual file links below — right-click each file in Google Drive → <em>Share</em> → <em>Anyone with the link</em> → copy link.',
+    videoGroupLabel:'🎬 Videos', docGroupLabel:'📄 Documents & Resources',
+    clearAll:'Clear All', saveLinks:'Save Links',
+    exportToast:'✅ Progress copied! Paste it on your other device.',
+    importToast:'✅ Progress imported successfully!',
+    importError:'❌ Invalid code. Make sure you copied it fully.',
+    saveLinksToast:(n)=>`✅ ${n} Drive link${n!==1?'s':''} saved! Resources bar updated.`,
+    clearLinksToast:'🗑 Drive links cleared.',
+  },
+  es: {
+    subtitle:'Principiante a CLB 5 · Pasa el TCF con Esme · 12 Semanas · 12 Horas/Semana',
+    onboarding:'▶ Ver Video de Bienvenida',
+    syncLabel:'📲 Sincronización:', exportBtn:'⬆ Exportar Progreso', importBtn:'⬇ Importar Progreso', settingsBtn:'⚙️ Links de Drive',
+    langBtn:'🇬🇧 English',
+    progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
+    tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF',
+    days:{Monday:'Lunes',Tuesday:'Martes',Wednesday:'Miércoles',Thursday:'Jueves',Friday:'Viernes',Weekend:'Fin de Semana'},
+    dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
+    phases:{foundation:'Fase Fundamentos — CLB 1–2',building:'Fase de Desarrollo — CLB 3–4',readiness:'Fase Preparación TCF — CLB 5'},
+    dailyTitle:'📅 Tareas de Estudio Diarias',
+    tasksDone:(d,t)=>`${d}/${t} tareas completadas`,
+    completeWeek:(n)=>`🏁 Marcar Semana ${n} como Completada`,
+    weekDone:(n)=>`✅ ¡Semana ${n} Completada! ¡Excelente trabajo, Edison!`,
+    undoComplete:'✅ Semana Marcada como Completa (clic para deshacer)',
+    completedOn:'Completada el:', dateLabel:'Fecha:',
+    revealAll:'Revelar Todo', hideAll:'Ocultar Todo', tapReveal:'toca para revelar',
+    vocabTitle:(n)=>`Vocabulario — Semana ${n}`,
+    vocabSubtitle:'Haz clic en cualquier tarjeta para ver la traducción al inglés.',
+    quizTitle:(n)=>`Examen de Vocabulario — Semana ${n}`,
+    quizSubtitle:'Escribe la traducción al francés. Meta: 16/20 o más.',
+    quizPlaceholder:'Escribe en francés aquí...',
+    checkBtn:'Verificar ✓', skipBtn:'Siguiente →', restartBtn:'Reiniciar 🔄',
+    quizDone:'🎉 ¡Examen Completado!',
+    quizScore:(c,t,p)=>`Puntaje: ${c}/${t} (${p}%)`,
+    quizPass:'✅ ¡Meta alcanzada! ¡Muy bien!', quizFail:'📚 Sigue practicando — la meta es 80%',
+    questionOf:(c,t)=>`Pregunta ${c} de ${t}`, scoreLabel:(c,t)=>`Puntaje: ${c}/${t}`,
+    correctMsg:(fr)=>`✓ ¡Correcto! "${fr}"`, wrongMsg:(fr)=>`✗ La respuesta era: "${fr}"`,
+    writingLabel:'✏️ Redacción', speakingLabel:'🗣 Expresión Oral', tipLabel:'💡 Consejo del Examinador',
+    checklistTitle:'✅ Lista de Verificación CLB 5',
+    checklist:['Completé la tarea completa','Usé vocabulario correcto para el tema','Mi gramática fue mayormente precisa','Usé conectores y marcadores del discurso','Hablé/escribí la longitud requerida','Puedo hacer esta tarea sin traducir en mi cabeza'],
+    resBarLabel:'📁 Tus Archivos y Recursos',
+    howToUse:'💡 <strong>Cómo usar:</strong> Haz clic en cada día para ver las tareas. Márcalas al completarlas. Usa el Examen de Vocabulario para practicar. El progreso se guarda automáticamente.',
+    settingsTitle:'⚙️ Configurar Links de Google Drive',
+    settingsInfo:'<strong>✅ ¡Tu carpeta de videos ya está vinculada!</strong> El botón "📂 Videos en Drive" abre tu carpeta directamente.<br><br>Para acceso más rápido, pega links individuales — clic derecho en Google Drive → <em>Compartir</em> → <em>Cualquier persona con el enlace</em> → copiar.',
+    videoGroupLabel:'🎬 Videos', docGroupLabel:'📄 Documentos y Recursos',
+    clearAll:'Borrar Todo', saveLinks:'Guardar Links',
+    exportToast:'✅ ¡Progreso copiado! Pégalo en tu otro dispositivo.',
+    importToast:'✅ ¡Progreso importado exitosamente!',
+    importError:'❌ Código inválido. Asegúrate de copiarlo completo.',
+    saveLinksToast:(n)=>`✅ ${n} link${n!==1?'s':''} de Drive guardado${n!==1?'s':''}. Barra actualizada.`,
+    clearLinksToast:'🗑 Links de Drive borrados.',
+  }
+};
+function getLang() { return localStorage.getItem('tcf_lang') || 'en'; }
+function setLang(l) { localStorage.setItem('tcf_lang', l); location.reload(); }
+const t = T[getLang()];
+
 // ============================================================
 // RESOURCE PATHS & LINKS
 // ============================================================
@@ -383,7 +486,7 @@ function buildResBar(weekNum) {
     const badge = hasDrive ? ' 🔗' : '';
     return `<a href="${href}" target="_blank" class="res-chip ${f.c}" title="${hasDrive ? 'Individual Drive link' : 'Opens Drive folder'}">${f.l}${badge}</a>`;
   }).join('');
-  return `<div class="res-bar"><span class="res-bar-label">📁 Your Files & Resources</span>
+  return `<div class="res-bar"><span class="res-bar-label">${t.resBarLabel}</span>
     <a href="${GDRIVE_VIDEOS_FOLDER}" target="_blank" class="res-chip video" title="Your Google Drive videos folder">📂 Videos on Drive</a>
     <a href="${GDRIVE_DOCS_FOLDER}"   target="_blank" class="res-chip doc"   title="Your Google Drive documents folder">📂 Docs on Drive</a>
     ${chips}
@@ -1554,6 +1657,9 @@ function getTaskKey(weekNum, dayIdx, taskIdx) {
 function getWeekCompleteKey(weekNum) {
   return `w${weekNum}_complete`;
 }
+function getWeekDateKey(weekNum) {
+  return `w${weekNum}_completedDate`;
+}
 
 // ============================================================
 // QUIZ STATE
@@ -1591,7 +1697,7 @@ function updateActiveNav(idx) {
 function updateProgress() {
   const state = getState();
   const completed = weeks.filter(w => state[getWeekCompleteKey(w.number)]).length;
-  document.getElementById('progress-text').textContent = `${completed} / 12 weeks complete`;
+  document.getElementById('progress-text').textContent = t.progressText(completed);
   document.getElementById('overall-progress').style.width = `${(completed / 12) * 100}%`;
 }
 
@@ -1609,6 +1715,7 @@ function showWeek(idx) {
   // Phase
   const phaseClass = { foundation: 'phase-foundation', building: 'phase-building', readiness: 'phase-readiness' }[w.phase];
   const phaseEmoji = { foundation: '📗', building: '📘', readiness: '📕' }[w.phase];
+  const phaseLabel = t.phases[w.phase] || w.phaseLabel;
 
   // Count tasks completed this week
   let totalTasks = 0, doneTasks = 0;
@@ -1619,33 +1726,40 @@ function showWeek(idx) {
     });
   });
 
+  const completedDate = state[getWeekDateKey(w.number)] || '';
+  const todayStr = new Date().toISOString().split('T')[0];
+
   let html = `
-    <span class="phase-badge ${phaseClass}">${phaseEmoji} ${w.phaseLabel}</span>
-    ${isComplete ? `<div class="week-complete-banner">🎉 Week ${w.number} Complete! Great work, Edison!</div>` : ''}
+    <span class="phase-badge ${phaseClass}">${phaseEmoji} ${phaseLabel}</span>
+    ${isComplete ? `<div class="week-complete-banner">${t.weekDone(w.number)}${completedDate ? `<div class="completed-date">${t.completedOn} ${completedDate}</div>` : ''}</div>` : ''}
     <div class="week-header">
       <h2>Week ${w.number}: ${w.title}</h2>
       <div class="week-theme">Theme: ${w.theme}</div>
       <div class="week-meta">
         <span class="meta-tag video">🎬 ${w.video}</span>
         <span class="meta-tag grammar">📖 ${w.grammar}</span>
-        <span class="meta-tag">${doneTasks}/${totalTasks} tasks done</span>
+        <span class="meta-tag">${t.tasksDone(doneTasks, totalTasks)}</span>
       </div>
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab(this, 'daily-${idx}')">📅 Daily Plan</button>
-      <button class="tab-btn" onclick="switchTab(this, 'vocab-${idx}')">📚 Vocabulary</button>
-      <button class="tab-btn" onclick="switchTab(this, 'quiz-${idx}')">✏️ Vocab Quiz</button>
-      <button class="tab-btn" onclick="switchTab(this, 'tcf-${idx}')">🎯 TCF Practice</button>
+      <button class="tab-btn active" onclick="switchTab(this, 'daily-${idx}')">${t.tabDaily}</button>
+      <button class="tab-btn" onclick="switchTab(this, 'vocab-${idx}')">${t.tabVocab}</button>
+      <button class="tab-btn" onclick="switchTab(this, 'quiz-${idx}')">${t.tabQuiz}</button>
+      <button class="tab-btn" onclick="switchTab(this, 'tcf-${idx}')">${t.tabTCF}</button>
     </div>
 
     <div class="tab-content active" id="daily-${idx}">
       ${buildResBar(w.number)}
       <div class="card">
-        <div class="card-title"><span class="icon">📅</span> Daily Study Tasks</div>
+        <div class="card-title"><span class="icon">📅</span> ${t.dailyTitle}</div>
         ${w.days.map((day, di) => buildDaySection(w, day, di, state)).join('')}
+        <div class="date-complete-row">
+          <label for="date-complete-${idx}">${t.dateLabel}</label>
+          <input type="date" class="date-complete-input" id="date-complete-${idx}" value="${completedDate || todayStr}">
+        </div>
         <button class="complete-week-btn ${isComplete ? 'completed' : ''}" onclick="toggleWeekComplete(${idx})" id="complete-btn-${idx}">
-          ${isComplete ? '✅ Week Marked Complete (click to undo)' : '🏁 Mark Week ' + w.number + ' as Complete'}
+          ${isComplete ? t.undoComplete : t.completeWeek(w.number)}
         </button>
       </div>
     </div>
@@ -1673,12 +1787,13 @@ function showWeek(idx) {
 function buildDaySection(w, day, di, state) {
   const allDone = day.tasks.every((_, ti) => state[getTaskKey(w.number, di, ti)]);
   const doneCnt = day.tasks.filter((_, ti) => state[getTaskKey(w.number, di, ti)]).length;
-  const dayEmoji = { Monday: '🌅', Tuesday: '☀️', Wednesday: '🌤', Thursday: '🌞', Friday: '🎉', Weekend: '🌊' }[day.name] || '📅';
+  const dayEmoji = (t.dayEmoji && t.dayEmoji[day.name]) || { Monday: '🌅', Tuesday: '☀️', Wednesday: '🌤', Thursday: '🌞', Friday: '🎉', Weekend: '🌊' }[day.name] || '📅';
+  const dayLabel = (t.days && t.days[day.name]) || day.name;
   return `
     <div class="day-section">
       <div class="day-header ${allDone ? 'completed-day' : ''}" onclick="toggleDay(this)">
         <span>${dayEmoji}</span>
-        <span class="day-name">${day.name}</span>
+        <span class="day-name">${dayLabel}</span>
         <span class="day-time">~${day.time}</span>
         <span class="day-check">${allDone ? '✅' : `${doneCnt}/${day.tasks.length}`}</span>
       </div>
@@ -1698,14 +1813,14 @@ function buildDaySection(w, day, di, state) {
 
 function buildVocabSection(w, idx) {
   return `<div class="card">
-    <div class="card-title"><span class="icon">📚</span> Week ${w.number} Vocabulary <button class="reset-btn" onclick="revealAll(${idx})">Reveal All</button> <button class="reset-btn" onclick="hideAll(${idx})">Hide All</button></div>
-    <p style="font-size:13px;color:#6b7280;margin-bottom:12px;">Click any card to reveal the English translation.</p>
+    <div class="card-title"><span class="icon">📚</span> ${t.vocabTitle(w.number)} <button class="reset-btn" onclick="revealAll(${idx})">${t.revealAll}</button> <button class="reset-btn" onclick="hideAll(${idx})">${t.hideAll}</button></div>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:12px;">${t.vocabSubtitle}</p>
     <div class="vocab-grid" id="vocab-grid-${idx}">
       ${w.vocab.map((v, vi) => `
         <div class="vocab-card" id="vc-${idx}-${vi}" onclick="toggleVocab(${idx}, ${vi})">
           <div class="vocab-french">${v.fr}</div>
           <div class="vocab-translation">${v.en}</div>
-          <div class="vocab-hint">tap to reveal</div>
+          <div class="vocab-hint">${t.tapReveal}</div>
         </div>`).join('')}
     </div>
   </div>`;
@@ -1713,16 +1828,16 @@ function buildVocabSection(w, idx) {
 
 function buildQuizSection(w, idx) {
   return `<div class="card">
-    <div class="card-title"><span class="icon">✏️</span> Vocabulary Quiz — Week ${w.number}</div>
-    <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Type the French translation for each English word. Target: 16/20 or above.</p>
+    <div class="card-title"><span class="icon">✏️</span> ${t.quizTitle(w.number)}</div>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">${t.quizSubtitle}</p>
     <div id="quiz-area-${idx}">
       <div class="quiz-prompt" id="quiz-prompt-${idx}">Loading...</div>
-      <input type="text" class="quiz-input" id="quiz-input-${idx}" placeholder="Type French here..." onkeydown="if(event.key==='Enter') checkAnswer(${idx})">
+      <input type="text" class="quiz-input" id="quiz-input-${idx}" placeholder="${t.quizPlaceholder}" onkeydown="if(event.key==='Enter') checkAnswer(${idx})">
       <div class="quiz-feedback hidden" id="quiz-feedback-${idx}"></div>
       <div class="quiz-buttons">
-        <button class="btn btn-primary" onclick="checkAnswer(${idx})">Check ✓</button>
-        <button class="btn btn-secondary" onclick="skipQuestion(${idx})">Skip →</button>
-        <button class="btn btn-secondary" onclick="initQuiz(${idx});renderQuiz(${idx})">Restart 🔄</button>
+        <button class="btn btn-primary" onclick="checkAnswer(${idx})">${t.checkBtn}</button>
+        <button class="btn btn-secondary" onclick="skipQuestion(${idx})">${t.skipBtn}</button>
+        <button class="btn btn-secondary" onclick="initQuiz(${idx});renderQuiz(${idx})">${t.restartBtn}</button>
       </div>
       <div class="quiz-score" id="quiz-score-${idx}"></div>
       <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-prog-${idx}" style="width:0%"></div></div>
@@ -1734,27 +1849,20 @@ function buildTCFSection(w) {
   return `<div class="card">
     <div class="card-title"><span class="icon">🎯</span> TCF Practice Tasks — Week ${w.number}</div>
     <div class="tcf-prompt">
-      <div class="tcf-prompt-label">✏️ Writing Prompt</div>
+      <div class="tcf-prompt-label">${t.writingLabel}</div>
       <div class="tcf-prompt-text">${w.tcfWriting}</div>
     </div>
     <div class="tcf-prompt">
-      <div class="tcf-prompt-label">🗣 Speaking Prompt</div>
+      <div class="tcf-prompt-label">${t.speakingLabel}</div>
       <div class="tcf-prompt-text">${w.tcfSpeaking}</div>
     </div>
     <div class="tcf-tip">
-      <div class="tcf-tip-label">💡 Examiner Tip</div>
+      <div class="tcf-tip-label">${t.tipLabel}</div>
       ${w.examTip}
     </div>
     <div style="margin-top:16px;background:#f9fafb;border-radius:10px;padding:16px;">
-      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">✅ CLB 5 Self-Evaluation Checklist</div>
-      ${[
-        'I completed the full task',
-        'I used correct vocabulary for the topic',
-        'My grammar was mostly accurate',
-        'I used connectors/discourse markers',
-        'I spoke/wrote for the required length',
-        'I can do this task without translating in my head'
-      ].map(item => `<div class="checklist-item"><span>☐</span><span style="font-size:13px">${item}</span></div>`).join('')}
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">${t.checklistTitle}</div>
+      ${t.checklist.map(item => `<div class="checklist-item"><span>☐</span><span style="font-size:13px">${item}</span></div>`).join('')}
     </div>
   </div>`;
 }
@@ -1805,7 +1913,17 @@ function toggleWeekComplete(idx) {
   const w = weeks[idx];
   const state = getState();
   const key = getWeekCompleteKey(w.number);
-  state[key] = !state[key];
+  const dateKey = getWeekDateKey(w.number);
+  const wasComplete = !!state[key];
+  state[key] = !wasComplete;
+  if (!wasComplete) {
+    // Marking complete — read the date input (or use today)
+    const dateInput = document.getElementById(`date-complete-${idx}`);
+    state[dateKey] = dateInput ? dateInput.value : new Date().toISOString().split('T')[0];
+  } else {
+    // Undoing — clear the date
+    delete state[dateKey];
+  }
   saveState(state);
   buildNav();
   updateProgress();
@@ -1864,10 +1982,10 @@ function renderQuiz(idx) {
 
   if (qs.done || qs.current >= qs.questions.length) {
     const pct = Math.round((qs.correct / qs.questions.length) * 100);
-    promptEl.textContent = '🎉 Quiz Complete!';
+    promptEl.textContent = t.quizDone;
     inputEl.style.display = 'none';
     feedbackEl.className = 'quiz-feedback ' + (pct >= 80 ? 'correct' : 'wrong');
-    feedbackEl.textContent = `Score: ${qs.correct}/${qs.questions.length} (${pct}%) — ${pct >= 80 ? '✅ Target reached! Well done!' : '📚 Keep practising — target is 80%'}`;
+    feedbackEl.textContent = `${t.quizScore(qs.correct, qs.questions.length, pct)} — ${pct >= 80 ? t.quizPass : t.quizFail}`;
     feedbackEl.classList.remove('hidden');
     scoreEl.textContent = '';
     progEl.style.width = '100%';
@@ -1881,7 +1999,7 @@ function renderQuiz(idx) {
   inputEl.style.display = 'block';
   inputEl.focus();
   feedbackEl.classList.add('hidden');
-  scoreEl.textContent = `Question ${qs.current + 1} of ${qs.questions.length} · Score: ${qs.correct}/${qs.total}`;
+  scoreEl.textContent = `${t.questionOf(qs.current + 1, qs.questions.length)} · ${t.scoreLabel(qs.correct, qs.total)}`;
   progEl.style.width = `${(qs.current / qs.questions.length) * 100}%`;
 }
 
@@ -1910,11 +2028,11 @@ function checkAnswer(idx) {
     qs.correct++;
     inputEl.className = 'quiz-input correct';
     feedbackEl.className = 'quiz-feedback correct';
-    feedbackEl.textContent = `✓ Correct! "${q.fr}"`;
+    feedbackEl.textContent = t.correctMsg(q.fr);
   } else {
     inputEl.className = 'quiz-input wrong';
     feedbackEl.className = 'quiz-feedback wrong';
-    feedbackEl.textContent = `✗ The answer was: "${q.fr}"`;
+    feedbackEl.textContent = t.wrongMsg(q.fr);
   }
   feedbackEl.classList.remove('hidden');
 
@@ -1933,8 +2051,33 @@ function skipQuestion(idx) {
 }
 
 // ============================================================
+// APPLY TRANSLATIONS TO STATIC HTML ELEMENTS
+// ============================================================
+function applyTranslations() {
+  document.getElementById('sync-label').textContent = t.syncLabel;
+  document.getElementById('btn-export').textContent = t.exportBtn;
+  document.getElementById('btn-import').textContent = t.importBtn;
+  document.getElementById('btn-settings').textContent = t.settingsBtn;
+  document.getElementById('btn-lang').textContent = t.langBtn;
+  document.getElementById('modal-title').textContent = t.settingsTitle;
+  document.getElementById('btn-clear').textContent = t.clearAll;
+  document.getElementById('btn-save').textContent = t.saveLinks;
+  // Progress label
+  const plabel = document.getElementById('progress-label-main');
+  if (plabel) plabel.textContent = t.progressLabel;
+  // Settings info box
+  const infoBox = document.querySelector('#settings-modal .info-box');
+  if (infoBox) infoBox.innerHTML = t.settingsInfo;
+  // Settings section headers
+  const sectionHeaders = document.querySelectorAll('#settings-modal .modal-section h4');
+  if (sectionHeaders[0]) sectionHeaders[0].textContent = t.videoGroupLabel;
+  if (sectionHeaders[1]) sectionHeaders[1].textContent = t.docGroupLabel;
+}
+
+// ============================================================
 // INIT
 // ============================================================
+applyTranslations();
 buildNav();
 updateProgress();
 showWeek(0);
@@ -1965,9 +2108,9 @@ function exportProgress() {
     const state = getState();
     const code = btoa(JSON.stringify(state));
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(code).then(() => showToast('✅ Progress copied! Paste it on your other device.'));
+      navigator.clipboard.writeText(code).then(() => showToast(t.exportToast));
     } else {
-      prompt('Copy this code and paste it on your other device:', code);
+      prompt(t.exportToast, code);
     }
   } catch(e) { showToast('❌ Export failed. Please try again.'); }
 }
@@ -1981,8 +2124,8 @@ function importProgress() {
     buildNav();
     updateProgress();
     showWeek(currentWeekIdx);
-    showToast('✅ Progress imported successfully!');
-  } catch(e) { showToast('❌ Invalid code. Make sure you copied it fully.'); }
+    showToast(t.importToast);
+  } catch(e) { showToast(t.importError); }
 }
 
 // ============================================================
@@ -2058,7 +2201,7 @@ function saveDriveLinks() {
   // Refresh current week to update resource bar
   showWeek(currentWeekIdx);
   const count = Object.keys(dl).length;
-  showToast(`✅ ${count} Drive link${count!==1?'s':''} saved! Resources bar updated.`);
+  showToast(t.saveLinksToast(count));
 }
 
 function clearDriveLinks() {
@@ -2066,7 +2209,7 @@ function clearDriveLinks() {
   localStorage.removeItem(DRIVE_STORAGE_KEY);
   closeSettings();
   showWeek(currentWeekIdx);
-  showToast('🗑 Drive links cleared.');
+  showToast(t.clearLinksToast);
 }
 </script>
 
@@ -2076,7 +2219,7 @@ function clearDriveLinks() {
 window.addEventListener('DOMContentLoaded', () => {
   const infoBar = document.createElement('div');
   infoBar.style.cssText = 'background:#eff6ff;border-bottom:1px solid #bfdbfe;padding:10px 32px;font-size:13px;color:#1e40af;display:flex;align-items:center;gap:8px;';
-  infoBar.innerHTML = '💡 <strong>How to use:</strong> Click each day to expand tasks. Check off tasks as you complete them. Use the Vocab Quiz tab to test yourself. Progress saves automatically.';
+  infoBar.innerHTML = t.howToUse;
   document.querySelector('.progress-section').after(infoBar);
 });
 </script>
