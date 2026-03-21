@@ -304,7 +304,7 @@ const T = {
     days:{Monday:'Monday',Tuesday:'Tuesday',Wednesday:'Wednesday',Thursday:'Thursday',Friday:'Friday',Weekend:'Weekend'},
     dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
     phases:{foundation:'Foundation Phase — CLB 1–2',building:'Building Phase — CLB 3–4',readiness:'TCF Readiness Phase — CLB 5'},
-    dailyTitle:'📅 Daily Study Tasks',
+    dailyTitle:'Daily Study Tasks',
     tasksDone:(d,t)=>`${d}/${t} tasks done`,
     completeWeek:(n)=>`🏁 Mark Week ${n} as Complete`,
     weekDone:(n)=>`✅ Week ${n} Complete! Great work, Edison!`,
@@ -350,7 +350,7 @@ const T = {
     days:{Monday:'Lunes',Tuesday:'Martes',Wednesday:'Miércoles',Thursday:'Jueves',Friday:'Viernes',Weekend:'Fin de Semana'},
     dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
     phases:{foundation:'Fase Fundamentos — CLB 1–2',building:'Fase de Desarrollo — CLB 3–4',readiness:'Fase Preparación TCF — CLB 5'},
-    dailyTitle:'📅 Tareas de Estudio Diarias',
+    dailyTitle:'Tareas de Estudio Diarias',
     tasksDone:(d,t)=>`${d}/${t} tareas completadas`,
     completeWeek:(n)=>`🏁 Marcar Semana ${n} como Completada`,
     weekDone:(n)=>`✅ ¡Semana ${n} Completada! ¡Excelente trabajo, Edison!`,
@@ -1653,6 +1653,704 @@ const weeks = [
 ];
 
 // ============================================================
+// SPANISH TRANSLATIONS FOR ALL WEEK CONTENT
+// ============================================================
+const weeksES = {
+  1: {
+    title: "¡Bonjour! Fundamentos del Francés",
+    theme: "Presentaciones y el Alfabeto",
+    grammar: "Pronombres sujeto + être | Saludos, números 1–100, nacionalidades",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 1 en Google Drive: 'El Sistema de Sonidos del Francés'. Pausa y repite cada ejemplo de pronunciación en voz alta." },
+          { text: "Estudia las 30 palabras de vocabulario de esta semana. Lee cada palabra francesa en voz alta, luego cubre el inglés y pruébate a ti mismo." },
+          { text: "Anki / Quizlet: Crea tu mazo de tarjetas de la Semana 1 con las 30 palabras. Haz tu primer repaso." },
+          { text: "Escucha un corto diálogo de saludo en francés en YouTube (busca: 'dialogues en français débutant'). Repite las frases." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Estudia el verbo être (ser): je suis, tu es, il/elle est, nous sommes, vous êtes, ils/elles sont. Escríbelo de memoria 3 veces." },
+          { text: "Ve a bonjourdefrance.com → Gramática → Verbos → Être. Lee la lección y completa 2 ejercicios." },
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea A (Oral): Grábate a ti mismo presentándote en francés (1.5 min). Usa être + pronombres sujeto." },
+          { text: "Repaso de vocabulario: Cubre la columna francesa y escribe el francés para las 30 palabras. Califícate a ti mismo." },
+          { text: "Anki: completa las tarjetas vencidas de hoy." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TV5Monde (tv5monde.com/apprendre) → Débutant A1 → encuentra una actividad de comprensión auditiva sobre saludos o presentaciones." },
+          { text: "Números 1–100: práctica contando en voz alta. Escribe el francés para: 15, 27, 43, 56, 78, 91." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee un corto texto de presentación en francés y responde preguntas de comprensión." },
+          { text: "Repaso de vocabulario: Tarjetas vencidas de Anki + vuelve a probarte con palabras que obtuviste mal ayer." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 1: Escribe un mensaje corto (60–70 palabras) presentándote a un amigo por correspondencia francés." },
+          { text: "Enfoque de gramática: Números como palabras completas. Escribe en francés: twenty-two, thirty-five, forty-eight, sixty-three, eighty-one." },
+          { text: "Ve a RFI Savoirs (savoirs.rfi.fr) → encuentra una actividad de comprensión auditiva A1. Escucha dos veces y escribe 3 palabras clave que escuchaste." },
+          { text: "Vocabulario: Repaso final de las 30 palabras antes de la mini-prueba del viernes. Usa el método de cubrir-probar-verificar." },
+          { text: "Repaso de tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea Oral 1 (Monólogo): INSTRUCCIÓN: 'Présentez-vous.' Grábate durante 1.5 minutos. Reproduce y auto-evalúate." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre la columna francesa completamente. Escribe el francés para las 20 palabras de prueba. Califícate sobre 20." },
+          { text: "Consolidación de lectura: Encuentra un texto francés muy corto en TV5Monde. Identifica 5 palabras que conoces y 3 que no. Busca las 3 nuevas." },
+          { text: "Diario de reflexión: Escribe 3–4 oraciones en francés sobre tu semana. Usa être y vocabulario que has aprendido." },
+          { text: "Tarjetas vencidas de Anki. ¡Bien hecho — completaste la Semana 1!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira cualquier parte del Video 1 que encontraste desafiante. Enfócate especialmente en los sonidos nasales." },
+          { text: "Duolingo o Quizlet: Completa 2 sesiones de francés a nivel principiante. Enfócate en saludos e presentaciones." },
+          { text: "BONUS — Conexión cultural: Mira un video de YouTube de 5 minutos sobre la vida diaria en Francia o Quebec en inglés o con subtítulos en francés." }
+        ]
+      }
+    ],
+    vocab: ["hola / buenos días", "buenas noches", "adiós", "por favor (informal)", "por favor (formal)", "gracias", "disculpe (formal)", "soy", "él / ella es", "usted es (formal/plural)", "eres (informal)", "me llamo...", "canadiense", "inglés/inglesa", "profesor/profesora", "una mujer", "la ciudad", "vivo en...", "encantado/encantada", "muy bien, gracias"],
+    tcfWriting: "Escribe un perfil corto (60–70 palabras) sobre ti para un sitio web de intercambio de idiomas franceses.",
+    tcfSpeaking: "Tarea Oral TCF 1 — 'Présentez-vous.' (1.5 minutos). Estructura: nombre → edad → nacionalidad → ciudad → trabajo → un pasatiempo.",
+    examTip: "Usa la estructura: nombre → edad → nacionalidad → ciudad → trabajo → un pasatiempo. ¡Habla claramente y no te apresures!"
+  },
+  2: {
+    title: "Ma Famille et Mes Amis",
+    theme: "Familia y Relaciones",
+    grammar: "Avoir + artículos + acuerdo adjetivo | Familia, descripciones físicas, relaciones",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 2 en Google Drive: 'Être & Avoir'. Pausa después de cada conjugación y escríbela." },
+          { text: "Estudia las 30 palabras de vocabulario. Enfócate primero en miembros de la familia (10 palabras), luego adjetivos descriptivos (10 palabras), luego relaciones (10 palabras)." },
+          { text: "Añade las 30 palabras a tu mazo Anki/Quizlet. Incluye el artículo (le/la/les) con cada sustantivo." },
+          { text: "Dibuja tu propio árbol genealógico en francés — etiqueta a cada persona con su nombre de relación." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Estudia la conjugación de avoir: j'ai, tu as, il/elle a, nous avons, vous avez, ils/elles ont. Escríbelo 3 veces de memoria." },
+          { text: "Revisión de artículos: un/une (indefinido) vs le/la/les (definido). Regla: usa le/la/les para cosas específicas. Escribe 6 ejemplos." },
+          { text: "Acuerdo adjetivo: Los adjetivos franceses cambian por género/número. Practica con: grand/grande, petit/petite, gentil/gentille." },
+          { text: "Repaso de vocabulario: Cubre columna francesa, escribe francés para las 30 palabras. Califícate." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TV5Monde → A1 → encuentra una actividad de comprensión auditiva con tema familiar. Complétala. Escribe 5 palabras nuevas que escuches." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee el texto 'Je m'appelle Karim. J'ai une grande famille...' y responde preguntas de comprensión." },
+          { text: "Práctica de adjetivos posesivos: Completa oraciones con mon/ma/mes, ton/ta/tes, son/sa/ses." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 1: Escribe un mensaje corto (65–75 palabras) a un amigo francés describiendo tu familia." },
+          { text: "Bonjour de France → Gramática → Adjetivos → completa 2 ejercicios sobre acuerdo adjetivo." },
+          { text: "Preparación para hablar: Planifica tu descripción de familia usando las palabras: Il/Elle s'appelle..., Il/Elle a...ans, Il/Elle est..." },
+          { text: "Repaso de vocabulario: Tarjetas vencidas de Anki. Enfócate en pares adjetivos (masculino/femenino)." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea 2: INSTRUCCIÓN: 'Décrivez un membre de votre famille.' Grábate durante 2 minutos usando avoir + adjetivos." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre columna francesa. Escribe las 30 palabras de memoria. Puntuación: __ /20. Objetivo: 16+." },
+          { text: "Consolidación: Escribe un párrafo (60–80 palabras) llamado 'Mi familia ideal'. Usa avoir, être y adjetivos." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 2 completa!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira Video 2 enfocándote en avoir. Escribe la conjugación completa 3 veces de memoria." },
+          { text: "Duolingo: 2 sesiones sobre vocabulario familiar y descripciones." },
+          { text: "BONUS: Encuentra una celebridad francesa. Lee su biografía en francés (Wikipedia en francés). Identifica vocabulario familiar." }
+        ]
+      }
+    ],
+    vocab: ["padre / madre", "esposo / esposa", "hijo / hija", "hermano / hermana", "los niños", "los abuelos", "tengo", "él / ella tiene", "mi / mi / mis (m./f./pl.)", "su / su / sus (m./f./pl.)", "tu / tu / tus (m./f./pl.)", "pequeño/pequeña", "joven", "amable / agradable", "divertido", "cabello rubio", "un amigo / una amiga", "casado/casada", "él/ella parece / se ve", "familia numerosa"],
+    tcfWriting: "Escribe un párrafo corto (65–75 palabras) sobre tu familia para un sitio web de intercambio de idiomas francés.",
+    tcfSpeaking: "Tarea Oral TCF 2 — 'Décrivez un membre de votre famille.' (2 minutos). Estructura: nombre → edad → apariencia → personalidad → trabajo → relación.",
+    examTip: "Estructura: nombre → edad → apariencia → personalidad → trabajo → lo que te gusta hacer juntos."
+  },
+  3: {
+    title: "Au Quotidien",
+    theme: "Rutinas Diarias y Tiempo",
+    grammar: "Verbos regulares -ER, negación (ne...pas), palabras de pregunta | Actividades diarias, expresiones de tiempo",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 3 en Google Drive: 'Rutina Diaria en Francés'. Sigue y di CADA oración en voz alta después del hablante." },
+          { text: "Estudia 30 palabras de vocabulario. Agrúpalas: VERBOS (1–12), TIEMPO (13–20), FRECUENCIA (21–30)." },
+          { text: "Añade las 30 palabras a Anki. Para verbos, añade la conjugación 'je' en el reverso de la tarjeta." },
+          { text: "Regla de verbo -ER: Elimina -ER, añade: -e, -es, -e, -ons, -ez, -ent. Escribe la conjugación completa de 'parler' de memoria." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Conjuga estos 5 verbos en completo (las 6 formas): parler, écouter, regarder, aimer, habiter." },
+          { text: "Negación: ne...pas. Regla: ne va antes del verbo, pas va después. Escribe 8 oraciones negativas sobre tu rutina." },
+          { text: "Bonjour de France → verbos -ER → completa 2 ejercicios. Revisa respuestas cuidadosamente." },
+          { text: "Práctica de tiempo: Escribe el francés para estas horas: 7:00, 9:30, 12:15, 3:45, 6:30, 11:00." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TV5Monde → A1 → encuentra una actividad de comprensión auditiva de rutina diaria. Complétala. Intenta identificar 5 verbos que conoces." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee 'Je m'appelle Laura. Je me lève à 7 heures...' y responde verdadero/falso." },
+          { text: "Adverbios de frecuencia: Escribe una oración para cada uno — toujours, souvent, parfois, rarement, jamais." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 1: INSTRUCCIÓN: Un amigo francés te pide que describas un día típico. Escribe 70–80 palabras." },
+          { text: "Práctica de palabras de pregunta: Quand (cuándo), où (dónde), qui (quién), qu'est-ce que (qué). Escribe 2 preguntas con cada una." },
+          { text: "Preparación para hablar: Planifica tu respuesta oral para mañana usando estas preguntas: Quand est-ce que tu te lèves? Qu'est-ce que tu manges?" },
+          { text: "Repaso de vocabulario: Tarjetas vencidas de Anki. Enfócate en adverbios de frecuencia — esencial para TCF." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea 1 (Monólogo): INSTRUCCIÓN: 'Décrivez votre journée typique.' Grábate durante 1.5–2 minutos." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre columna francesa. Escribe las 30 palabras. Puntuación: __ /20. Objetivo: 16+." },
+          { text: "Consolidación: RFI Savoirs → encuentra un audio corto sobre la vida diaria de alguien. Escucha dos veces." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 3 lista!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira Video 3. Esta vez, pausa después de cada oración e intenta decirla de memoria antes de presionar play nuevamente." },
+          { text: "Duolingo: 2 sesiones enfocadas en actividades diarias y tiempo." },
+          { text: "BONUS: Encuentra un vlogger francés en YouTube que filma su rutina matinal ('ma routine matinale'). Mira con subtítulos en francés." }
+        ]
+      }
+    ],
+    vocab: ["levantarse", "ducharse", "vestirse", "comer", "trabajar", "hablar", "escuchar", "mirar", "gustar / amar", "vivir", "volver a casa", "la mañana", "la tarde", "la noche", "son ... en punto", "y cuarto", "siempre", "a menudo", "a veces", "nunca", "el fin de semana", "cuándo"],
+    tcfWriting: "Describe tu día típico en 70–80 palabras a un amigo francés.",
+    tcfSpeaking: "Tarea Oral TCF 1 — 'Décrivez votre journée typique.' (1.5 minutos). Usa palabras de tiempo: le matin, l'après-midi, le soir.",
+    examTip: "Usa palabras de tiempo: le matin, l'après-midi, le soir. Usa conectores: d'abord, ensuite, puis, finalement."
+  },
+  4: {
+    title: "En Ville",
+    theme: "Lugares en la Ciudad y Direcciones",
+    grammar: "Aller, futuro cercano (aller + infinitivo), preposiciones de lugar | Lugares de la ciudad, direcciones, transporte",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 4 en Google Drive: 'Moviéndose en Francés'. Mientras miras, dibuja un mapa simple de la ciudad con etiquetas en francés." },
+          { text: "Estudia las 30 palabras de vocabulario. Aprende la conjugación de aller perfectamente — se usa constantemente en francés." },
+          { text: "Anki: Añade las 30 palabras. Para sustantivos de lugar, incluye el artículo (la pharmacie, l'hôpital). Haz el primer repaso." },
+          { text: "Escribe 6 oraciones con aller, una para cada forma conjugada. Ejemplo: 'Je vais à la bibliothèque.'" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Contracciones con à: à + le = AU, à + la = À LA, à + l' = À L', à + les = AUX. Completa 10 ejercicios de contracción." },
+          { text: "Futuro cercano (futur proche): aller (conjugado) + infinitivo. Escribe 8 oraciones: Je vais manger, Tu vas travailler..." },
+          { text: "Bonjour de France → Aller / Futuro Cercano → completa 2 ejercicios." },
+          { text: "Vocabulario: Cubre columna y escribe francés para las 30 palabras. Presta especial atención a las preposiciones de lugar." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TV5Monde → A1 → encuentra una actividad de comprensión auditiva sobre transporte o ciudad. Enfócate en palabras de dirección: à droite, à gauche, tout droit." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee un texto de direcciones 'Pour aller à la gare depuis l'hôtel...' y responde preguntas." },
+          { text: "Práctica de preposiciones: Escribe oraciones usando: près de, loin de, en face de, à côté de, au bout de la rue." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 1: INSTRUCCIÓN: Un amigo te está visitando tu ciudad por primera vez. Escribe direcciones desde la estación de tren a tu casa (70–80 palabras)." },
+          { text: "Práctica de futuro cercano: Escribe 10 oraciones sobre lo que vas a hacer la próxima semana." },
+          { text: "Preparación para hablar: Prepara una descripción de 90 segundos de tu barrio usando: il y a, c'est près de / loin de." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea 2: INSTRUCCIÓN: 'Décrivez votre quartier.' Grábate durante 2–2.5 minutos." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre columna francesa. Escribe las 30 palabras. Puntuación: __ /20. Objetivo: 16+." },
+          { text: "Consolidación: Encuentra un mapa de una ciudad francesa (París, Lyon, Montreal). Escribe 5 oraciones de direcciones usando el mapa." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 4 completa! Terminaste la Fase 1 — Fundamentos. ¡Bien hecho!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Revisa todas las tarjetas de Anki de Semanas 1–4. Cualquier palabra debajo de 80% de precisión — haz una lista especial para revisar diariamente la próxima semana." },
+          { text: "Escribe un párrafo corto (50 palabras) resumiendo lo que aprendiste en Semanas 1–4." },
+          { text: "BONUS: Mira un video corto de YouTube en francés ambientado en París o Montreal con subtítulos en francés." }
+        ]
+      }
+    ],
+    vocab: ["ir", "voy / vas", "él / ella va", "vamos", "van", "ustedes van (formal/plural)", "la farmacia", "el supermercado", "el hospital", "el aeropuerto", "el banco", "el ayuntamiento", "el metro/subterráneo", "a la derecha / gira a la derecha", "a la izquierda / gira a la izquierda", "recto", "al final de la calle", "cerca de / cerca a", "al lado de", "voy a + infinitivo"],
+    tcfWriting: "Escribe direcciones desde la estación de tren a tu casa y describe tu barrio (70–80 palabras).",
+    tcfSpeaking: "Tarea Oral TCF 2 — 'Décrivez votre quartier.' (2–2.5 minutos). Usa: il y a, c'est près de / loin de, j'aime... parce que.",
+    examTip: "Usa: il y a, c'est près de / loin de, j'aime... parce que. Termina con una opinión sobre tu barrio."
+  },
+  5: {
+    title: "À Table!",
+    theme: "Comida, Compras e Interacciones en Cafés",
+    grammar: "Artículos partitivos (du/de la/des/de l'), vouloir/pouvoir/prendre | Comida, bebidas, cantidades, restaurante",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 5 en Google Drive: 'Pide Como un Local'. Sigue el diálogo del café — pausa y repite cada línea." },
+          { text: "Estudia las 30 palabras de vocabulario. Agrupa por categoría: COMIDAS, BEBIDAS, PALABRAS DE COMPRAS, EXPRESIONES DE CANTIDAD." },
+          { text: "Anki: Añade las 30 palabras. Para artículos de comida, escribe una oración de ejemplo en el reverso." },
+          { text: "Artículos partitivos: du (masculino), de la (femenino), de l' (vocal), des (plural). Escribe 8 oraciones de comida." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Conjuga vouloir: je veux, tu veux, il veut, nous voulons, vous voulez, ils veulent. Memoriza este verbo irregular." },
+          { text: "Conjuga pouvoir y prendre completamente. Estos son esenciales para diálogos TCF sobre pedir y comprar." },
+          { text: "Bonjour de France → Verbos irregulares → vouloir/pouvoir. Completa 2 ejercicios." },
+          { text: "Repaso de vocabulario + Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TV5Monde → A2 → encuentra una actividad de comprensión auditiva sobre comida o compras. Identifica todo el vocabulario de comida que reconoces." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee un menú de restaurante francés y responde preguntas de comprensión sobre platos y precios." },
+          { text: "Práctica de rol: Escribe un diálogo de café — pide una comida completa usando vouloir, pouvoir, prendre." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 1: INSTRUCCIÓN: Escribe un mensaje corto (60–70 palabras) a un amigo sobre tu comida favorita y una reciente visita a un café." },
+          { text: "Expresiones de cantidad: un kilo de, une bouteille de, beaucoup de, un peu de, assez de. Escribe 8 oraciones." },
+          { text: "Comprensión auditiva: YouTube 'commander au café en français' — escucha y repite el diálogo completo." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea 2 Rol: Estás en un restaurante francés. Pide entrada, plato principal, postre y bebida. Grábate durante 2 minutos." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre columna francesa. Escribe las 20 palabras de prueba. Puntuación: __ /20. Objetivo: 16+." },
+          { text: "Escribe una corta reseña de restaurante (50–70 palabras) de un restaurante francés imaginario." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 5 completa!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira la sección de Video 5 de ordenar en el café. Escribe el diálogo completo de memoria." },
+          { text: "Duolingo: 2 sesiones sobre vocabulario de comida y compras." },
+          { text: "BONUS: Mira un video de cocina en YouTube en francés (por ejemplo, 'une recette en français') con subtítulos." }
+        ]
+      }
+    ],
+    vocab: ["el pan", "la carne", "las verduras", "la leche", "el jugo de naranja", "algo / algo / algo (artículos partitivos)", "tomaré / estoy tomando", "quiero", "puede usted (formal)", "¿cuánto cuesta?", "un kilo de", "mucho de", "el mercado", "la carnicería", "la cuenta/el recuento", "una mesa para dos", "quisiera...", "por favor (formal/mesero)", "es delicioso", "el menú"],
+    tcfWriting: "Tarea de Escritura TCF 1 (60–70 palabras): Escribe un mensaje corto a un amigo sobre tus preferencias de comida.",
+    tcfSpeaking: "Tarea Oral TCF 2 — Rol en un restaurante francés. Pide una comida completa para ti y un amigo.",
+    examTip: "Los diálogos de comida y compras son muy comunes en la Sección de Comprensión Auditiva TCF. Aprende tus artículos partitivos de memoria."
+  },
+  6: {
+    title: "Passé Composé — ¡Cuéntame tu Vida!",
+    theme: "Hablando del Pasado",
+    grammar: "passé composé (verbos avoir + être) | Marcadores de tiempo: hier, la semaine dernière, actividades",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 6: 'passé composé Explicado Simplemente'. Toma notas sobre la regla avoir vs être. Pausa y repite cada ejemplo." },
+          { text: "Estudia el vocabulario de esta semana. Enfócate en MARCADORES DE TIEMPO — estos son esenciales para tareas de escritura TCF." },
+          { text: "Anki: Añade todas las palabras de vocabulario nuevas. Para verbos, añade el participio pasado en el reverso." },
+          { text: "Regla de formación: SUJETO + avoir/être (conjugado) + PARTICIPIO PASADO. Escribe el passé composé de 6 verbos regulares." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Participios pasados irregulares: être → été, avoir → eu, faire → fait, prendre → pris, venir → venu. Memoriza los 10." },
+          { text: "Verbos DR MRS VANDERTRAMPP (usan être): aller, venir, arriver, partir, entrer, sortir, naître, mourir... Escribe los 14 con sus participios." },
+          { text: "Bonjour de France → passé composé → completa 2 ejercicios. Verifica cuidadosamente avoir vs être." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TV5Monde → A2 → encuentra una actividad de comprensión auditiva de eventos pasados. Escribe cada marcador de tiempo que escuches." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee una narrativa de fin de semana y responde preguntas de comprensión." },
+          { text: "Actividad de corrección de errores: Corrige estas 10 oraciones en passé composé que contienen errores (mezclas avoir/être)." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF: INSTRUCCIÓN: Escribe sobre lo que hiciste el fin de semana pasado (80 palabras). Usa al menos 6 verbos en passé composé y 3 marcadores de tiempo." },
+          { text: "Verbos reflexivos en passé composé (siempre usan être + acuerdo): Je me suis levé(e), tu t'es habillé(e)... Escribe 8 oraciones." },
+          { text: "Preparación para hablar: Planifica un relato de 2 minutos de un día memorable usando: D'abord..., Ensuite..., Puis..., Finalement..." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF: INSTRUCCIÓN: 'Parlez d'une journée mémorable.' Grábate durante 2 minutos. Usa passé composé en todo." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre columna francesa. Escribe las 20 palabras de prueba. Puntuación: __ /20." },
+          { text: "Escribe un párrafo (80 palabras) sobre un día memorable — usa al menos 8 verbos en passé composé." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 6 completa!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira Video 6, especialmente la sección DR MRS VANDERTRAMPP. Pruébate sin notas." },
+          { text: "Duolingo: 2 sesiones enfocadas en tiempo pasado." },
+          { text: "BONUS: Escribe una entrada breve de diario en francés sobre lo que hiciste esta semana. Usa passé composé en todo." }
+        ]
+      }
+    ],
+    vocab: ["ayer", "anteayer", "la semana pasada", "el fin de semana pasado", "comí", "hice / hice", "fui", "llegué", "me levantéé", "primero", "luego / siguiente", "luego / después", "finalmente", "tomé", "vi", "fui (passé composé)", "era (imperfecto)", "me gustó / disfruté", "por la mañana", "por la noche"],
+    tcfWriting: "Tarea de Escritura TCF: Describe lo que hiciste el fin de semana pasado (80 palabras). Usa al menos 6 verbos en passé composé.",
+    tcfSpeaking: "Tarea Oral TCF 1 — 'Parlez d'une journée mémorable.' (2 minutos). Usa passé composé en todo.",
+    examTip: "El passé composé es el tiempo más probado en tareas de escritura y oral TCF. Domina completamente la regla avoir vs être."
+  },
+  7: {
+    title: "¿Cómo Te Sientes?",
+    theme: "Salud, Cuerpo y Sentimientos",
+    grammar: "Verbos reflexivos, devoir + infinitivo, expresiones con avoir | Cuerpo, salud, emociones",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 7: 'Clase Maestra de Comprensión Auditiva TCF'. Toma notas sobre las 3 estrategias principales: predecir, captar el sentido general, eliminar." },
+          { text: "Estudia el vocabulario de esta semana: partes del cuerpo, palabras de salud, sentimientos, síntomas." },
+          { text: "Anki: Añade todo el vocabulario nuevo. Para partes del cuerpo, dibuja un simple diagrama del cuerpo con etiquetas en francés." },
+          { text: "Regla de verbo reflexivo: pronombre sujeto + pronombre reflexivo + verbo. Escribe: se lever, se sentir, se coucher en completo." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Expresiones con avoir: avoir mal à (tener dolor en), avoir faim (hambriento), avoir soif (sediento), avoir peur (asustado), avoir chaud/froid. Escribe una oración para cada una." },
+          { text: "Devoir + infinitivo (deber/tener que): Tu dois boire de l'eau. Escribe 8 oraciones de consejo usando devoir." },
+          { text: "Bonjour de France → Verbos reflexivos → completa 2 ejercicios." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESTRATEGIA DE COMPRENSIÓN AUDITIVA TCF: Usa las 3 estrategias del Video 7 en 5 preguntas de comprensión auditiva estilo TCF. Predice, escucha el sentido general, elimina." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee un diálogo de cita médica y responde preguntas de comprensión sobre síntomas." },
+          { text: "Práctica de rol: Escribe un diálogo médico-paciente usando vocabulario corporal y expresiones avoir mal à." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF: INSTRUCCIÓN: Escribe un corto email a un médico describiendo tus síntomas y pidiendo una cita (70–80 palabras)." },
+          { text: "Práctica de vocabulario emocional: Escribe oraciones usando: je me sens bien/mal, je suis fatigué(e), je suis stressé(e), je suis content(e)." },
+          { text: "Preparación para hablar: Planifica una descripción de 2 minutos de cómo te sientes y por qué, usando expresiones avoir y verbos reflexivos." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF: INSTRUCCIÓN: 'Décrivez comment vous vous sentez et expliquez pourquoi.' Grábate durante 2 minutos." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Cubre columna francesa. Escribe las 20 palabras de prueba. Puntuación: __ /20." },
+          { text: "Práctica de Comprensión Auditiva TCF Cronometrada: Haz 10 preguntas de opción múltiple de comprensión auditiva — usa las estrategias del Video 7." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 7 lista!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira Video 7. Esta vez, practica cada una de las 3 estrategias de comprensión auditiva con ejemplos reales." },
+          { text: "Duolingo: 2 sesiones sobre vocabulario de salud y cuerpo." },
+          { text: "BONUS: Mira un corto video francés sobre vida saludable ('la santé en français') con subtítulos." }
+        ]
+      }
+    ],
+    vocab: ["la cabeza", "el vientre/barriga", "la espalda", "me duele la cabeza", "tengo fiebre", "estoy cansado/cansada", "me siento", "acostarse", "descansar", "deber / tener que", "debe (formal)", "tener hambre", "tener sed", "tener miedo", "feliz / complacido", "preocupado/preocupada", "el médico", "una cita", "una receta", "la farmacia"],
+    tcfWriting: "Escribe un corto email a un médico describiendo tus síntomas e pidiendo una cita (70–80 palabras).",
+    tcfSpeaking: "Tarea Oral TCF — 'Décrivez comment vous vous sentez et expliquez pourquoi.' (2 minutos).",
+    examTip: "La comprensión auditiva es a menudo la habilidad más débil para principiantes. La escucha estratégica (predecir → sentido general → eliminar) puede añadir 20–30 puntos."
+  },
+  8: {
+    title: "Le Monde du Travail",
+    theme: "Trabajo, Escuela y Estudios",
+    grammar: "Faire, comparativos (plus...que, moins...que) | Trabajos, estudios, lugar de trabajo, escuela",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 8: 'Lectura TCF Hecha Simple'. Toma notas sobre los 3 pasos: lee preguntas primero → escanea rápidamente → busca respuestas." },
+          { text: "Estudia el vocabulario de esta semana: profesiones, lugar de trabajo, educación, estudios." },
+          { text: "Anki: Añade todo el vocabulario. Para profesiones, nota las formas de género (un/una ingénieur, un avocat/une avocate)." },
+          { text: "Conjuga faire completamente: je fais, tu fais, il fait, nous faisons, vous faites, ils font." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Comparativos: plus...que (más que), moins...que (menos que), aussi...que (tan como). Escribe 10 oraciones de comparación comparando trabajos." },
+          { text: "Superlativos: le/la plus..., le/la moins.... Escribe 6 oraciones superlativas." },
+          { text: "Bonjour de France → Comparativos → completa 2 ejercicios." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESTRATEGIA DE LECTURA TCF: Aplica el método del Video 8 a un texto de lectura TCF de muestra. Lee preguntas primero, escanea, luego busca." },
+          { text: "PRÁCTICA DE LECTURA TCF: Lee un anuncio de trabajo y responde preguntas de comprensión." },
+          { text: "Preparación de escritura: Planifica una carta de presentación de 80–100 palabras usando vocabulario de profesiones y comparativos." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 2: INSTRUCCIÓN: Escribe sobre tus objetivos profesionales (80–100 palabras). ¿Qué quieres hacer y por qué?" },
+          { text: "Ejercicio de comprensión auditiva: YouTube 'parler de son travail en français'. Escribe 5 profesiones y 5 frases relacionadas con trabajo que escuches." },
+          { text: "Preparación para hablar: Planifica tu respuesta a 'Qu'est-ce que vous faites dans la vie?' — prepara una respuesta de 2 minutos." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF: INSTRUCCIÓN: 'Comparez deux professions. Laquelle préférez-vous et pourquoi?' Grábate durante 2 minutos." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO SEMANAL: Puntuación: __ /20. Objetivo: 16+." },
+          { text: "Práctica de Lectura TCF Cronometrada: Aplica método escanear-buscar. 10 opción múltiple en 15 minutos." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 8 lista! ¡Fase 2 completa!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Revisa tarjetas de Anki de Semanas 5–8. Identifica tus 10 palabras más débiles e intenta dominarlas." },
+          { text: "Re-lee tus tareas escritas de semanas 5–8. Nota cualquier error repetido — estos son tu prioridad para arreglar." },
+          { text: "BONUS: Lee un anuncio de trabajo francés en línea (indeed.fr). ¿Cuántas palabras entiendes? Objetivo: 70%+." }
+        ]
+      }
+    ],
+    vocab: ["enfermera/enfermero", "ingeniero/ingeniera", "abogado/abogada", "la oficina", "el salario", "los estudios", "estoy estudiando", "más...que", "menos...que", "tan...como", "trabajar a tiempo completo", "el colega", "una reunión", "he trabajado desde", "una empresa", "educación superior", "un diploma/grado", "prefiero", "en mi opinión", "es mejor"],
+    tcfWriting: "Tarea de Escritura TCF 2 (80–100 palabras): Escribe sobre tus objetivos profesionales y por qué.",
+    tcfSpeaking: "Tarea Oral TCF — 'Comparez deux professions. Laquelle préférez-vous et pourquoi?' (2 minutos).",
+    examTip: "La lectura CLB 5 requiere entender ideas principales. Con la estrategia escanear-buscar, puedes puntuar incluso con vocabulario limitado."
+  },
+  9: {
+    title: "TCF Sprint — Comprensión Auditiva y Lectura",
+    theme: "Habilidades de Examen: Comprensión",
+    grammar: "Revisa todos los tiempos cubiertos | Vocabulario de examen: servicios públicos, situaciones sociales",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 9 (Tarea de Escritura 1) en Google Drive. Estudia la estructura de 3 partes: apertura → cuerpo → cierre. Copia 10 iniciadores de oración." },
+          { text: "Revisa todas las tarjetas de Anki de Semanas 1–8. Ordena por dificultad — enfócate tu tiempo de estudio en tus palabras más débiles." },
+          { text: "Revisión de estrategia de Comprensión Auditiva TCF: predice antes de escuchar, escucha el sentido general, usa eliminación. Haz 5 preguntas de opción múltiple de calentamiento." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Simulación de Sección A de Comprensión Auditiva TCF Cronometrada: 15 preguntas, 15 minutos. Condiciones de examen estrictas — sin pausas." },
+          { text: "Revisa tus respuestas. Para cada respuesta incorrecta, identifica POR QUÉ la obtuviste mal — ¿opción distractor, palabra perdida u vocabulario desconocido?" },
+          { text: "Ejercicio de estrategia: Identifica opciones de respuesta distractor. Practica eliminando opciones obviamente incorrectas rápidamente." },
+          { text: "Anki + repaso de vocabulario." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Simulación de Sección A de Lectura TCF Cronometrada: 15 preguntas, 20 minutos. Aplica: lee preguntas primero → escanea estructura → busca respuestas." },
+          { text: "Revisa respuestas incorrectas. Para cada una, re-lee el texto y encuentra dónde estaba la respuesta. Entrena tu ojo de escaneo." },
+          { text: "Vocabulario en contexto: Lee un artículo de periódico francés (lemonde.fr o lapresse.ca — artículos gratis). Identifica la idea principal en una oración." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE ESCRITURA TCF — Tarea 1 (Cronometrada): Escribe un email informal sobre un evento reciente (60–80 palabras). Cronométrate: 20 minutos." },
+          { text: "Auto-califica usando criterios CLB 5: finalización de tarea, rango de vocabulario, precisión gramatical, coherencia. Califícate honestamente." },
+          { text: "Revisión de gramática: passé composé, futuro cercano, comparativos — escribe 3 oraciones cada una bajo condiciones cronometradas." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Oral Cronometrado: INSTRUCCIÓN: 'Décrivez votre vie quotidienne au Canada.' Grábate durante 3 minutos completos. Sin parar." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO: Elige 20 palabras de Semanas 1–8 que encuentres más difíciles. Pruébate." },
+          { text: "Simulación completa de comprensión auditiva cronometrada: 29 preguntas, 25 minutos. Marca tus respuestas después." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 9 lista — estás en la fase final!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Revisa toda tu práctica cronometrada esta semana. ¿Cuál fue tu puntuación? ¿Qué tipos de preguntas pierdes más?" },
+          { text: "Lee un corto texto francés auténtico (artículo de noticias, publicación de blog). Objetivo: entender 80% sin diccionario." },
+          { text: "Escucha 10 minutos de audio francés (RFI Savoirs A2). No mires la transcripción primero — entrena tu oído." }
+        ]
+      }
+    ],
+    vocab: ["el ayuntamiento", "los servicios públicos", "el permiso de conducir", "la tarjeta de identidad", "un formulario", "rellenar", "la caja / cajero", "alojamiento / acomodación", "el alquiler", "transporte público", "el barrio", "buscar", "encontrar", "en mi opinión", "en mi opinión", "me parece que", "creo que", "por ejemplo", "es por eso", "sin embargo"],
+    tcfWriting: "Tarea Cronometrada 1 (20 min): Escribe un email a un amigo sobre un evento reciente en tu vida (60–80 palabras).",
+    tcfSpeaking: "Tarea Oral Cronometrada 1: 'Décrivez votre vie quotidienne au Canada.' (3 minutos — sin parar).",
+    examTip: "Para Comprensión Auditiva TCF: siempre lee las opciones de respuesta ANTES de que el audio se reproduzca. Esto activa tu cerebro para escuchar palabras específicas."
+  },
+  10: {
+    title: "TCF Sprint — Escritura",
+    theme: "Expresión Escrita en CLB 5",
+    grammar: "Conectores, variedad de oraciones, revisión de verbos modales | Lenguaje de opinión, temas cotidianos",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 10 (Tarea de Escritura 2) en Google Drive. Anota las respuestas de modelo CLB 5 vs CLB 3 lado a lado. ¿Qué hace la diferencia?" },
+          { text: "Ejercicio de palabras conectoras: d'abord, ensuite, puis, enfin, parce que, donc, mais, cependant, de plus. Escribe 2 oraciones para cada una." },
+          { text: "Analiza 2 muestras de escritura CLB 5 — subraya conectores, frases de opinión y vocabulario variado." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TAREA Cronometrada 1 (20 minutos): Escribe un email informal sobre una situación personal. Comienza a cronometrar — detente a los 20 min incluso si no terminas." },
+          { text: "Auto-califica: ¿Completaste la tarea? ¿Usaste vocabulario apropiado? Cuenta tus palabras (objetivo 60–80)." },
+          { text: "Práctica de lenguaje de opinión: je pense que, à mon avis, selon moi, je crois que, il me semble que. Escribe 10 oraciones de opinión." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TAREA Cronometrada 2 (35 minutos): Escribe tu opinión sobre un tema cotidiano simple (120+ palabras con conectores). Usa la estructura de 3 párrafos." },
+          { text: "Estructura de párrafo: Párrafo 1 — Introducción + opinión. Párrafo 2 — razones + ejemplos. Párrafo 3 — conclusión + reafirma opinión." },
+          { text: "Enriquecimiento de vocabulario: reemplaza palabras básicas con mejores alternativas. beau → magnifique, bon → excellent, dit → déclare." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "TAREA Cronometrada 1 segundo intento: Un tema diferente. 20 minutos, cronometraje estricto. Tu puntuación debe mejorar desde el martes." },
+          { text: "Revisión de gramática: Asegúrate de que cada oración tenga: sujeto, verbo en tiempo correcto, acuerdo correcto. Verifica 10 oraciones de tu escritura anterior." },
+          { text: "Preparación para hablar: Prepara tu opinión sobre el tema de Tarea 2 de miércoles — usarás esto para la Tarea Oral 3 del TCF mañana." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "PRÁCTICA DE EXPRESIÓN ORAL TCF — Tarea Oral 3 (defiende un punto de vista, 4.5 minutos): Expresa y defiende tu opinión sobre un tema. Grábate el tiempo completo." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO: 20 palabras de semanas 7–10. Puntuación: __ /20. Objetivo: 18+." },
+          { text: "Revisa todas las tareas de escritura de esta semana. Re-escribe una de ellas incorporando todos los comentarios/mejoras." },
+          { text: "Tarjetas vencidas de Anki. ¡Semana 10 lista!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Elige cualquier tarea de escritura que hayas hecho esta semana y re-escríbela desde cero sin mirar tu primera versión." },
+          { text: "Lee una publicación de blog o artículo de opinión francés. Identifica los conectores y frases de opinión que el autor usa." },
+          { text: "BONUS: Grábate a ti mismo leyendo tu mejor tarea de escritura en voz alta. Escucha — ¿suena natural?" }
+        ]
+      }
+    ],
+    vocab: ["primero", "entonces / siguiente", "finalmente", "porque", "entonces / por lo tanto", "sin embargo", "además / además", "en conclusión", "creo que", "en mi opinión", "me parece que", "estoy de acuerdo", "no estoy de acuerdo", "por ejemplo", "es verdad que", "es necesario", "uno puede / podemos", "especialmente / ante todo", "en general", "según mi / en mi opinión"],
+    tcfWriting: "Tarea Cronometrada 2 (35 min): Escribe tu opinión sobre un tema cotidiano simple usando una estructura de 3 párrafos (120+ palabras).",
+    tcfSpeaking: "Tarea Oral TCF 3 — Defiende un punto de vista sobre un tema cotidiano (4.5 minutos). Usa frases de opinión y conectores.",
+    examTip: "La mayoría de los principiantes pierden puntos en la Tarea 2 por estructura pobre — no vocabulario. Domina la estructura de 3 párrafos."
+  },
+  11: {
+    title: "TCF Sprint — Expresión Oral",
+    theme: "Francés Hablado en CLB 5",
+    grammar: "Expresiones subjetivas, marcadores de discurso | Opiniones, reacciones, lenguaje de aproximación",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 11: 'Expresión Oral TCF'. Toma notas sobre las 3 tareas. Escribe cada frase de relleno y estrategia de recuperación mencionada." },
+          { text: "Ejercicio de frases de relleno: euh, c'est-à-dire, donc, alors, bien, voilà, comment dire... Practica usando cada una en una oración naturalmente." },
+          { text: "Técnica de planificación de 30 segundos: Lee una instrucción de Tarea 1 → planifica durante 30 segundos (solo palabras clave, SIN oraciones completas) → habla durante 3 minutos." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Práctica de Tarea Oral 1 (x3 instrucciones diferentes): 1) Décrivez votre logement 2) Parlez de vos loisirs 3) Décrivez votre ville. 3 minutos cada una." },
+          { text: "Graba respuesta de Tarea 1 #3 y escucha nuevamente. Auto-evalúa: fluidez, rango de vocabulario, precisión gramatical, finalización de tarea." },
+          { text: "Practica recuperación de errores: 'Pardon, je veux dire...', 'Ce que je veux dire, c'est...', 'En fait...' Escribe 5 frases de recuperación." },
+          { text: "Tarjetas vencidas de Anki + repaso de vocabulario." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Práctica de Tarea Oral 2: Describe un documento visual (imagen/gráfico). Habla sobre lo que ves durante 2 minutos. Usa: on voit, il y a, selon le document..." },
+          { text: "Vocabulario de acuerdo/desacuerdo: Je suis (tout à fait) d'accord, Je ne suis pas du tout d'accord, C'est exact, Au contraire... Practica 10 respuestas." },
+          { text: "Escribe tus 10 'frases de emergencia' principales para cuando te quedas atascado — memoriza estos para el día del examen." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Preparación de Tarea Oral 3: Elige un tema cotidiano controvertible. Prepara 3 argumentos A FAVOR y 3 EN CONTRA. Practica defendiendo tu posición." },
+          { text: "Examen oral completo simulado (dirigido por ti): Tarea 1 (3 min) + Tarea 2 (2 min) + Tarea 3 (4.5 min) = 12 minutos total. Grábate todo." },
+          { text: "Escucha tu grabación completa nuevamente. Califica cada tarea: vocabulario (1–3), gramática (1–3), fluidez (1–3), finalización de tarea (1–3)." },
+          { text: "Tarjetas vencidas de Anki." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Examen oral completo simulado con instructor (o dirigido por ti): 12 minutos, las 3 tareas, condiciones de examen. Grábate para revisión." },
+          { text: "AUTOEVALUACIÓN DE VOCABULARIO: 20 palabras de semanas 9–11. Puntuación: __ /20. Objetivo: 18+." },
+          { text: "Sesión de mejora de habla: Re-haz tu tarea más débil del simulacro. Compara ambas grabaciones — ¿hay mejora?" },
+          { text: "Anki. ¡Semana 11 lista — una semana para ir!" }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Re-mira Video 11, enfocándote en la sección de consejo del examinador. ¿Cómo suena realmente el francés CLB 5?" },
+          { text: "Grábate en un tema completamente nuevo (un tema que no has practicado). Esto prueba fluidez genuina." },
+          { text: "DESCANSA y recarga. Trabajaste increíblemente duro. Solo repaso ligero de Anki." }
+        ]
+      }
+    ],
+    vocab: ["euh... (relleno)", "es decir / me refiero a", "entonces / bueno entonces", "ahí va / eso es", "cómo decir... (relleno)", "quiero decir", "en realidad / de hecho", "a decir verdad", "podemos ver que", "se trata de / concierne", "según el documento", "estoy de acuerdo", "al contrario", "eso es correcto / exactamente", "absolutamente / completamente", "personalmente", "me parece que", "por un lado... por el otro", "para terminar / en conclusión", "mantengo que"],
+    tcfWriting: "Revisa y mejora tus dos mejores tareas de escritura de semanas 9 y 10. Incorpora todos los comentarios sobre conectores.",
+    tcfSpeaking: "Sección Oral Simulada Completa (12 minutos, las 3 tareas). Grábate y auto-califica usando rúbrica TCF.",
+    examTip: "El miedo oral es universal. Los examinadores premian la comunicación — no la perfección. ¡Sigue adelante incluso si cometes errores!"
+  },
+  12: {
+    title: "Simulacro de Examen y Revisión Final",
+    theme: "Simulación Completa TCF Canadá",
+    grammar: "Revisión completa según sea necesario | Revisión de todos los conjuntos de vocabulario temático",
+    days: [
+      {
+        tasks: [
+          { text: "Mira Video 12: 'Revisión Completa de Simulacro TCF'. Anota lo que gana CLB 5 vs CLB 4 en cada sección." },
+          { text: "Revisión de vocabulario final: Ve a través de TODAS las tarjetas de Anki de las 12 semanas. Enfócate en tus palabras más bajas." },
+          { text: "Preparación mental: Lee tu Lista de Verificación de Éxito CLB 5. Marca todo lo que puedas hacer con confianza." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "SIMULACRO COMPLETO CRONOMETRADO — Sección de Comprensión Auditiva (29 preguntas, 25 minutos). Condiciones de examen estrictas: sin pausas." },
+          { text: "SIMULACRO COMPLETO CRONOMETRADO — Sección de Lectura (29 preguntas, 45 minutos). Aplica estrategia escanear-buscar en todo." },
+          { text: "Marca y revisa respuestas con clave de respuestas. Calcula tu puntuación. Analiza patrones de error." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "SIMULACRO COMPLETO CRONOMETRADO — Sección de Escritura (2 tareas, 60 minutos): Tarea 1 (20 min) + Tarea 2 (40 min). Condiciones de examen estrictas." },
+          { text: "SIMULACRO COMPLETO CRONOMETRADO — Sección Oral (3 tareas, 12 minutos). Grábate todo. Condiciones de examen." },
+          { text: "Auto-análisis: Escribe 3 fortalezas y 3 áreas de mejora del simulacro de hoy." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "Revisa errores del simulacro de martes y miércoles. Para cada respuesta incorrecta, entiende exactamente por qué." },
+          { text: "Revisión de gramática enfocada: Enfócate en los 2 puntos de gramática con los que más luchaste esta semana. Trabájalo." },
+          { text: "Práctica oral final: Grábate una última Tarea 3 sobre un tema que no has practicado. Esto prueba fluidez real." },
+          { text: "Revisión final de Anki: solo las 20 palabras más difíciles." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "SIMULACRO FINAL — Sección Oral: Examen oral de 12 minutos completo. Grábate y escucha nuevamente. ¡Compara a tu grabación de la Semana 1!" },
+          { text: "Re-lee todas tus muestras de escritura corregidas del curso. Nota cuánto has mejorado." },
+          { text: "Preparación para el día del examen: Planifica tu viaje, prepara tus documentos, configura tu alarma. Conoce el formato exacto y tiempos." },
+          { text: "¡Celebración! Mira Semana 1 vs Semana 12. Comenzaste desde cero. Estás listo para CLB 5." }
+        ]
+      },
+      {
+        tasks: [
+          { text: "DESCANSA. Revisa suavemente tus tarjetas de vocabulario. Re-lee tus mejores muestras de escritura. ¡Estás listo — confía en el proceso!" }
+        ]
+      }
+    ],
+    vocab: ["estoy listo/lista", "el examen", "tener éxito / aprobar", "el resultado", "la puntuación", "comprensión auditiva", "comprensión de lectura", "expresión escrita", "expresión oral", "el nivel", "tengo confianza en mí", "¡buena suerte!", "¡felicitaciones!", "¡pasé / ¡tuve éxito!", "es difícil pero posible", "estoy haciendo lo mejor", "soy capaz", "la práctica", "cada día", "¡bravo!"],
+    tcfWriting: "Sección de Escritura Final Simulada: Tarea 1 (20 min) + Tarea 2 (40 min) bajo condiciones estrictas de examen.",
+    tcfSpeaking: "Sección Oral Final Simulada: Las 3 tareas, 12 minutos, condiciones de examen. ¡Grábate y compara a la Semana 1!",
+    examTip: "Comenzaste desde cero. En 12 semanas construiste las habilidades para aprobar TCF Canadá en CLB 5. ¡Confía en tu preparación!"
+  }
+};
+
+// ============================================================
 // STATE (localStorage for persistence)
 // ============================================================
 function getState() {
@@ -1725,6 +2423,8 @@ function showWeek(idx) {
   currentWeekIdx = idx;
   updateActiveNav(idx);
   const w = weeks[idx];
+  const lang = getLang();
+  const wES = lang === 'es' ? (weeksES[w.number] || {}) : {};
   const state = getState();
   const isComplete = !!state[getWeekCompleteKey(w.number)];
 
@@ -1732,6 +2432,11 @@ function showWeek(idx) {
   const phaseClass = { foundation: 'phase-foundation', building: 'phase-building', readiness: 'phase-readiness' }[w.phase];
   const phaseEmoji = { foundation: '📗', building: '📘', readiness: '📕' }[w.phase];
   const phaseLabel = t.phases[w.phase] || w.phaseLabel;
+
+  // Translated content (Spanish or English)
+  const weekTitle = wES.title || w.title;
+  const weekTheme = wES.theme || w.theme;
+  const weekGrammar = wES.grammar || w.grammar;
 
   // Count tasks completed this week
   let totalTasks = 0, doneTasks = 0;
@@ -1749,11 +2454,11 @@ function showWeek(idx) {
     <span class="phase-badge ${phaseClass}">${phaseEmoji} ${phaseLabel}</span>
     ${isComplete ? `<div class="week-complete-banner">${t.weekDone(w.number)}${completedDate ? `<div class="completed-date">${t.completedOn} ${completedDate}</div>` : ''}</div>` : ''}
     <div class="week-header">
-      <h2>${t.weekLabel} ${w.number}: ${w.title}</h2>
-      <div class="week-theme">${t.themeLabel} ${w.theme}</div>
+      <h2>${t.weekLabel} ${w.number}: ${weekTitle}</h2>
+      <div class="week-theme">${t.themeLabel} ${weekTheme}</div>
       <div class="week-meta">
         <span class="meta-tag video">🎬 ${w.video}</span>
-        <span class="meta-tag grammar">📖 ${w.grammar}</span>
+        <span class="meta-tag grammar">📖 ${weekGrammar}</span>
         <span class="meta-tag">${t.tasksDone(doneTasks, totalTasks)}</span>
       </div>
     </div>
@@ -1769,7 +2474,7 @@ function showWeek(idx) {
       ${buildResBar(w.number)}
       <div class="card">
         <div class="card-title"><span class="icon">📅</span> ${t.dailyTitle}</div>
-        ${w.days.map((day, di) => buildDaySection(w, day, di, state)).join('')}
+        ${w.days.map((day, di) => buildDaySection(w, day, di, state, wES)).join('')}
         <div class="date-complete-row">
           <label for="date-complete-${idx}">${t.dateLabel}</label>
           <input type="date" class="date-complete-input" id="date-complete-${idx}" value="${completedDate || today}">
@@ -1781,15 +2486,15 @@ function showWeek(idx) {
     </div>
 
     <div class="tab-content" id="vocab-${idx}">
-      ${buildVocabSection(w, idx)}
+      ${buildVocabSection(w, idx, wES)}
     </div>
 
     <div class="tab-content" id="quiz-${idx}">
-      ${buildQuizSection(w, idx)}
+      ${buildQuizSection(w, idx, wES)}
     </div>
 
     <div class="tab-content" id="tcf-${idx}">
-      ${buildTCFSection(w)}
+      ${buildTCFSection(w, wES)}
     </div>
   `;
 
@@ -1800,11 +2505,12 @@ function showWeek(idx) {
   renderQuiz(idx);
 }
 
-function buildDaySection(w, day, di, state) {
+function buildDaySection(w, day, di, state, wES) {
   const allDone = day.tasks.every((_, ti) => state[getTaskKey(w.number, di, ti)]);
   const doneCnt = day.tasks.filter((_, ti) => state[getTaskKey(w.number, di, ti)]).length;
   const dayEmoji = (t.dayEmoji && t.dayEmoji[day.name]) || { Monday: '🌅', Tuesday: '☀️', Wednesday: '🌤', Thursday: '🌞', Friday: '🎉', Weekend: '🌊' }[day.name] || '📅';
   const dayLabel = (t.days && t.days[day.name]) || day.name;
+  const esDays = wES && wES.days;
   return `
     <div class="day-section">
       <div class="day-header ${allDone ? 'completed-day' : ''}" onclick="toggleDay(this)">
@@ -1818,27 +2524,32 @@ function buildDaySection(w, day, di, state) {
           const key = getTaskKey(w.number, di, ti);
           const done = !!state[key];
           const doneDate = state[getTaskDateKey(w.number, di, ti)] || '';
+          const taskText = (esDays && esDays[di] && esDays[di].tasks[ti]) ? esDays[di].tasks[ti].text : task.text;
           return `<div class="task-item ${done ? 'done' : ''}" onclick="toggleTask(${w.number}, ${di}, ${ti}, this)">
             <div class="task-checkbox"></div>
             <span class="task-time-badge">${task.time}</span>
-            <span class="task-text">${linkify(task.text)}${done && doneDate ? `<span class="task-date-badge">✓ ${doneDate}</span>` : ''}</span>
+            <span class="task-text">${linkify(taskText)}</span>${done && doneDate ? `<span class="task-date-badge">✓ ${doneDate}</span>` : ''}
           </div>`;
         }).join('')}
       </div>
     </div>`;
 }
 
-function buildVocabSection(w, idx) {
+function buildVocabSection(w, idx, wES) {
+  const esVocab = wES && wES.vocab;
   return `<div class="card">
     <div class="card-title"><span class="icon">📚</span> ${t.vocabTitle(w.number)} <button class="reset-btn" onclick="revealAll(${idx})">${t.revealAll}</button> <button class="reset-btn" onclick="hideAll(${idx})">${t.hideAll}</button></div>
     <p style="font-size:13px;color:#6b7280;margin-bottom:12px;">${t.vocabSubtitle}</p>
     <div class="vocab-grid" id="vocab-grid-${idx}">
-      ${w.vocab.map((v, vi) => `
+      ${w.vocab.map((v, vi) => {
+        const translation = (esVocab && esVocab[vi]) ? esVocab[vi] : v.en;
+        return `
         <div class="vocab-card" id="vc-${idx}-${vi}" onclick="toggleVocab(${idx}, ${vi})">
           <div class="vocab-french">${v.fr}</div>
-          <div class="vocab-translation">${v.en}</div>
+          <div class="vocab-translation">${translation}</div>
           <div class="vocab-hint">${t.tapReveal}</div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>
   </div>`;
 }
@@ -1862,20 +2573,23 @@ function buildQuizSection(w, idx) {
   </div>`;
 }
 
-function buildTCFSection(w) {
+function buildTCFSection(w, wES) {
+  const writing = (wES && wES.tcfWriting) || w.tcfWriting;
+  const speaking = (wES && wES.tcfSpeaking) || w.tcfSpeaking;
+  const tip = (wES && wES.examTip) || w.examTip;
   return `<div class="card">
     <div class="card-title"><span class="icon">🎯</span> ${t.tcfPracticeTitle(w.number)}</div>
     <div class="tcf-prompt">
       <div class="tcf-prompt-label">${t.writingLabel}</div>
-      <div class="tcf-prompt-text">${w.tcfWriting}</div>
+      <div class="tcf-prompt-text">${writing}</div>
     </div>
     <div class="tcf-prompt">
       <div class="tcf-prompt-label">${t.speakingLabel}</div>
-      <div class="tcf-prompt-text">${w.tcfSpeaking}</div>
+      <div class="tcf-prompt-text">${speaking}</div>
     </div>
     <div class="tcf-tip">
       <div class="tcf-tip-label">${t.tipLabel}</div>
-      ${w.examTip}
+      ${tip}
     </div>
     <div style="margin-top:16px;background:#f9fafb;border-radius:10px;padding:16px;">
       <div style="font-size:13px;font-weight:600;margin-bottom:10px;">${t.checklistTitle}</div>
@@ -1906,17 +2620,16 @@ function toggleTask(weekNum, di, ti, el) {
   saveState(state);
   el.classList.toggle('done', state[key]);
 
-  // Update date badge in task text span
+  // Update date badge — placed AFTER .task-text so it is not crossed out
   const textSpan = el.querySelector('.task-text');
   if (textSpan) {
-    // Remove existing date badge if any
-    const existing = textSpan.querySelector('.task-date-badge');
+    const existing = el.querySelector('.task-date-badge');
     if (existing) existing.remove();
     if (state[key]) {
       const badge = document.createElement('span');
       badge.className = 'task-date-badge';
       badge.textContent = `✓ ${now}`;
-      textSpan.appendChild(badge);
+      textSpan.insertAdjacentElement('afterend', badge);
     }
   }
 
@@ -2004,7 +2717,14 @@ function hideAll(idx) {
 // ============================================================
 function initQuiz(idx) {
   const w = weeks[idx];
-  const shuffled = [...w.vocab].sort(() => Math.random() - 0.5);
+  const lang = getLang();
+  const esVocab = lang === 'es' ? (weeksES[w.number] && weeksES[w.number].vocab) : null;
+  // Build quiz questions using Spanish translation as prompt when in ES mode
+  const vocabWithLang = w.vocab.map((v, vi) => ({
+    fr: v.fr,
+    en: (esVocab && esVocab[vi]) ? esVocab[vi] : v.en
+  }));
+  const shuffled = [...vocabWithLang].sort(() => Math.random() - 0.5);
   quizState[idx] = { questions: shuffled, current: 0, correct: 0, total: 0, done: false };
 }
 
