@@ -373,11 +373,15 @@ function buildResBar(weekNum) {
     // Detect which driveKey this chip uses by matching the href to V/D
     let driveKey = null;
     for (const [k, v] of Object.entries({...V,...D})) { if (v === f.h) { driveKey = k; break; } }
-    const href = driveKey ? resolveLink(f.h, driveKey) : f.h;
     const dl = getDriveLinks();
     const hasDrive = driveKey && dl[driveKey];
+    let href = driveKey ? resolveLink(f.h, driveKey) : f.h;
+    // If still a computer:// link (no individual Drive link set), fall back to the Drive folder
+    if (href.startsWith('computer://')) {
+      href = f.c === 'video' ? GDRIVE_VIDEOS_FOLDER : GDRIVE_DOCS_FOLDER;
+    }
     const badge = hasDrive ? ' 🔗' : '';
-    return `<a href="${href}" target="_blank" class="res-chip ${f.c}" title="${hasDrive ? 'Google Drive link' : 'Local file'}">${f.l}${badge}</a>`;
+    return `<a href="${href}" target="_blank" class="res-chip ${f.c}" title="${hasDrive ? 'Individual Drive link' : 'Opens Drive folder'}">${f.l}${badge}</a>`;
   }).join('');
   return `<div class="res-bar"><span class="res-bar-label">📁 Your Files & Resources</span>
     <a href="${GDRIVE_VIDEOS_FOLDER}" target="_blank" class="res-chip video" title="Your Google Drive videos folder">📂 Videos on Drive</a>
