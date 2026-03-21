@@ -240,9 +240,9 @@
     </div>
     <div class="modal-body">
       <div class="info-box">
-        <strong>Why do this?</strong>
-        When you open this dashboard on your phone or any device other than your home computer, the local file links won't work. Paste your Google Drive share links here once, and they'll work everywhere — on mobile, tablet, any browser.
-        <br><br>In Google Drive: right-click each file → <em>Share</em> → <em>Anyone with the link</em> → copy the link.
+        <strong>✅ Your video folder is already linked!</strong>
+        The "📂 All Videos on Drive" button in every week opens your Google Drive videos folder directly.<br><br>
+        For even quicker access, paste individual file links below — right-click each file in Google Drive → <em>Share</em> → <em>Anyone with the link</em> → copy link. Once saved, each video chip will open that file directly instead of the folder.
       </div>
       <div class="modal-section">
         <h4>🎬 Videos</h4>
@@ -283,6 +283,8 @@
 // ============================================================
 // RESOURCE PATHS & LINKS
 // ============================================================
+const GDRIVE_VIDEOS_FOLDER = 'https://drive.google.com/drive/folders/1nDQohX2thr8yKau3jOPKuQNEHml3KsE4?usp=sharing';
+const GDRIVE_DOCS_FOLDER   = 'https://drive.google.com/drive/folders/1LmP3jRTzJO7OBmlujIfuSTlz8XrpBZdG?usp=sharing';
 const B = 'computer:///sessions/serene-optimistic-pascal/mnt/Edison%20Espinoza';
 const V = {
   onboard: `${B}/TCF%20Videos/Onboarding%20Intro%20video.mp4`,
@@ -377,7 +379,10 @@ function buildResBar(weekNum) {
     const badge = hasDrive ? ' 🔗' : '';
     return `<a href="${href}" target="_blank" class="res-chip ${f.c}" title="${hasDrive ? 'Google Drive link' : 'Local file'}">${f.l}${badge}</a>`;
   }).join('');
-  return `<div class="res-bar"><span class="res-bar-label">📁 Your Files & Resources</span>${chips}
+  return `<div class="res-bar"><span class="res-bar-label">📁 Your Files & Resources</span>
+    <a href="${GDRIVE_VIDEOS_FOLDER}" target="_blank" class="res-chip video" title="Your Google Drive videos folder">📂 Videos on Drive</a>
+    <a href="${GDRIVE_DOCS_FOLDER}"   target="_blank" class="res-chip doc"   title="Your Google Drive documents folder">📂 Docs on Drive</a>
+    ${chips}
     <a href="${EXT.tv5}"        target="_blank" class="res-chip ext">🌐 TV5Monde</a>
     <a href="${EXT.rfi}"        target="_blank" class="res-chip ext">🎧 RFI Savoirs</a>
     <a href="${EXT.bdf}"        target="_blank" class="res-chip ext">📖 Bonjour de France</a>
@@ -1930,7 +1935,7 @@ buildNav();
 updateProgress();
 showWeek(0);
 // Wire onboarding link (needs V defined, which it is)
-document.getElementById('onboard-link').href = V.onboard;
+document.getElementById('onboard-link').href = getDriveLinks()['onboard'] || GDRIVE_VIDEOS_FOLDER;
 
 // Open first day automatically
 setTimeout(() => {
