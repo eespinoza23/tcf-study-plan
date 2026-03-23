@@ -189,6 +189,34 @@
   .video-card-section-label.why { color: var(--green); }
   .video-card-section-text { font-size: 13px; line-height: 1.6; color: var(--dark); }
 
+  /* CLB 5 Success Checklist panel */
+  .clb5-panel { background: white; border-bottom: 1px solid #e5e7eb; }
+  .clb5-panel-header { padding: 12px 32px; display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .clb5-panel-header:hover { background: #fafafa; }
+  .clb5-panel-title { font-size: 14px; font-weight: 700; color: var(--green); flex: 1; }
+  .clb5-panel-score { font-size: 12px; font-weight: 700; background: var(--green-light); color: var(--green); border-radius: 12px; padding: 3px 12px; }
+  .clb5-panel-score.complete { background: var(--green); color: white; }
+  .clb5-panel-toggle { font-size: 12px; color: var(--gray); }
+  .clb5-panel-body { display: none; padding: 0 32px 20px; }
+  .clb5-panel-body.open { display: block; }
+  .clb5-subtitle { font-size: 13px; color: var(--gray); margin-bottom: 16px; }
+  .clb5-group { margin-bottom: 16px; }
+  .clb5-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #f3f4f6; }
+  .clb5-item { display: flex; align-items: flex-start; gap: 12px; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: background 0.15s; margin-bottom: 2px; }
+  .clb5-item:hover { background: var(--gray-light); }
+  .clb5-item.checked { background: var(--green-light); }
+  .clb5-item.checked .clb5-item-text { color: var(--green); }
+  .clb5-checkbox { width: 20px; height: 20px; border: 2px solid #d1d5db; border-radius: 5px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .clb5-item.checked .clb5-checkbox { background: var(--green); border-color: var(--green); }
+  .clb5-checkbox::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; display: none; }
+  .clb5-item.checked .clb5-checkbox::after { display: block; }
+  .clb5-item-text { font-size: 13px; line-height: 1.5; color: var(--dark); }
+  .clb5-progress-bar { height: 6px; background: #e5e7eb; border-radius: 6px; margin-bottom: 16px; }
+  .clb5-progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), #10b981); border-radius: 6px; transition: width 0.4s ease; }
+  .clb5-complete-msg { text-align: center; padding: 14px; background: var(--green-light); border-radius: 10px; color: var(--green); font-weight: 700; font-size: 14px; margin-top: 8px; display: none; }
+  .clb5-complete-msg.show { display: block; }
+  @media (max-width: 600px) { .clb5-panel-header { padding: 12px 16px; } .clb5-panel-body { padding: 0 16px 16px; } }
+
   .onboarding-card { background: linear-gradient(135deg, #1a56db, #6c2bd9); color: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
   .onboarding-card h3 { font-size: 18px; margin-bottom: 8px; }
   .onboarding-card p { opacity: 0.9; font-size: 14px; line-height: 1.6; }
@@ -311,6 +339,17 @@
   <div class="progress-bar"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
 </div>
 
+<div class="clb5-panel" id="clb5-panel">
+  <div class="clb5-panel-header" onclick="toggleCLB5Panel()">
+    <span class="clb5-panel-title" id="clb5-panel-title">🎯 CLB 5 Success Checklist</span>
+    <span class="clb5-panel-score" id="clb5-panel-score">0 / 9</span>
+    <span class="clb5-panel-toggle" id="clb5-panel-toggle">▼ Show</span>
+  </div>
+  <div class="clb5-panel-body" id="clb5-panel-body">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
 <div class="week-nav" id="week-nav">
   <!-- Buttons added by JS -->
 </div>
@@ -334,6 +373,18 @@ const T = {
     progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
     tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice', tabSession:'👩‍🏫 Coaching Sessions',
     videoCardTitle:'🎬 This Week\'s Video Tutorial', videoLearnLabel:'What you\'ll learn', videoWhyLabel:'💡 Why it matters', videoShowDetails:'▼ Show details', videoHideDetails:'▲ Hide details',
+    clb5PanelTitle:'🎯 CLB 5 Success Checklist',
+    clb5PanelSubtitle:'Check off each skill as you achieve it. These are the 9 targets you are working toward by Week 12.',
+    clb5Show:'▼ Show', clb5Hide:'▲ Hide',
+    clb5Score:(d,t)=>`${d} / ${t}`,
+    clb5CompleteMsg:'🎉 All 9 skills achieved — you are ready for TCF Canada CLB 5!',
+    clb5Groups:[
+      { label:'🎧 Listening', items:['Understand the main idea of a short spoken message on a familiar topic'] },
+      { label:'📖 Reading',   items:['Read and understand the key information in a short everyday text'] },
+      { label:'✏️ Writing',   items:['Write a 60–120-word short message clearly and with basic accuracy (Task 1)','Write a 120–150-word report or story (Task 2)','Write a 120–180-word comparative text (Task 3)'] },
+      { label:'🗣️ Oral Expression', items:['Introduce yourself and describe a situation in 3–5 coherent sentences (Task 1)','Respond to a simple document in a role-play task (Task 2)','Express opinions confidently for 4.5 minutes (Task 3)'] },
+      { label:'🔊 Pronunciation', items:['Communicate clearly and pronounce French so the examiner understands you'] }
+    ],
     sessionTitle:(n)=>`Coaching Sessions — Week ${n}`,
     sessionLesson:(n)=>`Lesson ${n}`,
     sessionFocusLabel:'Focus', sessionActivitiesLabel:'Activities', sessionTCFLabel:'TCF Link', sessionGrammarLabel:'Grammar & Vocabulary',
@@ -385,6 +436,18 @@ const T = {
     progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
     tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF', tabSession:'👩‍🏫 Sesiones de Coaching',
     videoCardTitle:'🎬 Video Tutorial de esta Semana', videoLearnLabel:'Lo que aprenderás', videoWhyLabel:'💡 Por qué importa', videoShowDetails:'▼ Ver detalles', videoHideDetails:'▲ Ocultar detalles',
+    clb5PanelTitle:'🎯 Lista de Verificación CLB 5',
+    clb5PanelSubtitle:'Marca cada habilidad cuando la logres. Estas son las 9 metas hacia la Semana 12.',
+    clb5Show:'▼ Mostrar', clb5Hide:'▲ Ocultar',
+    clb5Score:(d,t)=>`${d} / ${t}`,
+    clb5CompleteMsg:'🎉 ¡Las 9 habilidades logradas — estás listo/a para TCF Canadá CLB 5!',
+    clb5Groups:[
+      { label:'🎧 Comprensión Auditiva', items:['Entender la idea principal de un mensaje corto sobre un tema familiar'] },
+      { label:'📖 Comprensión Lectora',  items:['Leer y comprender la información clave en un texto cotidiano corto'] },
+      { label:'✏️ Expresión Escrita',    items:['Escribir un mensaje corto de 60–120 palabras con precisión básica (Tarea 1)','Escribir un relato o historia de 120–150 palabras (Tarea 2)','Escribir un texto comparativo de 120–180 palabras (Tarea 3)'] },
+      { label:'🗣️ Expresión Oral',       items:['Presentarte y describir una situación en 3–5 oraciones coherentes (Tarea 1)','Responder a un documento simple en una tarea de juego de rol (Tarea 2)','Expresar opiniones con confianza durante 4,5 minutos (Tarea 3)'] },
+      { label:'🔊 Pronunciación',         items:['Comunicarte claramente y pronunciar el francés para que el examinador te entienda'] }
+    ],
     sessionTitle:(n)=>`Sesiones de Coaching — Semana ${n}`,
     sessionLesson:(n)=>`Lección ${n}`,
     sessionFocusLabel:'Enfoque', sessionActivitiesLabel:'Actividades', sessionTCFLabel:'Enlace TCF', sessionGrammarLabel:'Gramática y Vocabulario',
@@ -2482,6 +2545,75 @@ let quizState = {};
 // ============================================================
 // BUILD NAV
 // ============================================================
+// ============================================================
+// CLB 5 CHECKLIST
+// ============================================================
+function getCLB5Key(gi, ii) { return `clb5_${gi}_${ii}`; }
+
+function renderCLB5Panel() {
+  const state = getState();
+  const groups = t.clb5Groups;
+  let total = 0, done = 0;
+  groups.forEach(g => { total += g.items.length; });
+  groups.forEach((g, gi) => g.items.forEach((_, ii) => { if (state[getCLB5Key(gi, ii)]) done++; }));
+
+  // Update score badge
+  const scoreEl = document.getElementById('clb5-panel-score');
+  if (scoreEl) {
+    scoreEl.textContent = t.clb5Score(done, total);
+    scoreEl.classList.toggle('complete', done === total);
+  }
+  const titleEl = document.getElementById('clb5-panel-title');
+  if (titleEl) titleEl.textContent = t.clb5PanelTitle;
+
+  // Build body
+  const body = document.getElementById('clb5-panel-body');
+  if (!body) return;
+
+  const progressPct = total > 0 ? Math.round((done / total) * 100) : 0;
+  let html = `
+    <p class="clb5-subtitle">${t.clb5PanelSubtitle}</p>
+    <div class="clb5-progress-bar"><div class="clb5-progress-fill" style="width:${progressPct}%"></div></div>`;
+
+  groups.forEach((g, gi) => {
+    html += `<div class="clb5-group"><div class="clb5-group-label">${g.label}</div>`;
+    g.items.forEach((item, ii) => {
+      const key = getCLB5Key(gi, ii);
+      const checked = !!state[key];
+      html += `<div class="clb5-item ${checked ? 'checked' : ''}" onclick="toggleCLB5Item(${gi},${ii},this)">
+        <div class="clb5-checkbox"></div>
+        <span class="clb5-item-text">${item}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `<div class="clb5-complete-msg ${done === total ? 'show' : ''}">${t.clb5CompleteMsg}</div>`;
+  body.innerHTML = html;
+}
+
+function toggleCLB5Item(gi, ii, el) {
+  const state = getState();
+  const key = getCLB5Key(gi, ii);
+  state[key] = !state[key];
+  saveState(state);
+  el.classList.toggle('checked', !!state[key]);
+  // Re-render score and progress without rebuilding whole body
+  renderCLB5Panel();
+  // Re-open the panel (renderCLB5Panel rebuilds body content but doesn't change open state)
+  const body = document.getElementById('clb5-panel-body');
+  if (body) body.classList.add('open');
+}
+
+function toggleCLB5Panel() {
+  const body = document.getElementById('clb5-panel-body');
+  const toggle = document.getElementById('clb5-panel-toggle');
+  if (!body || !toggle) return;
+  const isOpen = body.classList.toggle('open');
+  toggle.textContent = isOpen ? t.clb5Hide : t.clb5Show;
+  if (isOpen) renderCLB5Panel();
+}
+
 function buildNav() {
   const state = getState();
   const nav = document.getElementById('week-nav');
@@ -3017,6 +3149,7 @@ function applyTranslations() {
 applyTranslations();
 buildNav();
 updateProgress();
+renderCLB5Panel();   // init score badge (panel starts collapsed)
 showWeek(0);
 // Wire onboarding link (needs V defined, which it is)
 document.getElementById('onboard-link').href = getDriveLinks()['onboard'] || GDRIVE_VIDEOS_FOLDER;
@@ -3060,6 +3193,7 @@ function importProgress() {
     saveState(state);
     buildNav();
     updateProgress();
+    renderCLB5Panel();
     showWeek(currentWeekIdx);
     showToast(t.importToast);
   } catch(e) { showToast(t.importError); }
