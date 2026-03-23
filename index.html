@@ -158,6 +158,22 @@
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
+  /* Coaching Sessions tab */
+  .session-block { border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+  .session-header { padding: 12px 16px; background: var(--purple-light); display: flex; align-items: center; gap: 10px; }
+  .session-label { font-weight: 700; font-size: 14px; color: var(--purple); flex: 1; }
+  .session-timing { font-size: 12px; color: var(--gray); background: white; border-radius: 12px; padding: 2px 10px; }
+  .session-body { padding: 16px; }
+  .session-focus { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 12px; line-height: 1.5; }
+  .session-activities-list { margin-bottom: 12px; }
+  .session-activity-item { font-size: 13px; padding: 6px 0; border-bottom: 1px solid #f3f4f6; display: flex; gap: 8px; line-height: 1.4; }
+  .session-activity-item:last-child { border-bottom: none; }
+  .session-activity-num { color: var(--purple); font-weight: 700; flex-shrink: 0; min-width: 18px; }
+  .session-tcf-link { background: var(--yellow-light); border-left: 4px solid var(--yellow); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 13px; margin-top: 4px; }
+  .session-tcf-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--yellow); margin-bottom: 4px; }
+  .session-grammar { background: var(--gray-light); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--gray); margin-top: 12px; line-height: 1.5; }
+  .session-grammar-label { font-weight: 700; color: var(--dark); }
+
   .onboarding-card { background: linear-gradient(135deg, #1a56db, #6c2bd9); color: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
   .onboarding-card h3 { font-size: 18px; margin-bottom: 8px; }
   .onboarding-card p { opacity: 0.9; font-size: 14px; line-height: 1.6; }
@@ -301,7 +317,10 @@ const T = {
     exportBtn:'⬆ Export Progress', importBtn:'⬇ Import Progress', settingsBtn:'⚙️ Google Drive Links',
     langBtn:'🇻🇪 Español',
     progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
-    tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice',
+    tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice', tabSession:'👩‍🏫 Coaching Sessions',
+    sessionTitle:(n)=>`Coaching Sessions — Week ${n}`,
+    sessionLesson:(n)=>`Lesson ${n}`,
+    sessionFocusLabel:'Focus', sessionActivitiesLabel:'Activities', sessionTCFLabel:'TCF Link', sessionGrammarLabel:'Grammar & Vocabulary',
     days:{Monday:'Monday',Tuesday:'Tuesday',Wednesday:'Wednesday',Thursday:'Thursday',Friday:'Friday',Weekend:'Weekend'},
     dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
     phases:{foundation:'Foundation Phase — CLB 1–2',building:'Building Phase — CLB 3–4',readiness:'TCF Readiness Phase — CLB 5'},
@@ -348,7 +367,10 @@ const T = {
     syncLabel:'📲 Sincronización:', exportBtn:'⬆ Exportar Progreso', importBtn:'⬇ Importar Progreso', settingsBtn:'⚙️ Links de Drive',
     langBtn:'🇬🇧 English',
     progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
-    tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF',
+    tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF', tabSession:'👩‍🏫 Sesiones de Coaching',
+    sessionTitle:(n)=>`Sesiones de Coaching — Semana ${n}`,
+    sessionLesson:(n)=>`Lección ${n}`,
+    sessionFocusLabel:'Enfoque', sessionActivitiesLabel:'Actividades', sessionTCFLabel:'Enlace TCF', sessionGrammarLabel:'Gramática y Vocabulario',
     days:{Monday:'Lunes',Tuesday:'Martes',Wednesday:'Miércoles',Thursday:'Jueves',Friday:'Viernes',Weekend:'Fin de Semana'},
     dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
     phases:{foundation:'Fase Fundamentos — CLB 1–2',building:'Fase de Desarrollo — CLB 3–4',readiness:'Fase Preparación TCF — CLB 5'},
@@ -609,7 +631,11 @@ const weeks = [
     ],
     tcfWriting: "Write a short profile (60–70 words) about yourself for a French language exchange website.",
     tcfSpeaking: "TCF Oral Task 1 — 'Présentez-vous.' (1.5 minutes). Structure: name → age → nationality → city → job → one hobby.",
-    examTip: "Use the structure: name → age → nationality → city → job → one hobby. Speak clearly and don't rush!"
+    examTip: "Use the structure: name → age → nationality → city → job → one hobby. Speak clearly and don't rush!",
+    lessons: [
+      { number:1, focus:"French alphabet, pronunciation, accents, numbers 1–100; presenting yourself — TCF Oral Task A introduction", activities:["Introduce yourself in French with focus on TCF Oral Task A","Listen & repeat: short audio clips of native speakers greeting","Alphabet spelling drills and number pronunciation (1–100)"], tcfLink:"Oral Task A simulation: 'Présentez-vous' — record a 2-minute self-introduction", grammar:"Subject pronouns + être | Greetings, numbers 1–100, nationalities" },
+      { number:2, focus:"Verb être (to be) + subject pronouns; greetings & farewells", activities:["Être conjugation table practice — write from memory three times","Dialogue roleplay: meeting someone for the first time","Write 5 sentences about yourself using être in the present tense"], tcfLink:"TCF Oral Task 1 practice: describe yourself in 2–3 coherent sentences", grammar:"Subject pronouns + être | Greetings, numbers 1–100, nationalities" }
+    ]
   },
   {
     number: 2,
@@ -705,7 +731,11 @@ const weeks = [
     ],
     tcfWriting: "Write a short paragraph (65–75 words) about your family for a French language partner website.",
     tcfSpeaking: "TCF Oral Task 2 — 'Décrivez un membre de votre famille.' (2 minutes). Structure: name → age → appearance → personality → job → relationship.",
-    examTip: "Structure: name → age → appearance → personality → job → what you like doing together."
+    examTip: "Structure: name → age → appearance → personality → job → what you like doing together.",
+    lessons: [
+      { number:1, focus:"Verb avoir (to have), family vocabulary, articles (un/une/le/la/les)", activities:["Family tree labelling activity","Possessive adjectives: mon, ma, mes, ton, ta, tes","Listening: a French person describes their family"], tcfLink:"Reading: short family-themed paragraph — comprehension questions", grammar:"Avoir + articles + adjective agreement | Family, physical descriptions, relationships" },
+      { number:2, focus:"Adjective agreement (gender & number), describing people", activities:["Adjective agreement drills (grand/grande, petit/petite, gentil/gentille)","Oral: describe a family member using avoir + adjectives","Writing task: short paragraph about your family (5–6 sentences)"], tcfLink:"TCF Written Task practice: write about your family for an online profile", grammar:"Avoir + articles + adjective agreement | Family, physical descriptions, relationships" }
+    ]
   },
   {
     number: 3,
@@ -803,7 +833,11 @@ const weeks = [
     ],
     tcfWriting: "Describe your typical day in 70–80 words to a French friend.",
     tcfSpeaking: "TCF Oral Task 1 — 'Décrivez votre journée typique.' (1.5 minutes). Use time words: le matin, l'après-midi, le soir.",
-    examTip: "Use time words: le matin, l'après-midi, le soir. Use connectors: d'abord, ensuite, puis, finalement."
+    examTip: "Use time words: le matin, l'après-midi, le soir. Use connectors: d'abord, ensuite, puis, finalement.",
+    lessons: [
+      { number:1, focus:"Regular -ER verbs (manger, parler, travailler, habiter, aimer) and telling time", activities:["-ER verb conjugation drills","Clock reading activity — student reads times aloud in French","Listening: a typical French morning routine"], tcfLink:"TCF Listening: 3 short dialogues — identify the time and activity described", grammar:"Regular -ER verbs, negation, question words | Daily activities, time expressions, frequency adverbs" },
+      { number:2, focus:"Negation (ne...pas), adverbs of frequency, question words (quand, où, qui)", activities:["Transform positive sentences to negative using ne...pas","Partner Q&A activity: ask and answer about daily habits","Write a paragraph: Ma journée typique (50–60 words)"], tcfLink:"TCF Reading: short blog post about daily life — true/false questions", grammar:"Regular -ER verbs, negation, question words | Daily activities, time expressions, frequency adverbs" }
+    ]
   },
   {
     number: 4,
@@ -898,7 +932,11 @@ const weeks = [
     ],
     tcfWriting: "Write directions from the train station to your home and describe your neighbourhood (70–80 words).",
     tcfSpeaking: "TCF Oral Task 2 — 'Décrivez votre quartier.' (2–2.5 minutes). Use: il y a, c'est près de / loin de, j'aime... parce que.",
-    examTip: "Use: il y a, c'est près de / loin de, j'aime... parce que. End with an opinion about your neighbourhood."
+    examTip: "Use: il y a, c'est près de / loin de, j'aime... parce que. End with an opinion about your neighbourhood.",
+    lessons: [
+      { number:1, focus:"Prepositions of place, city vocabulary, irregular verb aller (to go)", activities:["City map labelling activity","Aller + contractions (au / à la / aux) drills","Listening: a person asks for and follows directions in a French city"], tcfLink:"TCF Listening: direction audio — mark the correct route on a simple map", grammar:"Aller, near future, prepositions | City places, directions, transport" },
+      { number:2, focus:"Near future tense (aller + infinitif), making plans", activities:["Near future drills: Qu'est-ce que tu vas faire?","Oral: describe what you are going to do this weekend","Writing: short note about weekend plans to a friend"], tcfLink:"TCF Oral Task 2 practice: describe your neighbourhood in 2 minutes", grammar:"Aller, near future, prepositions | City places, directions, transport" }
+    ]
   },
   {
     number: 5,
@@ -993,7 +1031,11 @@ const weeks = [
     ],
     tcfWriting: "TCF Writing Task 1 (60–70 words): Write a short message to a friend about your food preferences.",
     tcfSpeaking: "TCF Oral Task 2 — Roleplay at a French restaurant. Order a full meal for yourself and a friend.",
-    examTip: "Food and shopping dialogues are very common in TCF Listening Section A. Know your partitive articles cold."
+    examTip: "Food and shopping dialogues are very common in TCF Listening Section A. Know your partitive articles cold.",
+    lessons: [
+      { number:1, focus:"Partitive articles (du, de la, des, de l'), food vocabulary, quantities", activities:["Grocery store dialogue roleplay","Listening: ordering at a French café — identify what is ordered","Dictation: a shopping list"], tcfLink:"TCF Reading: a restaurant menu — answer comprehension questions; TCF Task 2 roleplay", grammar:"Partitive articles, vouloir/pouvoir/prendre | Food, drinks, quantities, restaurant" },
+      { number:2, focus:"Irregular verbs vouloir, pouvoir, prendre; polite requests", activities:["Conjugation of vouloir / pouvoir / prendre — write and drill","Roleplay: at a restaurant — order a full meal politely","Write a short restaurant review (50–70 words)"], tcfLink:"TCF Written Task 1 practice: write a short message to a friend about food preferences", grammar:"Partitive articles, vouloir/pouvoir/prendre | Food, drinks, quantities, restaurant" }
+    ]
   },
   {
     number: 6,
@@ -1088,7 +1130,11 @@ const weeks = [
     ],
     tcfWriting: "TCF Writing Task: Describe what you did last weekend (80 words). Use at least 6 passé composé verbs.",
     tcfSpeaking: "TCF Oral Task 1 — 'Parlez d'une journée mémorable.' (2 minutes). Use passé composé throughout.",
-    examTip: "Passé composé is the most tested tense in TCF writing and oral tasks. Master avoir vs être rule completely."
+    examTip: "Passé composé is the most tested tense in TCF writing and oral tasks. Master avoir vs être rule completely.",
+    lessons: [
+      { number:1, focus:"Passé composé with avoir: formation and irregular past participles", activities:["Passé composé formation chart — practice with 20 common verbs","Oral gap-fill: what did you do yesterday?","Listening: a person recounts their weekend"], tcfLink:"TCF Listening: weekend story — answer comprehension questions", grammar:"Passé composé (avoir + être) | Time markers (hier, la semaine dernière), activities" },
+      { number:2, focus:"Passé composé with être (movement verbs + reflexives) and time markers", activities:["Être verbs mnemonic (DR MRS VANDERTRAMPP) drills","Writing: paragraph about a memorable day (80 words)","Error correction activity — spot the mistakes in a student's text"], tcfLink:"TCF Writing Task practice: describe what you did last weekend (80 words)", grammar:"Passé composé (avoir + être) | Time markers (hier, la semaine dernière), activities" }
+    ]
   },
   {
     number: 7,
@@ -1183,7 +1229,11 @@ const weeks = [
     ],
     tcfWriting: "Write a short email to a doctor describing your symptoms and requesting an appointment (70–80 words).",
     tcfSpeaking: "TCF Oral Task — 'Décrivez comment vous vous sentez et expliquez pourquoi.' (2 minutes).",
-    examTip: "Listening is often the weakest skill for beginners. Strategic listening (predict → gist → eliminate) can add 20–30 points."
+    examTip: "Listening is often the weakest skill for beginners. Strategic listening (predict → gist → eliminate) can add 20–30 points.",
+    lessons: [
+      { number:1, focus:"Body parts, health vocabulary, reflexive verbs (se lever, se sentir, se coucher)", activities:["Body part labelling activity","Reflexive verb conjugation drills","Listening: a medical appointment dialogue — identify the symptoms"], tcfLink:"TCF Listening: doctor's appointment audio; TCF Oral Task 2 preparation", grammar:"Reflexive verbs, devoir + infinitif, avoir expressions | Body, health, emotions" },
+      { number:2, focus:"Expressions with avoir (avoir mal à, avoir faim, avoir peur); giving advice with devoir", activities:["Avoir expression matching activity","Roleplay: doctor–patient consultation","Write a short email to a doctor describing your symptoms"], tcfLink:"TCF Oral Task practice: describe how you are feeling and explain why", grammar:"Reflexive verbs, devoir + infinitif, avoir expressions | Body, health, emotions" }
+    ]
   },
   {
     number: 8,
@@ -1278,7 +1328,11 @@ const weeks = [
     ],
     tcfWriting: "TCF Writing Task 2 (80–100 words): Write about your professional goals and why.",
     tcfSpeaking: "TCF Oral — 'Comparez deux professions. Laquelle préférez-vous et pourquoi?' (2 minutes).",
-    examTip: "CLB 5 reading requires understanding main ideas. With the skim-scan strategy, you can score even with limited vocabulary."
+    examTip: "CLB 5 reading requires understanding main ideas. With the skim-scan strategy, you can score even with limited vocabulary.",
+    lessons: [
+      { number:1, focus:"Jobs and professions, verb faire, school/office vocabulary; expressing likes and dislikes (aimer/préférer)", activities:["Profession matching quiz","Listening: a person talks about their job","Oral drill: Qu'est-ce que tu fais dans la vie?"], tcfLink:"TCF Reading: a short job advertisement — comprehension questions", grammar:"Faire, comparatives | Jobs, studies, workplace, school" },
+      { number:2, focus:"Comparatives (plus...que, moins...que, aussi...que); talking about studies", activities:["Comparative drills with professions and study programs","Oral: compare two jobs or two schools in 2 minutes","Writing: write a short cover letter (80–100 words)"], tcfLink:"TCF Written Task 2 practice: write about your professional goals", grammar:"Faire, comparatives | Jobs, studies, workplace, school" }
+    ]
   },
   {
     number: 9,
@@ -1372,7 +1426,11 @@ const weeks = [
     ],
     tcfWriting: "Timed Task 1 (20 min): Write an email to a friend about a recent event in your life (60–80 words).",
     tcfSpeaking: "Timed Oral Task 1: 'Décrivez votre vie quotidienne au Canada.' (3 minutes — no stopping).",
-    examTip: "For TCF Listening: always read the answer choices BEFORE the audio plays. This activates your brain to listen for specific words."
+    examTip: "For TCF Listening: always read the answer choices BEFORE the audio plays. This activates your brain to listen for specific words.",
+    lessons: [
+      { number:1, focus:"TCF listening strategies: predicting content, listening for gist, catching key words", activities:["Timed TCF-style listening practice (10 MCQ)","Strategy review: using context clues to eliminate wrong answers","Identify distractor answer choices in sample questions"], tcfLink:"Full TCF Listening Section A simulation — 15 questions, 15 minutes", grammar:"Review: all tenses covered to date | Exam vocabulary: public services, social situations" },
+      { number:2, focus:"TCF reading strategies: skimming, scanning, paragraph structure", activities:["Timed TCF-style reading practice (10 MCQ)","Vocabulary in context exercises","Skim a French newspaper article and identify the main idea"], tcfLink:"Full TCF Reading Section A simulation — 15 questions, 20 minutes", grammar:"Review: all tenses covered to date | Exam vocabulary: public services, social situations" }
+    ]
   },
   {
     number: 10,
@@ -1465,7 +1523,11 @@ const weeks = [
     ],
     tcfWriting: "Timed Task 2 (35 min): Write your opinion on a simple everyday topic using a 3-paragraph structure (120+ words).",
     tcfSpeaking: "TCF Oral Task 3 — Defend a point of view on an everyday topic (4.5 minutes). Use opinion phrases and connectors.",
-    examTip: "Most beginners lose marks on Task 2 because of poor structure — not vocabulary. Master the 3-paragraph structure."
+    examTip: "Most beginners lose marks on Task 2 because of poor structure — not vocabulary. Master the 3-paragraph structure.",
+    lessons: [
+      { number:1, focus:"TCF Written Expression Task 1: informal message/email (60–80 words) — planning and structuring", activities:["Analyse model answers at CLB 4 and CLB 5 side by side","Timed writing: an informal email about a personal situation (20 min)","Peer/instructor feedback on structure and vocabulary"], tcfLink:"Timed Task 1 (20 minutes): write an email to a friend about a recent event", grammar:"Connectors, sentence variety, modal verbs review | Opinion language, everyday topics" },
+      { number:2, focus:"TCF Written Expression Task 2: describe or give an opinion (120+ words) using connectors", activities:["Connector words practice: d'abord, ensuite, enfin, parce que, donc","Write a structured 3-paragraph response (35 min timed)","Instructor marks using TCF rubric and gives written feedback"], tcfLink:"Timed Task 2 (35 minutes): write your opinion on a simple everyday topic", grammar:"Connectors, sentence variety, modal verbs review | Opinion language, everyday topics" }
+    ]
   },
   {
     number: 11,
@@ -1559,7 +1621,11 @@ const weeks = [
     ],
     tcfWriting: "Review and improve your two best writing tasks from weeks 9 & 10. Incorporate all connector feedback.",
     tcfSpeaking: "Full mock Oral Expression section (12 minutes, all 3 tasks). Record and self-score using TCF rubric.",
-    examTip: "Oral fear is universal. Examiners reward communication — not perfection. Keep going even if you make mistakes."
+    examTip: "Oral fear is universal. Examiners reward communication — not perfection. Keep going even if you make mistakes.",
+    lessons: [
+      { number:1, focus:"TCF Oral Task 1 (monologue): introduce yourself and describe a situation", activities:["30-second planning technique — write exactly 5 words as your plan","Practice 3 different Task 1 prompts back-to-back","Record responses and listen back for self-evaluation"], tcfLink:"Timed Task 1 oral (3 minutes): describe your daily life in Canada", grammar:"Subjective expressions, discourse markers (eh bien, c'est-à-dire, d'accord) | Opinions, reactions, hedging language" },
+      { number:2, focus:"TCF Oral Task 2 & 3: react to a document / defend a point of view", activities:["Analyse a visual document and speak about it (1 minute plan, 2 min response)","Practice expressing agreement and disagreement","Full mock oral exam — all 3 tasks scored on TCF rubric (12 minutes)"], tcfLink:"Full mock Oral Expression section — 3 tasks, 12 minutes, full rubric scoring", grammar:"Subjective expressions, discourse markers (eh bien, c'est-à-dire, d'accord) | Opinions, reactions, hedging language" }
+    ]
   },
   {
     number: 12,
@@ -1649,7 +1715,11 @@ const weeks = [
     ],
     tcfWriting: "Final mock Writing Section: Task 1 (20 min) + Task 2 (40 min) under strict exam conditions.",
     tcfSpeaking: "Final mock Oral Section: All 3 tasks, 12 minutes, exam conditions. Record and compare to Week 1!",
-    examTip: "You started from zero. In 12 weeks you've built the skills to pass TCF Canada at CLB 5. Trust your preparation!"
+    examTip: "You started from zero. In 12 weeks you've built the skills to pass TCF Canada at CLB 5. Trust your preparation!",
+    lessons: [
+      { number:1, focus:"Full timed mock exam — Listening + Reading under TCF exam conditions", activities:["25-minute timed listening section (29 questions)","45-minute timed reading section (29 questions)","Mark and review all answers with instructor — identify patterns in errors"], tcfLink:"Full mock exam Sections 1 & 2 (listening + reading)", grammar:"Full review as needed | Review all thematic vocabulary sets" },
+      { number:2, focus:"Full timed mock exam — Writing + Oral + Personalised Feedback Session", activities:["60-minute writing mock: 2 tasks under TCF conditions","12-minute oral mock: all 3 tasks under TCF conditions","Detailed debrief: celebrate strengths, address final gaps, exam day tips"], tcfLink:"Full mock exam Sections 3 & 4 + personalised debrief and score prediction", grammar:"Full review as needed | Review all thematic vocabulary sets" }
+    ]
   }
 ];
 
@@ -2466,6 +2536,7 @@ function showWeek(idx) {
 
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab(this, 'daily-${idx}')">${t.tabDaily}</button>
+      <button class="tab-btn" onclick="switchTab(this, 'session-${idx}')">${t.tabSession}</button>
       <button class="tab-btn" onclick="switchTab(this, 'vocab-${idx}')">${t.tabVocab}</button>
       <button class="tab-btn" onclick="switchTab(this, 'quiz-${idx}')">${t.tabQuiz}</button>
       <button class="tab-btn" onclick="switchTab(this, 'tcf-${idx}')">${t.tabTCF}</button>
@@ -2484,6 +2555,10 @@ function showWeek(idx) {
           ${isComplete ? t.undoComplete : t.completeWeek(w.number)}
         </button>
       </div>
+    </div>
+
+    <div class="tab-content" id="session-${idx}">
+      ${buildSessionSection(w)}
     </div>
 
     <div class="tab-content" id="vocab-${idx}">
@@ -2597,6 +2672,36 @@ function buildTCFSection(w, wES) {
       ${t.checklist.map(item => `<div class="checklist-item"><span>☐</span><span style="font-size:13px">${item}</span></div>`).join('')}
     </div>
   </div>`;
+}
+
+function buildSessionSection(w) {
+  if (!w.lessons || !w.lessons.length) return `<div class="card"><p style="color:var(--gray);font-size:14px;">Session details not available for this week.</p></div>`;
+  const intro = `<div style="background:var(--purple-light);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--purple);">
+    <strong>👩‍🏫 ${t.sessionTitle(w.number)}</strong><br>
+    <span style="font-size:12px;opacity:0.85;">2 sessions × 60 min · Use this tab to prepare before each session or follow along during it.</span>
+  </div>`;
+  const blocks = w.lessons.map(lesson => `
+    <div class="session-block">
+      <div class="session-header">
+        <span class="session-label">📋 ${t.sessionLesson(lesson.number)}</span>
+        <span class="session-timing">60 min</span>
+      </div>
+      <div class="session-body">
+        <div class="session-focus">🎯 ${t.sessionFocusLabel}: ${lesson.focus}</div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray);margin-bottom:8px;">${t.sessionActivitiesLabel}</div>
+        <div class="session-activities-list">
+          ${lesson.activities.map((a, i) => `<div class="session-activity-item"><span class="session-activity-num">${i + 1}.</span><span>${a}</span></div>`).join('')}
+        </div>
+        <div class="session-tcf-link">
+          <div class="session-tcf-label">🎯 ${t.sessionTCFLabel}</div>
+          ${lesson.tcfLink}
+        </div>
+        <div class="session-grammar">
+          <span class="session-grammar-label">📖 ${t.sessionGrammarLabel}: </span>${lesson.grammar}
+        </div>
+      </div>
+    </div>`).join('');
+  return `<div class="card">${intro}${blocks}</div>`;
 }
 
 // ============================================================
