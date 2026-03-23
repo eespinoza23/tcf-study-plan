@@ -488,7 +488,7 @@ const T = {
     resBarLabel:'📁 Your Files & Resources',
     howToUse:'💡 <strong>How to use:</strong> Click each day to expand tasks. Check off tasks as you complete them. Use the Vocab Quiz tab to test yourself. Progress saves automatically.',
     settingsTitle:'⚙️ Configure Google Drive Links',
-    settingsInfo:'<strong>✅ Your video folder is already linked!</strong> The "📂 Videos on Drive" button in every week opens your Google Drive videos folder directly.<br><br>For even quicker access, paste individual file links below — right-click each file in Google Drive → <em>Share</em> → <em>Anyone with the link</em> → copy link.',
+    settingsInfo:'<strong>✅ All files auto-linked from this device!</strong> When opened locally, every file (videos, PDFs, DOCX, PPTX) links directly to your computer — no setup needed.<br><br><strong>📲 For cross-device access</strong> (phone, tablet, another computer), paste Google Drive share links below. They permanently override the local paths. Right-click any file in Google Drive → <em>Share</em> → <em>Anyone with the link</em> → copy link.',
     videoGroupLabel:'🎬 Videos', docGroupLabel:'📄 Documents & Resources',
     clearAll:'Clear All', saveLinks:'Save Links',
     exportToast:'✅ Progress copied! Paste it on your other device.',
@@ -567,7 +567,7 @@ const T = {
     resBarLabel:'📁 Tus Archivos y Recursos',
     howToUse:'💡 <strong>Cómo usar:</strong> Haz clic en cada día para ver las tareas. Márcalas al completarlas. Usa el Examen de Vocabulario para practicar. El progreso se guarda automáticamente.',
     settingsTitle:'⚙️ Configurar Links de Google Drive',
-    settingsInfo:'<strong>✅ ¡Tu carpeta de videos ya está vinculada!</strong> El botón "📂 Videos en Drive" abre tu carpeta directamente.<br><br>Para acceso más rápido, pega links individuales — clic derecho en Google Drive → <em>Compartir</em> → <em>Cualquier persona con el enlace</em> → copiar.',
+    settingsInfo:'<strong>✅ ¡Todos los archivos vinculados automáticamente desde este dispositivo!</strong> Al abrir localmente, cada archivo (videos, PDFs, DOCX, PPTX) se vincula directamente a tu computadora — sin configuración.<br><br><strong>📲 Para acceso desde otros dispositivos</strong> (celular, tablet, otra computadora), pega links de Google Drive abajo. Reemplazan permanentemente las rutas locales. Clic derecho en Drive → <em>Compartir</em> → <em>Cualquier persona con el enlace</em> → copiar.',
     videoGroupLabel:'🎬 Videos', docGroupLabel:'📄 Documentos y Recursos',
     clearAll:'Borrar Todo', saveLinks:'Guardar Links',
     exportToast:'✅ ¡Progreso copiado! Pégalo en tu otro dispositivo.',
@@ -3322,6 +3322,45 @@ function applyTranslations() {
 // ============================================================
 // INIT
 // ============================================================
+// ============================================================
+// AUTO-DETECT LOCAL FILE PATHS
+// Pre-populates every resource link using the current file://
+// location, so all files open immediately when the HTML is opened
+// from its folder — no manual Drive setup needed for local use.
+// Drive links set via ⚙️ always override these.
+// ============================================================
+function initLocalFilePaths() {
+  if (!window.location.href.startsWith('file://')) return;
+  const base = window.location.href.replace(/\/[^/]*$/, '/');
+  const dl = getDriveLinks();
+  const localPaths = {
+    onboard:  base + 'TCF%20Videos/Onboarding%20Intro%20video.mp4',
+    v1:       base + 'TCF%20Videos/Video%201.mp4',
+    v2:       base + 'TCF%20Videos/Video%202.mp4',
+    v3:       base + 'TCF%20Videos/Video%203.mp4',
+    v4:       base + 'TCF%20Videos/Video%204.mp4',
+    v5:       base + 'TCF%20Videos/Video%205.mp4',
+    v6:       base + 'TCF%20Videos/Video%206.mp4',
+    v7:       base + 'TCF%20Videos/Video%207%20Listening%20Masterclass.mp4',
+    v8:       base + 'TCF%20Videos/Video%208%20Reading%20Made%20Simple.mp4',
+    v910:     base + 'TCF%20Videos/Video%209%2610%20Writing%20TCF%20Masterclass.mp4',
+    v11:      base + 'TCF%20Videos/Video%2011%20TCF%20Speaking%20Masterclass.mp4',
+    vocab:    base + 'Digital%20Study%20Resources/TCF_CLB5_Vital_Verbs_and_Vocabulary-2.pdf',
+    verbs:    base + 'Digital%20Study%20Resources/clb5_verbs_worksheet.docx',
+    reflexive:base + 'Digital%20Study%20Resources/french_reflexive_verbs.docx',
+    speaking: base + 'Digital%20Study%20Resources/CLB5%20TEF%20Speaking%20template.docx',
+    plan:     base + 'Personalised%20Study%20Plan/12%20Week%20Personalised%20TCF%20Study%20Plan.docx',
+    coaching: base + '12%20Week%20Programme%20Plan%20%26%20Lessons/12-WEEK%20TCF%20GROUP%20COACHING%20PLAN.docx',
+    slides:   base + '12%20Week%20Programme%20Plan%20%26%20Lessons/12-Week-French-TCF%20Course.pptx',
+  };
+  let changed = false;
+  for (const [key, path] of Object.entries(localPaths)) {
+    if (!dl[key]) { dl[key] = path; changed = true; }
+  }
+  if (changed) localStorage.setItem(DRIVE_STORAGE_KEY, JSON.stringify(dl));
+}
+
+initLocalFilePaths();
 applyTranslations();
 buildNav();
 updateProgress();
