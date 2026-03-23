@@ -222,6 +222,8 @@
   .video-card-title { font-size: 14px; font-weight: 700; color: var(--purple); flex: 1; }
   .video-card-duration { font-size: 12px; background: var(--purple-light); color: var(--purple); border-radius: 12px; padding: 2px 10px; font-weight: 600; white-space: nowrap; }
   .video-card-toggle { font-size: 12px; color: var(--gray); transition: transform 0.2s; }
+  .video-card-watch { font-size: 12px; font-weight: 700; background: var(--purple); color: white; border-radius: 12px; padding: 4px 12px; text-decoration: none; white-space: nowrap; transition: opacity 0.2s; }
+  .video-card-watch:hover { opacity: 0.85; }
   .video-card-body { padding: 0 20px 16px; border-top: 1px solid #f0ebff; display: none; }
   .video-card-body.open { display: block; }
   .video-card-section { margin-top: 14px; }
@@ -622,6 +624,9 @@ const EXT = {
 };
 
 // Per-week resources bar (shown above daily tasks)
+// Map week number → V key (for resolving the video link)
+const weekVideoKey = {1:'v1',2:'v2',3:'v3',4:'v4',5:'v5',6:'v6',7:'v7',8:'v8',9:'v910',10:'v910',11:'v11'};
+
 const weekRes = {
   1:  [ {l:'▶ Video 1',    h:V.v1,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'}, {l:'📋 Coaching Plan',h:D.coaching,c:'doc'}, {l:'🖥️ Course Slides',h:D.slides,c:'doc'} ],
   2:  [ {l:'▶ Video 2',    h:V.v2,   c:'video'}, {l:'📄 Verbs Worksheet',    h:D.verbs,   c:'doc'}, {l:'📘 Vocab & Verbs PDF',h:D.vocab, c:'pdf'}, {l:'📋 Coaching Plan',h:D.coaching,c:'doc'}, {l:'🖥️ Course Slides',h:D.slides,c:'doc'} ],
@@ -2842,6 +2847,10 @@ function showWeek(idx) {
   const completedDate = state[getWeekDateKey(w.number)] || '';
   const today = todayStr();
 
+  // Resolve video link for this week
+  const vKey = weekVideoKey[w.number];
+  const videoHref = vKey ? resolveLink(V[vKey], vKey) : null;
+
   let html = `
     <span class="phase-badge ${phaseClass}">${phaseEmoji} ${phaseLabel}</span>
     ${isComplete ? `<div class="week-complete-banner">${t.weekDone(w.number)}${completedDate ? `<div class="completed-date">${t.completedOn} ${completedDate}</div>` : ''}</div>` : ''}
@@ -2849,7 +2858,9 @@ function showWeek(idx) {
       <h2>${t.weekLabel} ${w.number}: ${weekTitle}</h2>
       <div class="week-theme">${t.themeLabel} ${weekTheme}</div>
       <div class="week-meta">
-        <span class="meta-tag video">🎬 ${w.video}</span>
+        ${videoHref
+          ? `<a href="${videoHref}" target="_blank" class="meta-tag video" style="text-decoration:none;">🎬 ${w.video} ▶</a>`
+          : `<span class="meta-tag video">🎬 ${w.video}</span>`}
         <span class="meta-tag grammar">📖 ${weekGrammar}</span>
         <span class="meta-tag">${t.tasksDone(doneTasks, totalTasks)}</span>
       </div>
@@ -2865,7 +2876,7 @@ function showWeek(idx) {
 
     <div class="tab-content active" id="daily-${idx}">
       ${buildResBar(w.number)}
-      ${buildVideoCard(w)}
+      ${buildVideoCard(w, videoHref)}
       <div class="card">
         <div class="card-title"><span class="icon">📅</span> ${t.dailyTitle}</div>
         ${w.days.map((day, di) => buildDaySection(w, day, di, state, wES)).join('')}
@@ -2996,14 +3007,18 @@ function buildTCFSection(w, wES) {
   </div>`;
 }
 
-function buildVideoCard(w) {
+function buildVideoCard(w, videoHref) {
   if (!w.videoDesc) return '';
   const id = `vc-body-${w.number}`;
+  const watchBtn = videoHref
+    ? `<a href="${videoHref}" target="_blank" class="video-card-watch" onclick="event.stopPropagation()">▶ Watch</a>`
+    : '';
   return `
   <div class="video-card">
     <div class="video-card-header" onclick="toggleVideoCard('${id}', this)">
       <span class="video-card-title">${t.videoCardTitle}: ${w.video}</span>
       <span class="video-card-duration">⏱ ${w.videoDesc.duration}</span>
+      ${watchBtn}
       <span class="video-card-toggle" id="vc-toggle-${w.number}">${t.videoShowDetails}</span>
     </div>
     <div class="video-card-body" id="${id}">
