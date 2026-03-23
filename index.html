@@ -426,7 +426,7 @@ const T = {
     langBtn:'🇻🇪 Español',
     progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
     tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice', tabSession:'👩‍🏫 Coaching Sessions',
-    videoCardTitle:'🎬 This Week\'s Video Tutorial', videoLearnLabel:'What you\'ll learn', videoWhyLabel:'💡 Why it matters', videoShowDetails:'▼ Show details', videoHideDetails:'▲ Hide details',
+    videoCardTitle:'🎬 This Week\'s Video Tutorial', videoLearnLabel:'What you\'ll learn', videoWhyLabel:'💡 Why it matters', videoShowDetails:'▼ Show details', videoHideDetails:'▲ Hide details', videoWatchBtn:'▶ Watch',
     overviewPanelTitle:'📋 Program Overview',
     overviewShow:'▼ Show', overviewHide:'▲ Hide',
     overviewPackageTitle:'📦 What\'s Included',
@@ -457,6 +457,8 @@ const T = {
     ],
     sessionTitle:(n)=>`Coaching Sessions — Week ${n}`,
     sessionLesson:(n)=>`Lesson ${n}`,
+    sessionIntro:'2 sessions × 60 min · Use this tab to prepare before each session or follow along during it.',
+    sessionNoDetails:'Session details not available for this week.',
     sessionFocusLabel:'Focus', sessionActivitiesLabel:'Activities', sessionTCFLabel:'TCF Link', sessionGrammarLabel:'Grammar & Vocabulary',
     days:{Monday:'Monday',Tuesday:'Tuesday',Wednesday:'Wednesday',Thursday:'Thursday',Friday:'Friday',Weekend:'Weekend'},
     dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
@@ -505,7 +507,7 @@ const T = {
     langBtn:'🇬🇧 English',
     progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
     tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF', tabSession:'👩‍🏫 Sesiones de Coaching',
-    videoCardTitle:'🎬 Video Tutorial de esta Semana', videoLearnLabel:'Lo que aprenderás', videoWhyLabel:'💡 Por qué importa', videoShowDetails:'▼ Ver detalles', videoHideDetails:'▲ Ocultar detalles',
+    videoCardTitle:'🎬 Video Tutorial de esta Semana', videoLearnLabel:'Lo que aprenderás', videoWhyLabel:'💡 Por qué importa', videoShowDetails:'▼ Ver detalles', videoHideDetails:'▲ Ocultar detalles', videoWatchBtn:'▶ Ver',
     overviewPanelTitle:'📋 Resumen del Programa',
     overviewShow:'▼ Mostrar', overviewHide:'▲ Ocultar',
     overviewPackageTitle:'📦 Qué Incluye',
@@ -536,6 +538,8 @@ const T = {
     ],
     sessionTitle:(n)=>`Sesiones de Coaching — Semana ${n}`,
     sessionLesson:(n)=>`Lección ${n}`,
+    sessionIntro:'2 sesiones × 60 min · Usa esta pestaña para prepararte antes de cada sesión o para seguirla durante la clase.',
+    sessionNoDetails:'Detalles de la sesión no disponibles para esta semana.',
     sessionFocusLabel:'Enfoque', sessionActivitiesLabel:'Actividades', sessionTCFLabel:'Enlace TCF', sessionGrammarLabel:'Gramática y Vocabulario',
     days:{Monday:'Lunes',Tuesday:'Martes',Wednesday:'Miércoles',Thursday:'Jueves',Friday:'Viernes',Weekend:'Fin de Semana'},
     dayEmoji:{Monday:'🌅',Tuesday:'☀️',Wednesday:'🌤',Thursday:'🌞',Friday:'🎉',Weekend:'🌊'},
@@ -1966,7 +1970,12 @@ const weeksES = {
     vocab: ["hola / buenos días", "buenas noches", "adiós", "por favor (informal)", "por favor (formal)", "gracias", "disculpe (formal)", "soy", "él / ella es", "usted es (formal/plural)", "eres (informal)", "me llamo...", "canadiense", "inglés/inglesa", "profesor/profesora", "una mujer", "la ciudad", "vivo en...", "encantado/encantada", "muy bien, gracias"],
     tcfWriting: "Escribe un perfil corto (60–70 palabras) sobre ti para un sitio web de intercambio de idiomas franceses.",
     tcfSpeaking: "Tarea Oral TCF 1 — 'Présentez-vous.' (1.5 minutos). Estructura: nombre → edad → nacionalidad → ciudad → trabajo → un pasatiempo.",
-    examTip: "Usa la estructura: nombre → edad → nacionalidad → ciudad → trabajo → un pasatiempo. ¡Habla claramente y no te apresures!"
+    examTip: "Usa la estructura: nombre → edad → nacionalidad → ciudad → trabajo → un pasatiempo. ¡Habla claramente y no te apresures!",
+    lessons: [
+      { focus:"Alfabeto francés, pronunciación, acentos, números 1–100; presentarte — Introducción a la Tarea Oral TCF A", activities:["Preséntate en francés con énfasis en la Tarea Oral TCF A","Escucha y repite: clips de audio cortos de hablantes nativos saludando","Ejercicios de deletreo del alfabeto y pronunciación de números (1–100)"], tcfLink:"Simulación de Tarea Oral A: 'Présentez-vous' — graba una autopresentación de 2 minutos" },
+      { focus:"Verbo être (ser/estar) + pronombres sujeto; saludos y despedidas", activities:["Práctica de la tabla de conjugación de être — escribe de memoria tres veces","Roleplay de diálogo: conocer a alguien por primera vez","Escribe 5 oraciones sobre ti mismo usando être en presente"], tcfLink:"Práctica de Tarea Oral TCF 1: descríbete en 2–3 oraciones coherentes" }
+    ],
+    videoDesc: { duration:"12–15 min", content:"Cubre los 5 sonidos nasales del francés, letras mudas, liaison y tildes. Usa comparaciones de audio entre sonidos en inglés y francés, terminando con un desafío de pronunciación que puedes pausar y repetir.", why:"La ansiedad por la pronunciación es la principal barrera para los principiantes. Resolverla pronto aumenta tu confianza y mejora directamente tu puntuación de Comprensión Auditiva TCF." }
   },
   2: {
     title: "Ma Famille et Mes Amis",
@@ -2025,7 +2034,12 @@ const weeksES = {
     vocab: ["padre / madre", "esposo / esposa", "hijo / hija", "hermano / hermana", "los niños", "los abuelos", "tengo", "él / ella tiene", "mi / mi / mis (m./f./pl.)", "su / su / sus (m./f./pl.)", "tu / tu / tus (m./f./pl.)", "pequeño/pequeña", "joven", "amable / agradable", "divertido", "cabello rubio", "un amigo / una amiga", "casado/casada", "él/ella parece / se ve", "familia numerosa"],
     tcfWriting: "Escribe un párrafo corto (65–75 palabras) sobre tu familia para un sitio web de intercambio de idiomas francés.",
     tcfSpeaking: "Tarea Oral TCF 2 — 'Décrivez un membre de votre famille.' (2 minutos). Estructura: nombre → edad → apariencia → personalidad → trabajo → relación.",
-    examTip: "Estructura: nombre → edad → apariencia → personalidad → trabajo → lo que te gusta hacer juntos."
+    examTip: "Estructura: nombre → edad → apariencia → personalidad → trabajo → lo que te gusta hacer juntos.",
+    lessons: [
+      { focus:"Verbo avoir (tener), vocabulario de familia, artículos (un/une/le/la/les)", activities:["Actividad de etiquetado del árbol genealógico","Adjetivos posesivos: mon, ma, mes, ton, ta, tes","Escucha: una persona francesa describe su familia"], tcfLink:"Lectura: párrafo corto con tema familiar — preguntas de comprensión" },
+      { focus:"Acuerdo de adjetivos (género y número), describir personas", activities:["Ejercicios de acuerdo adjetivo (grand/grande, petit/petite, gentil/gentille)","Oral: describe a un familiar usando avoir + adjetivos","Tarea de escritura: párrafo corto sobre tu familia (5–6 oraciones)"], tcfLink:"Práctica de Tarea Escrita TCF: escribe sobre tu familia para un perfil en línea" }
+    ],
+    videoDesc: { duration:"10–12 min", content:"Tablas animadas de conjugación para être y avoir con ejemplos de oraciones reales. Incluye una vista previa de por qué être se usa en passé composé — así ya estarás preparado para la Semana 6.", why:"Estos dos verbos aparecen en casi todas las preguntas TCF en las cuatro habilidades. Dominarlos esta semana elimina un obstáculo que bloquea a los estudiantes durante meses." }
   },
   3: {
     title: "Au Quotidien",
@@ -2084,7 +2098,12 @@ const weeksES = {
     vocab: ["levantarse", "ducharse", "vestirse", "comer", "trabajar", "hablar", "escuchar", "mirar", "gustar / amar", "vivir", "volver a casa", "la mañana", "la tarde", "la noche", "son ... en punto", "y cuarto", "siempre", "a menudo", "a veces", "nunca", "el fin de semana", "cuándo"],
     tcfWriting: "Describe tu día típico en 70–80 palabras a un amigo francés.",
     tcfSpeaking: "Tarea Oral TCF 1 — 'Décrivez votre journée typique.' (1.5 minutos). Usa palabras de tiempo: le matin, l'après-midi, le soir.",
-    examTip: "Usa palabras de tiempo: le matin, l'après-midi, le soir. Usa conectores: d'abord, ensuite, puis, finalement."
+    examTip: "Usa palabras de tiempo: le matin, l'après-midi, le soir. Usa conectores: d'abord, ensuite, puis, finalement.",
+    lessons: [
+      { focus:"Verbos regulares -ER (manger, parler, travailler, habiter, aimer) y decir la hora", activities:["Ejercicios de conjugación de verbos -ER","Actividad de lectura del reloj — el estudiante lee las horas en voz alta en francés","Escucha: una rutina matutina típica francesa"], tcfLink:"Comprensión Auditiva TCF: 3 diálogos cortos — identifica la hora y la actividad descrita" },
+      { focus:"Negación (ne...pas), adverbios de frecuencia, palabras interrogativas (quand, où, qui)", activities:["Transforma oraciones positivas a negativas usando ne...pas","Actividad de preguntas y respuestas: pregunta y responde sobre hábitos diarios","Escribe un párrafo: Ma journée typique (50–60 palabras)"], tcfLink:"Lectura TCF: entrada de blog corta sobre la vida diaria — preguntas verdadero/falso" }
+    ],
+    videoDesc: { duration:"12 min", content:"Recorre un día completo en francés usando verbos -ER y expresiones de tiempo. Incluye un ejercicio de repetición donde repites oraciones después de una grabación de hablante nativo — una de las formas más rápidas de desarrollar fluidez.", why:"La rutina diaria es un tema garantizado en la Tarea Oral TCF 1. Después de este video tendrás una plantilla de oraciones lista para usar en el examen." }
   },
   4: {
     title: "En Ville",
@@ -2142,7 +2161,12 @@ const weeksES = {
     vocab: ["ir", "voy / vas", "él / ella va", "vamos", "van", "ustedes van (formal/plural)", "la farmacia", "el supermercado", "el hospital", "el aeropuerto", "el banco", "el ayuntamiento", "el metro/subterráneo", "a la derecha / gira a la derecha", "a la izquierda / gira a la izquierda", "recto", "al final de la calle", "cerca de / cerca a", "al lado de", "voy a + infinitivo"],
     tcfWriting: "Escribe direcciones desde la estación de tren a tu casa y describe tu barrio (70–80 palabras).",
     tcfSpeaking: "Tarea Oral TCF 2 — 'Décrivez votre quartier.' (2–2.5 minutos). Usa: il y a, c'est près de / loin de, j'aime... parce que.",
-    examTip: "Usa: il y a, c'est près de / loin de, j'aime... parce que. Termina con una opinión sobre tu barrio."
+    examTip: "Usa: il y a, c'est près de / loin de, j'aime... parce que. Termina con una opinión sobre tu barrio.",
+    lessons: [
+      { focus:"Preposiciones de lugar, vocabulario de ciudad, verbo irregular aller (ir)", activities:["Actividad de etiquetado de mapa de ciudad","Contracciones con aller (au / à la / aux): ejercicios","Escucha: una persona pide y sigue direcciones en una ciudad francesa"], tcfLink:"Comprensión Auditiva TCF: audio de direcciones — marca la ruta correcta en un mapa simple" },
+      { focus:"Futuro próximo (aller + infinitivo), hacer planes", activities:["Ejercicios de futuro próximo: ¿Qu'est-ce que tu vas faire?","Oral: describe qué vas a hacer este fin de semana","Escritura: nota corta sobre planes de fin de semana para un amigo"], tcfLink:"Práctica de Tarea Oral TCF 2: describe tu barrio en 2 minutos" }
+    ],
+    videoDesc: { duration:"10 min", content:"Enseña vocabulario de direcciones con un mapa de ciudad animado, luego muestra cómo aller + infinitivo crea el futuro próximo. Incluye un segmento de roleplay: pedir y dar direcciones en una ciudad francesa.", why:"El lenguaje de ciudad, transporte y direcciones aparece regularmente en las secciones de Comprensión Auditiva y Lectura TCF. El futuro próximo también desbloquea una estructura clave para las tareas orales." }
   },
   5: {
     title: "À Table!",
@@ -2200,7 +2224,12 @@ const weeksES = {
     vocab: ["el pan", "la carne", "las verduras", "la leche", "el jugo de naranja", "algo / algo / algo (artículos partitivos)", "tomaré / estoy tomando", "quiero", "puede usted (formal)", "¿cuánto cuesta?", "un kilo de", "mucho de", "el mercado", "la carnicería", "la cuenta/el recuento", "una mesa para dos", "quisiera...", "por favor (formal/mesero)", "es delicioso", "el menú"],
     tcfWriting: "Tarea de Escritura TCF 1 (60–70 palabras): Escribe un mensaje corto a un amigo sobre tus preferencias de comida.",
     tcfSpeaking: "Tarea Oral TCF 2 — Rol en un restaurante francés. Pide una comida completa para ti y un amigo.",
-    examTip: "Los diálogos de comida y compras son muy comunes en la Sección de Comprensión Auditiva TCF. Aprende tus artículos partitivos de memoria."
+    examTip: "Los diálogos de comida y compras son muy comunes en la Sección de Comprensión Auditiva TCF. Aprende tus artículos partitivos de memoria.",
+    lessons: [
+      { focus:"Artículos partitivos (du, de la, des, de l'), vocabulario de alimentos, cantidades", activities:["Roleplay de diálogo en tienda de comestibles","Escucha: haciendo un pedido en un café francés — identifica lo que se pide","Dictado: una lista de compras"], tcfLink:"Lectura TCF: menú de restaurante — responder preguntas de comprensión; roleplay Tarea TCF 2" },
+      { focus:"Verbos irregulares vouloir, pouvoir, prendre; peticiones corteses", activities:["Conjugación de vouloir / pouvoir / prendre — escribe y practica","Roleplay: en un restaurante — pide una comida completa con cortesía","Escribe una crítica corta de restaurante (50–70 palabras)"], tcfLink:"Práctica de Tarea Escrita TCF 1: escribe un mensaje corto a un amigo sobre preferencias alimenticias" }
+    ],
+    videoDesc: { duration:"14 min", content:"Cubre artículos partitivos, vocabulario de alimentos y un diálogo completo de pedido en un café. Incluye un menú visual donde puedes practicar hacer pedidos, más un bono sobre cómo pedir la cuenta cortésmente.", why:"Los diálogos de comida y compras son extremadamente comunes en la Sección A de Comprensión Auditiva TCF. Conocer estos patrones de memoria significa puntos fáciles en preguntas que de otro modo serían difíciles." }
   },
   6: {
     title: "Passé Composé — ¡Cuéntame tu Vida!",
@@ -2258,7 +2287,12 @@ const weeksES = {
     vocab: ["ayer", "anteayer", "la semana pasada", "el fin de semana pasado", "comí", "hice / hice", "fui", "llegué", "me levantéé", "primero", "luego / siguiente", "luego / después", "finalmente", "tomé", "vi", "fui (passé composé)", "era (imperfecto)", "me gustó / disfruté", "por la mañana", "por la noche"],
     tcfWriting: "Tarea de Escritura TCF: Describe lo que hiciste el fin de semana pasado (80 palabras). Usa al menos 6 verbos en passé composé.",
     tcfSpeaking: "Tarea Oral TCF 1 — 'Parlez d'une journée mémorable.' (2 minutos). Usa passé composé en todo.",
-    examTip: "El passé composé es el tiempo más probado en tareas de escritura y oral TCF. Domina completamente la regla avoir vs être."
+    examTip: "El passé composé es el tiempo más probado en tareas de escritura y oral TCF. Domina completamente la regla avoir vs être.",
+    lessons: [
+      { focus:"Passé composé con avoir: formación y participios pasados irregulares", activities:["Tabla de formación del passé composé — practica con 20 verbos comunes","Actividad oral de relleno de espacios: ¿qué hiciste ayer?","Escucha: una persona cuenta su fin de semana"], tcfLink:"Comprensión Auditiva TCF: historia del fin de semana — responder preguntas de comprensión" },
+      { focus:"Passé composé con être (verbos de movimiento + reflexivos) y marcadores temporales", activities:["Ejercicios con verbos être (mnemotecnia DR MRS VANDERTRAMPP)","Escritura: párrafo sobre un día memorable (80 palabras)","Actividad de corrección de errores — detecta los errores en el texto de un estudiante"], tcfLink:"Práctica de Tarea de Escritura TCF: describe lo que hiciste el fin de semana pasado (80 palabras)" }
+    ],
+    videoDesc: { duration:"15 min", content:"Una explicación visual clara de avoir vs être en passé composé, incluyendo el truco DR MRS VANDERTRAMPP. Cubre 20 oraciones de ejemplo, un mini-examen rápido y los errores más comunes a evitar.", why:"El passé composé es el tiempo más evaluado en las Tareas de Escritura y Oral TCF. Los estudiantes que dominan avoir vs être desbloquean el salto de CLB 4 a CLB 5." }
   },
   7: {
     title: "¿Cómo Te Sientes?",
@@ -2316,7 +2350,12 @@ const weeksES = {
     vocab: ["la cabeza", "el vientre/barriga", "la espalda", "me duele la cabeza", "tengo fiebre", "estoy cansado/cansada", "me siento", "acostarse", "descansar", "deber / tener que", "debe (formal)", "tener hambre", "tener sed", "tener miedo", "feliz / complacido", "preocupado/preocupada", "el médico", "una cita", "una receta", "la farmacia"],
     tcfWriting: "Escribe un corto email a un médico describiendo tus síntomas e pidiendo una cita (70–80 palabras).",
     tcfSpeaking: "Tarea Oral TCF — 'Décrivez comment vous vous sentez et expliquez pourquoi.' (2 minutos).",
-    examTip: "La comprensión auditiva es a menudo la habilidad más débil para principiantes. La escucha estratégica (predecir → sentido general → eliminar) puede añadir 20–30 puntos."
+    examTip: "La comprensión auditiva es a menudo la habilidad más débil para principiantes. La escucha estratégica (predecir → sentido general → eliminar) puede añadir 20–30 puntos.",
+    lessons: [
+      { focus:"Partes del cuerpo, vocabulario de salud, verbos reflexivos (se lever, se sentir, se coucher)", activities:["Actividad de etiquetado de partes del cuerpo","Ejercicios de conjugación de verbos reflexivos","Escucha: diálogo de cita médica — identifica los síntomas"], tcfLink:"Comprensión Auditiva TCF: audio de consulta médica; preparación para Tarea Oral TCF 2" },
+      { focus:"Expresiones con avoir (avoir mal à, avoir faim, avoir peur); dar consejos con devoir", activities:["Actividad de emparejamiento de expresiones con avoir","Roleplay: consulta médico-paciente","Escribe un correo corto a un médico describiendo tus síntomas"], tcfLink:"Práctica de Tarea Oral TCF: describe cómo te sientes y explica por qué" }
+    ],
+    videoDesc: { duration:"18 min", content:"Enseña las 3 estrategias principales de comprensión auditiva TCF: predecir antes de que el audio se reproduzca, escuchar la idea general no cada palabra, y eliminar respuestas incorrectas. Trabaja a través de 5 preguntas de audio estilo TCF en pantalla.", why:"La comprensión auditiva es a menudo la habilidad más débil para los principiantes. Usar estas estrategias — incluso sin un francés perfecto — puede añadir 20–30 puntos a tu puntuación TCF." }
   },
   8: {
     title: "Le Monde du Travail",
@@ -2374,7 +2413,12 @@ const weeksES = {
     vocab: ["enfermera/enfermero", "ingeniero/ingeniera", "abogado/abogada", "la oficina", "el salario", "los estudios", "estoy estudiando", "más...que", "menos...que", "tan...como", "trabajar a tiempo completo", "el colega", "una reunión", "he trabajado desde", "una empresa", "educación superior", "un diploma/grado", "prefiero", "en mi opinión", "es mejor"],
     tcfWriting: "Tarea de Escritura TCF 2 (80–100 palabras): Escribe sobre tus objetivos profesionales y por qué.",
     tcfSpeaking: "Tarea Oral TCF — 'Comparez deux professions. Laquelle préférez-vous et pourquoi?' (2 minutos).",
-    examTip: "La lectura CLB 5 requiere entender ideas principales. Con la estrategia escanear-buscar, puedes puntuar incluso con vocabulario limitado."
+    examTip: "La lectura CLB 5 requiere entender ideas principales. Con la estrategia escanear-buscar, puedes puntuar incluso con vocabulario limitado.",
+    lessons: [
+      { focus:"Empleos y profesiones, verbo faire, vocabulario escolar/laboral; expresar gustos y disgustos (aimer/préférer)", activities:["Cuestionario de emparejamiento de profesiones","Escucha: una persona habla sobre su trabajo","Práctica oral: ¿Qu'est-ce que tu fais dans la vie?"], tcfLink:"Lectura TCF: un anuncio de trabajo corto — preguntas de comprensión" },
+      { focus:"Comparativos (plus...que, moins...que, aussi...que); hablar sobre estudios", activities:["Ejercicios comparativos con profesiones y programas de estudio","Oral: compara dos empleos o dos escuelas en 2 minutos","Escritura: escribe una carta de presentación corta (80–100 palabras)"], tcfLink:"Práctica de Tarea Escrita TCF 2: escribe sobre tus metas profesionales" }
+    ],
+    videoDesc: { duration:"14 min", content:"Muestra exactamente cómo abordar un texto de lectura TCF: lee las preguntas primero, hojea el texto para la estructura, luego busca respuestas específicas. Trabaja a través de una sección completa de lectura TCF de muestra en vivo.", why:"La lectura CLB 5 requiere entender ideas principales en textos cotidianos. Con la estrategia escanear-buscar, puedes obtener buena puntuación incluso cuando no entiendes cada palabra." }
   },
   9: {
     title: "TCF Sprint — Comprensión Auditiva y Lectura",
@@ -2431,7 +2475,12 @@ const weeksES = {
     vocab: ["el ayuntamiento", "los servicios públicos", "el permiso de conducir", "la tarjeta de identidad", "un formulario", "rellenar", "la caja / cajero", "alojamiento / acomodación", "el alquiler", "transporte público", "el barrio", "buscar", "encontrar", "en mi opinión", "en mi opinión", "me parece que", "creo que", "por ejemplo", "es por eso", "sin embargo"],
     tcfWriting: "Tarea Cronometrada 1 (20 min): Escribe un email a un amigo sobre un evento reciente en tu vida (60–80 palabras).",
     tcfSpeaking: "Tarea Oral Cronometrada 1: 'Décrivez votre vie quotidienne au Canada.' (3 minutos — sin parar).",
-    examTip: "Para Comprensión Auditiva TCF: siempre lee las opciones de respuesta ANTES de que el audio se reproduzca. Esto activa tu cerebro para escuchar palabras específicas."
+    examTip: "Para Comprensión Auditiva TCF: siempre lee las opciones de respuesta ANTES de que el audio se reproduzca. Esto activa tu cerebro para escuchar palabras específicas.",
+    lessons: [
+      { focus:"Estrategias de comprensión auditiva TCF: predecir el contenido, escuchar la idea general, captar palabras clave", activities:["Práctica de comprensión auditiva estilo TCF cronometrada (10 preguntas de opción múltiple)","Estrategia: usar el contexto para eliminar respuestas incorrectas","Identificar respuestas distractor en preguntas de muestra"], tcfLink:"Simulación completa de Sección A de Comprensión Auditiva TCF — 15 preguntas, 15 minutos" },
+      { focus:"Estrategias de lectura TCF: escaneo, búsqueda rápida, estructura de párrafos", activities:["Práctica de lectura estilo TCF cronometrada (10 preguntas de opción múltiple)","Ejercicios de vocabulario en contexto","Hojea un artículo de periódico francés e identifica la idea principal"], tcfLink:"Simulación completa de Sección A de Comprensión Lectora TCF — 15 preguntas, 20 minutos" }
+    ],
+    videoDesc: { duration:"15 min (Parte 1 de 2)", content:"Deconstruye un correo electrónico modelo CLB 5: apertura, cuerpo, cierre. Proporciona 10 frases de inicio que puedes usar de inmediato, más una demostración de escritura en vivo desde página en blanco hasta tarea terminada.", why:"La Tarea 1 de Escritura es la tarea TCF más accesible. Con la plantilla y los inicios correctos, incluso un principiante puede alcanzar CLB 5 — este video te da exactamente eso." }
   },
   10: {
     title: "TCF Sprint — Escritura",
@@ -2487,7 +2536,12 @@ const weeksES = {
     vocab: ["primero", "entonces / siguiente", "finalmente", "porque", "entonces / por lo tanto", "sin embargo", "además / además", "en conclusión", "creo que", "en mi opinión", "me parece que", "estoy de acuerdo", "no estoy de acuerdo", "por ejemplo", "es verdad que", "es necesario", "uno puede / podemos", "especialmente / ante todo", "en general", "según mi / en mi opinión"],
     tcfWriting: "Tarea Cronometrada 2 (35 min): Escribe tu opinión sobre un tema cotidiano simple usando una estructura de 3 párrafos (120+ palabras).",
     tcfSpeaking: "Tarea Oral TCF 3 — Defiende un punto de vista sobre un tema cotidiano (4.5 minutos). Usa frases de opinión y conectores.",
-    examTip: "La mayoría de los principiantes pierden puntos en la Tarea 2 por estructura pobre — no vocabulario. Domina la estructura de 3 párrafos."
+    examTip: "La mayoría de los principiantes pierden puntos en la Tarea 2 por estructura pobre — no vocabulario. Domina la estructura de 3 párrafos.",
+    lessons: [
+      { focus:"Tarea Escrita TCF Expresión 1: mensaje/correo informal (60–80 palabras) — planificación y estructura", activities:["Analiza respuestas modelo de CLB 4 y CLB 5 lado a lado","Escritura cronometrada: un correo informal sobre una situación personal (20 min)","Retroalimentación del instructor/compañero sobre estructura y vocabulario"], tcfLink:"Tarea 1 cronometrada (20 minutos): escribe un correo a un amigo sobre un evento reciente" },
+      { focus:"Tarea Escrita TCF Expresión 2: describir u opinar (120+ palabras) usando conectores", activities:["Práctica de palabras conectoras: d'abord, ensuite, enfin, parce que, donc","Escribe una respuesta estructurada de 3 párrafos (35 min cronometrado)","El instructor califica usando la rúbrica TCF y da retroalimentación escrita"], tcfLink:"Tarea 2 cronometrada (35 minutos): escribe tu opinión sobre un tema cotidiano simple" }
+    ],
+    videoDesc: { duration:"16 min (Parte 2 de 2)", content:"Cubre conectores de opinión, marcadores del discurso y una estructura confiable de 3 párrafos. Anota una respuesta modelo CLB 5 y una CLB 3 lado a lado para que veas exactamente qué hace la diferencia.", why:"La mayoría de los principiantes pierden puntos en la Tarea 2 por estructura pobre, no por vocabulario pobre. Este video soluciona el problema de estructura — el mayor factor para mejorar tu puntuación de Escritura." }
   },
   11: {
     title: "TCF Sprint — Expresión Oral",
@@ -2544,7 +2598,12 @@ const weeksES = {
     vocab: ["euh... (relleno)", "es decir / me refiero a", "entonces / bueno entonces", "ahí va / eso es", "cómo decir... (relleno)", "quiero decir", "en realidad / de hecho", "a decir verdad", "podemos ver que", "se trata de / concierne", "según el documento", "estoy de acuerdo", "al contrario", "eso es correcto / exactamente", "absolutamente / completamente", "personalmente", "me parece que", "por un lado... por el otro", "para terminar / en conclusión", "mantengo que"],
     tcfWriting: "Revisa y mejora tus dos mejores tareas de escritura de semanas 9 y 10. Incorpora todos los comentarios sobre conectores.",
     tcfSpeaking: "Sección Oral Simulada Completa (12 minutos, las 3 tareas). Grábate y auto-califica usando rúbrica TCF.",
-    examTip: "El miedo oral es universal. Los examinadores premian la comunicación — no la perfección. ¡Sigue adelante incluso si cometes errores!"
+    examTip: "El miedo oral es universal. Los examinadores premian la comunicación — no la perfección. ¡Sigue adelante incluso si cometes errores!",
+    lessons: [
+      { focus:"Tarea Oral TCF 1 (monólogo): preséntate y describe una situación", activities:["Técnica de planificación de 30 segundos — escribe exactamente 5 palabras como plan","Practica 3 diferentes indicaciones de Tarea 1 seguidas","Graba respuestas y escúchalas para autoevaluación"], tcfLink:"Tarea Oral 1 cronometrada (3 minutos): describe tu vida diaria en Canadá" },
+      { focus:"Tareas Orales TCF 2 y 3: reaccionar a un documento / defender un punto de vista", activities:["Analiza un documento visual y habla sobre él (1 minuto de plan, 2 min de respuesta)","Practica expresar acuerdo y desacuerdo","Simulacro completo de examen oral — las 3 tareas calificadas con rúbrica TCF (12 minutos)"], tcfLink:"Simulacro completo de sección de Expresión Oral — 3 tareas, 12 minutos, calificación con rúbrica completa" }
+    ],
+    videoDesc: { duration:"16 min", content:"Desglosa las tres tareas orales TCF con consejos para cada una. Cubre frases de relleno (euh, c'est-à-dire, donc), cómo recuperarse con gracia de los errores y lo que los examinadores realmente quieren escuchar en CLB 5 — con ejemplos de audio reales.", why:"El miedo oral es universal. Mostrarte exactamente cómo suena el francés CLB 5 — incluyendo sus imperfecciones — desmitifica el examen y reemplaza la ansiedad con un objetivo claro." }
   },
   12: {
     title: "Simulacro de Examen y Revisión Final",
@@ -2597,7 +2656,11 @@ const weeksES = {
     vocab: ["estoy listo/lista", "el examen", "tener éxito / aprobar", "el resultado", "la puntuación", "comprensión auditiva", "comprensión de lectura", "expresión escrita", "expresión oral", "el nivel", "tengo confianza en mí", "¡buena suerte!", "¡felicitaciones!", "¡pasé / ¡tuve éxito!", "es difícil pero posible", "estoy haciendo lo mejor", "soy capaz", "la práctica", "cada día", "¡bravo!"],
     tcfWriting: "Sección de Escritura Final Simulada: Tarea 1 (20 min) + Tarea 2 (40 min) bajo condiciones estrictas de examen.",
     tcfSpeaking: "Sección Oral Final Simulada: Las 3 tareas, 12 minutos, condiciones de examen. ¡Grábate y compara a la Semana 1!",
-    examTip: "Comenzaste desde cero. En 12 semanas construiste las habilidades para aprobar TCF Canadá en CLB 5. ¡Confía en tu preparación!"
+    examTip: "Comenzaste desde cero. En 12 semanas construiste las habilidades para aprobar TCF Canadá en CLB 5. ¡Confía en tu preparación!",
+    lessons: [
+      { focus:"Simulacro de examen completo cronometrado — Comprensión Auditiva + Lectura bajo condiciones del examen TCF", activities:["Sección de comprensión auditiva cronometrada de 25 minutos (29 preguntas)","Sección de lectura cronometrada de 45 minutos (29 preguntas)","Califica y revisa todas las respuestas con el instructor — identifica patrones de errores"], tcfLink:"Simulacro completo del examen Secciones 1 y 2 (comprensión auditiva + lectura)" },
+      { focus:"Simulacro de examen completo cronometrado — Escritura + Expresión Oral + Sesión de Retroalimentación Personalizada", activities:["Simulacro de escritura de 60 minutos: 2 tareas bajo condiciones TCF","Simulacro oral de 12 minutos: las 3 tareas bajo condiciones TCF","Evaluación detallada: celebra fortalezas, aborda brechas finales, consejos para el día del examen"], tcfLink:"Simulacro completo del examen Secciones 3 y 4 + evaluación personalizada y predicción de puntuación" }
+    ]
   }
 };
 
@@ -2876,7 +2939,7 @@ function showWeek(idx) {
 
     <div class="tab-content active" id="daily-${idx}">
       ${buildResBar(w.number)}
-      ${buildVideoCard(w, videoHref)}
+      ${buildVideoCard(w, videoHref, wES)}
       <div class="card">
         <div class="card-title"><span class="icon">📅</span> ${t.dailyTitle}</div>
         ${w.days.map((day, di) => buildDaySection(w, day, di, state, wES)).join('')}
@@ -2891,7 +2954,7 @@ function showWeek(idx) {
     </div>
 
     <div class="tab-content" id="session-${idx}">
-      ${buildSessionSection(w)}
+      ${buildSessionSection(w, wES)}
     </div>
 
     <div class="tab-content" id="vocab-${idx}">
@@ -3007,28 +3070,29 @@ function buildTCFSection(w, wES) {
   </div>`;
 }
 
-function buildVideoCard(w, videoHref) {
+function buildVideoCard(w, videoHref, wES) {
   if (!w.videoDesc) return '';
+  const vd = (wES && wES.videoDesc) || w.videoDesc;
   const id = `vc-body-${w.number}`;
   const watchBtn = videoHref
-    ? `<a href="${videoHref}" target="_blank" class="video-card-watch" onclick="event.stopPropagation()">▶ Watch</a>`
+    ? `<a href="${videoHref}" target="_blank" class="video-card-watch" onclick="event.stopPropagation()">${t.videoWatchBtn}</a>`
     : '';
   return `
   <div class="video-card">
     <div class="video-card-header" onclick="toggleVideoCard('${id}', this)">
       <span class="video-card-title">${t.videoCardTitle}: ${w.video}</span>
-      <span class="video-card-duration">⏱ ${w.videoDesc.duration}</span>
+      <span class="video-card-duration">⏱ ${vd.duration}</span>
       ${watchBtn}
       <span class="video-card-toggle" id="vc-toggle-${w.number}">${t.videoShowDetails}</span>
     </div>
     <div class="video-card-body" id="${id}">
       <div class="video-card-section">
         <div class="video-card-section-label learn">📖 ${t.videoLearnLabel}</div>
-        <div class="video-card-section-text">${w.videoDesc.content}</div>
+        <div class="video-card-section-text">${vd.content}</div>
       </div>
       <div class="video-card-section">
         <div class="video-card-section-label why">${t.videoWhyLabel}</div>
-        <div class="video-card-section-text">${w.videoDesc.why}</div>
+        <div class="video-card-section-text">${vd.why}</div>
       </div>
     </div>
   </div>`;
@@ -3041,33 +3105,41 @@ function toggleVideoCard(bodyId, header) {
   toggle.textContent = isOpen ? t.videoHideDetails : t.videoShowDetails;
 }
 
-function buildSessionSection(w) {
-  if (!w.lessons || !w.lessons.length) return `<div class="card"><p style="color:var(--gray);font-size:14px;">Session details not available for this week.</p></div>`;
+function buildSessionSection(w, wES) {
+  if (!w.lessons || !w.lessons.length) return `<div class="card"><p style="color:var(--gray);font-size:14px;">${t.sessionNoDetails || 'Session details not available for this week.'}</p></div>`;
+  const esLessons = (wES && wES.lessons) ? wES.lessons : [];
   const intro = `<div style="background:var(--purple-light);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--purple);">
     <strong>👩‍🏫 ${t.sessionTitle(w.number)}</strong><br>
-    <span style="font-size:12px;opacity:0.85;">2 sessions × 60 min · Use this tab to prepare before each session or follow along during it.</span>
+    <span style="font-size:12px;opacity:0.85;">${t.sessionIntro}</span>
   </div>`;
-  const blocks = w.lessons.map(lesson => `
+  const blocks = w.lessons.map((lesson, li) => {
+    const esL = esLessons[li] || {};
+    const focus = esL.focus || lesson.focus;
+    const activities = esL.activities || lesson.activities;
+    const tcfLink = esL.tcfLink || lesson.tcfLink;
+    const grammar = (wES && wES.grammar) || lesson.grammar;
+    return `
     <div class="session-block">
       <div class="session-header">
         <span class="session-label">📋 ${t.sessionLesson(lesson.number)}</span>
         <span class="session-timing">60 min</span>
       </div>
       <div class="session-body">
-        <div class="session-focus">🎯 ${t.sessionFocusLabel}: ${lesson.focus}</div>
+        <div class="session-focus">🎯 ${t.sessionFocusLabel}: ${focus}</div>
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray);margin-bottom:8px;">${t.sessionActivitiesLabel}</div>
         <div class="session-activities-list">
-          ${lesson.activities.map((a, i) => `<div class="session-activity-item"><span class="session-activity-num">${i + 1}.</span><span>${a}</span></div>`).join('')}
+          ${activities.map((a, i) => `<div class="session-activity-item"><span class="session-activity-num">${i + 1}.</span><span>${a}</span></div>`).join('')}
         </div>
         <div class="session-tcf-link">
           <div class="session-tcf-label">🎯 ${t.sessionTCFLabel}</div>
-          ${lesson.tcfLink}
+          ${tcfLink}
         </div>
         <div class="session-grammar">
-          <span class="session-grammar-label">📖 ${t.sessionGrammarLabel}: </span>${lesson.grammar}
+          <span class="session-grammar-label">📖 ${t.sessionGrammarLabel}: </span>${grammar}
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   return `<div class="card">${intro}${blocks}</div>`;
 }
 
@@ -3329,6 +3401,8 @@ function applyTranslations() {
 // from its folder — no manual Drive setup needed for local use.
 // Drive links set via ⚙️ always override these.
 // ============================================================
+const DRIVE_STORAGE_KEY = 'tcf_drive_links'; // declared here so initLocalFilePaths() can use it
+
 function initLocalFilePaths() {
   if (!window.location.href.startsWith('file://')) return;
   const base = window.location.href.replace(/\/[^/]*$/, '/');
@@ -3418,7 +3492,7 @@ function importProgress() {
 // ============================================================
 // GOOGLE DRIVE LINKS SETTINGS
 // ============================================================
-const DRIVE_STORAGE_KEY = 'tcf_drive_links';
+// DRIVE_STORAGE_KEY is declared earlier (before initLocalFilePaths) to avoid TDZ error
 
 const driveFields = [
   // Videos
