@@ -33,6 +33,41 @@
   .stat-chip { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 500; }
 
   /* Progress Bar */
+  /* Program Overview panel */
+  .overview-panel { background: white; border-bottom: 1px solid #e5e7eb; }
+  .overview-panel-header { padding: 12px 32px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .overview-panel-header:hover { background: #fafafa; }
+  .overview-panel-title { font-size: 14px; font-weight: 700; color: var(--blue); flex: 1; }
+  .overview-panel-toggle { font-size: 12px; color: var(--gray); }
+  .overview-panel-body { display: none; padding: 0 32px 24px; }
+  .overview-panel-body.open { display: block; }
+  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .overview-card { border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; }
+  .overview-card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--blue); margin-bottom: 10px; }
+  .overview-card ul { list-style: none; margin: 0; padding: 0; }
+  .overview-card ul li { font-size: 13px; padding: 5px 0; border-bottom: 1px solid #f3f4f6; display: flex; gap: 8px; line-height: 1.4; }
+  .overview-card ul li:last-child { border-bottom: none; }
+  .overview-card ul li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .overview-tcf-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+  .overview-tcf-table th { background: var(--blue-light); color: var(--blue); font-weight: 700; text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .overview-tcf-table td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+  .overview-tcf-table tr:last-child td { border-bottom: none; }
+  .overview-tcf-table td:first-child { font-weight: 600; }
+  .overview-phase-row { display: flex; gap: 10px; margin-top: 4px; }
+  .overview-phase-chip { flex: 1; border-radius: 8px; padding: 10px 12px; font-size: 12px; text-align: center; }
+  .overview-phase-chip strong { display: block; font-size: 13px; margin-bottom: 2px; }
+  .phase-chip-foundation { background: var(--green-light); color: var(--green); }
+  .phase-chip-building { background: var(--yellow-light); color: var(--yellow); }
+  .phase-chip-readiness { background: var(--red-light); color: var(--red); }
+  .overview-rhythm { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .overview-rhythm-item { background: var(--gray-light); border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.4; }
+  .overview-rhythm-item strong { display: block; font-size: 12px; color: var(--blue); margin-bottom: 2px; }
+  @media (max-width: 600px) {
+    .overview-panel-header { padding: 12px 16px; } .overview-panel-body { padding: 0 16px 20px; }
+    .overview-grid { grid-template-columns: 1fr; } .overview-phase-row { flex-direction: column; }
+    .overview-rhythm { grid-template-columns: 1fr; }
+  }
+
   .progress-section { background: white; padding: 20px 32px; border-bottom: 1px solid #e5e7eb; }
   .progress-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray); margin-bottom: 8px; }
   .progress-bar { height: 10px; background: #e5e7eb; border-radius: 10px; overflow: hidden; }
@@ -290,6 +325,17 @@
   </div>
 </div>
 
+<!-- Program Overview Panel -->
+<div class="overview-panel" id="overview-panel">
+  <div class="overview-panel-header" onclick="toggleOverviewPanel()">
+    <span class="overview-panel-title" id="overview-panel-title">📋 Program Overview</span>
+    <span class="overview-panel-toggle" id="overview-panel-toggle">▼ Show</span>
+  </div>
+  <div class="overview-panel-body" id="overview-panel-body">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
 <!-- Sync Bar (content filled by JS after lang loads) -->
 <div class="sync-bar" id="sync-bar">
   <span id="sync-label"></span>
@@ -373,6 +419,19 @@ const T = {
     progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
     tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice', tabSession:'👩‍🏫 Coaching Sessions',
     videoCardTitle:'🎬 This Week\'s Video Tutorial', videoLearnLabel:'What you\'ll learn', videoWhyLabel:'💡 Why it matters', videoShowDetails:'▼ Show details', videoHideDetails:'▲ Hide details',
+    overviewPanelTitle:'📋 Program Overview',
+    overviewShow:'▼ Show', overviewHide:'▲ Hide',
+    overviewPackageTitle:'📦 What\'s Included',
+    overviewPackageItems:['24 coaching sessions × 60 min (2 per week)','12 video tutorials (1 per week)','12-week personalised study plan with AI support','Audio or video feedback each week','Digital resources: grammar, vocabulary, exam templates','WhatsApp group for urgent questions','Kickstarter call to assess your learning needs'],
+    overviewCLB5Title:'🎯 What is CLB 5?',
+    overviewCLB5Items:['Understand the main idea of simple, clearly spoken messages on familiar topics','Read and understand short, simple texts on everyday subjects','Write short, simple texts about personal topics or familiar situations','Speak about familiar topics using basic sentences, with some hesitation','Use past, present, and future tenses accurately in speech and writing'],
+    overviewExamTitle:'📝 TCF Canada Exam Format',
+    overviewExamHeaders:['Section','Format','Duration','CLB 5 Score'],
+    overviewExamRows:[['🎧 Listening','39 MCQ','35 min','226–270'],['📖 Reading','39 MCQ','60 min','226–270'],['✏️ Writing','3 tasks','60 min','Level 5 rubric'],['🗣️ Speaking','3 tasks','12 min','Level 5 rubric']],
+    overviewRhythmTitle:'📅 Weekly Rhythm',
+    overviewRhythmItems:[{label:'Lesson 1 — 60 min',desc:'New grammar + vocabulary theme + listening/reading activity'},{label:'Lesson 2 — 60 min',desc:'Speaking & writing practice + TCF exam task + error correction'},{label:'Homework — 2 hrs/day',desc:'Vocabulary review, grammar drills, exam-style practice'},{label:'Video Tutorial',desc:'Pre-recorded lesson reinforcing the week\'s focus area'}],
+    overviewPhasesTitle:'📈 Skill Progression',
+    overviewPhases:[{label:'Foundation',weeks:'Weeks 1–4',clb:'CLB 1–2',cls:'phase-chip-foundation'},{label:'Building',weeks:'Weeks 5–8',clb:'CLB 3–4',cls:'phase-chip-building'},{label:'TCF Readiness',weeks:'Weeks 9–12',clb:'CLB 5',cls:'phase-chip-readiness'}],
     clb5PanelTitle:'🎯 CLB 5 Success Checklist',
     clb5PanelSubtitle:'Check off each skill as you achieve it. These are the 9 targets you are working toward by Week 12.',
     clb5Show:'▼ Show', clb5Hide:'▲ Hide',
@@ -436,6 +495,19 @@ const T = {
     progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
     tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF', tabSession:'👩‍🏫 Sesiones de Coaching',
     videoCardTitle:'🎬 Video Tutorial de esta Semana', videoLearnLabel:'Lo que aprenderás', videoWhyLabel:'💡 Por qué importa', videoShowDetails:'▼ Ver detalles', videoHideDetails:'▲ Ocultar detalles',
+    overviewPanelTitle:'📋 Resumen del Programa',
+    overviewShow:'▼ Mostrar', overviewHide:'▲ Ocultar',
+    overviewPackageTitle:'📦 Qué Incluye',
+    overviewPackageItems:['24 sesiones de coaching × 60 min (2 por semana)','12 tutoriales en video (1 por semana)','Plan de estudio personalizado de 12 semanas con apoyo IA','Retroalimentación en audio o video cada semana','Recursos digitales: gramática, vocabulario, plantillas de examen','Grupo de WhatsApp para preguntas urgentes','Llamada inicial para evaluar tus necesidades de aprendizaje'],
+    overviewCLB5Title:'🎯 ¿Qué es CLB 5?',
+    overviewCLB5Items:['Entender la idea principal de mensajes simples sobre temas familiares','Leer y comprender textos cortos y sencillos sobre temas cotidianos','Escribir textos cortos sobre temas personales o situaciones familiares','Hablar sobre temas familiares usando oraciones básicas, con cierta duda','Usar pasado, presente y futuro con precisión en habla y escritura'],
+    overviewExamTitle:'📝 Formato del Examen TCF Canadá',
+    overviewExamHeaders:['Sección','Formato','Duración','Puntaje CLB 5'],
+    overviewExamRows:[['🎧 Comprensión Auditiva','39 Opción Múltiple','35 min','226–270'],['📖 Comprensión Lectora','39 Opción Múltiple','60 min','226–270'],['✏️ Expresión Escrita','3 tareas','60 min','Rúbrica Nivel 5'],['🗣️ Expresión Oral','3 tareas','12 min','Rúbrica Nivel 5']],
+    overviewRhythmTitle:'📅 Ritmo Semanal',
+    overviewRhythmItems:[{label:'Lección 1 — 60 min',desc:'Nueva gramática + vocabulario + actividad de escucha/lectura'},{label:'Lección 2 — 60 min',desc:'Práctica de habla y escritura + tarea TCF + corrección de errores'},{label:'Tarea — 2 hrs/día',desc:'Revisión de vocabulario, gramática, práctica estilo examen'},{label:'Video Tutorial',desc:'Lección grabada que refuerza el tema de la semana'}],
+    overviewPhasesTitle:'📈 Progresión de Habilidades',
+    overviewPhases:[{label:'Fundamentos',weeks:'Semanas 1–4',clb:'CLB 1–2',cls:'phase-chip-foundation'},{label:'Desarrollo',weeks:'Semanas 5–8',clb:'CLB 3–4',cls:'phase-chip-building'},{label:'Preparación TCF',weeks:'Semanas 9–12',clb:'CLB 5',cls:'phase-chip-readiness'}],
     clb5PanelTitle:'🎯 Lista de Verificación CLB 5',
     clb5PanelSubtitle:'Marca cada habilidad cuando la logres. Estas son las 9 metas hacia la Semana 12.',
     clb5Show:'▼ Mostrar', clb5Hide:'▲ Ocultar',
@@ -2546,6 +2618,63 @@ let quizState = {};
 // BUILD NAV
 // ============================================================
 // ============================================================
+// PROGRAM OVERVIEW PANEL
+// ============================================================
+function renderOverviewPanel() {
+  const titleEl = document.getElementById('overview-panel-title');
+  if (titleEl) titleEl.textContent = t.overviewPanelTitle;
+  const toggleEl = document.getElementById('overview-panel-toggle');
+  const body = document.getElementById('overview-panel-body');
+  if (!body) return;
+
+  const packageList = t.overviewPackageItems.map(i => `<li>${i}</li>`).join('');
+  const clb5List    = t.overviewCLB5Items.map(i => `<li>${i}</li>`).join('');
+  const examRows    = t.overviewExamRows.map(r => `<tr>${r.map((c,i) => i===0?`<td>${c}</td>`:`<td>${c}</td>`).join('')}</tr>`).join('');
+  const rhythmItems = t.overviewRhythmItems.map(r => `<div class="overview-rhythm-item"><strong>${r.label}</strong>${r.desc}</div>`).join('');
+  const phases      = t.overviewPhases.map(p => `<div class="overview-phase-chip ${p.cls}"><strong>${p.label}</strong>${p.weeks}<br><span style="font-size:11px;font-weight:700;">${p.clb}</span></div>`).join('');
+
+  body.innerHTML = `
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="overview-card-title">${t.overviewPackageTitle}</div>
+        <ul>${packageList}</ul>
+      </div>
+      <div class="overview-card">
+        <div class="overview-card-title">${t.overviewCLB5Title}</div>
+        <ul>${clb5List}</ul>
+      </div>
+    </div>
+    <div class="overview-grid" style="margin-top:0;">
+      <div class="overview-card" style="grid-column:1/-1;">
+        <div class="overview-card-title">${t.overviewExamTitle}</div>
+        <table class="overview-tcf-table">
+          <thead><tr>${t.overviewExamHeaders.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>${examRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="overview-grid" style="margin-top:0;">
+      <div class="overview-card">
+        <div class="overview-card-title">${t.overviewRhythmTitle}</div>
+        <div class="overview-rhythm">${rhythmItems}</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-card-title">${t.overviewPhasesTitle}</div>
+        <div class="overview-phase-row">${phases}</div>
+      </div>
+    </div>`;
+}
+
+function toggleOverviewPanel() {
+  const body   = document.getElementById('overview-panel-body');
+  const toggle = document.getElementById('overview-panel-toggle');
+  if (!body || !toggle) return;
+  const isOpen = body.classList.toggle('open');
+  toggle.textContent = isOpen ? t.overviewHide : t.overviewShow;
+  if (isOpen) renderOverviewPanel();
+}
+
+// ============================================================
 // CLB 5 CHECKLIST
 // ============================================================
 function getCLB5Key(gi, ii) { return `clb5_${gi}_${ii}`; }
@@ -3149,7 +3278,8 @@ function applyTranslations() {
 applyTranslations();
 buildNav();
 updateProgress();
-renderCLB5Panel();   // init score badge (panel starts collapsed)
+renderOverviewPanel(); // title only — body renders on first open
+renderCLB5Panel();     // init score badge (panel starts collapsed)
 showWeek(0);
 // Wire onboarding link (needs V defined, which it is)
 document.getElementById('onboard-link').href = getDriveLinks()['onboard'] || GDRIVE_VIDEOS_FOLDER;
