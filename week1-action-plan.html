@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 1 Action Plan — TCF Study</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .section {
+      margin-bottom: 40px;
+      border-left: 4px solid #667eea;
+      padding-left: 20px;
+    }
+    .section h2 {
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .day-block {
+      background: #f8f9ff;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border-left: 3px solid #667eea;
+    }
+    .day-block.work {
+      border-left-color: #10b981;
+    }
+    .day-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .task-list {
+      list-style: none;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .task-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+    .task-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: #667eea;
+    }
+    .task-item input[type="checkbox"]:checked + label {
+      text-decoration: line-through;
+      color: #999;
+    }
+    .task-item label {
+      cursor: pointer;
+      flex: 1;
+      color: #333;
+      font-size: 14px;
+    }
+    .time-badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .time-badge.work {
+      background: #10b981;
+    }
+    .highlight {
+      background: #fef3c7;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #f59e0b;
+    }
+    .highlight h3 {
+      color: #d97706;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .highlight p {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .phrases-box {
+      background: #f0f4ff;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+    }
+    .phrases-box ol {
+      margin-left: 20px;
+      color: #667eea;
+      font-weight: 600;
+    }
+    .phrases-box li {
+      margin-bottom: 6px;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+    }
+    @media print {
+      body { background: white; }
+      .container { box-shadow: none; }
+      input[type="checkbox"] { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🇫🇷 Week 1 Action Plan</h1>
+    <p class="subtitle">Your French learning + work deadlines for this week</p>
+
+    <div class="highlight">
+      <h3>📌 The 8 Phrases You're Learning</h3>
+      <div class="phrases-box">
+        <ol>
+          <li>Bonjour</li>
+          <li>Ça va</li>
+          <li>Bon matin</li>
+          <li>Excuse-moi</li>
+          <li>Je m'appelle</li>
+          <li>Vous êtes</li>
+          <li>S'il vous plaît</li>
+          <li>S'il te plaît</li>
+        </ol>
+      </div>
+      <p><strong>Goal:</strong> By Friday, you will remember all 8 from memory through spaced retrieval (repeating at strategic intervals).</p>
+    </div>
+
+    <!-- FRENCH SCHEDULE -->
+    <div class="section">
+      <h2>🇫🇷 French Learning Schedule</h2>
+
+      <div class="day-block">
+        <div class="day-title">Tuesday, March 25 <span class="time-badge">6:00 - 7:00 PM</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="t1"><label for="t1">Write all 8 phrases on paper</label></li>
+          <li><input type="checkbox" id="t2"><label for="t2">Read each phrase aloud 2x (sound matters!)</label></li>
+          <li><input type="checkbox" id="t3"><label for="t3">Close paper & say each from memory</label></li>
+          <li><input type="checkbox" id="t4"><label for="t4">Note which stuck, which were fuzzy</label></li>
+          <li><input type="checkbox" id="t5"><label for="t5">Review Week 1 vocab in TCF app (30 min)</label></li>
+          <li><input type="checkbox" id="t6"><label for="t6">Mark "French Session 1 ✅" in app</label></li>
+        </ul>
+      </div>
+
+      <div class="day-block">
+        <div class="day-title">Wednesday, March 26 <span class="time-badge">6:00 - 7:00 PM</span></div>
+        <p style="color: #666; margin-bottom: 12px; font-size: 13px;"><em>Note: You'll be tired from SAFe training. That's okay — showing up is the win.</em></p>
+        <ul class="task-list">
+          <li><input type="checkbox" id="w1"><label for="w1">DON'T look at notes first — recall all 8 from memory</label></li>
+          <li><input type="checkbox" id="w2"><label for="w2">Check what you got right/wrong</label></li>
+          <li><input type="checkbox" id="w3"><label for="w3">Spend 20 min on the ones you missed</label></li>
+          <li><input type="checkbox" id="w4"><label for="w4">Practice pronunciation (TCF app or YouTube)</label></li>
+          <li><input type="checkbox" id="w5"><label for="w5">Mark "French Session 2 ✅" in app</label></li>
+        </ul>
+      </div>
+
+      <div class="day-block">
+        <div class="day-title">Thursday, March 27 <span class="time-badge">6:00 - 7:00 PM</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="h1"><label for="h1">Recall all 8 from memory (1st thing)</label></li>
+          <li><input type="checkbox" id="h2"><label for="h2">Build 3 simple sentences with the phrases</label></li>
+          <li><input type="checkbox" id="h3"><label for="h3">Practice saying the 3 sentences aloud 5x each</label></li>
+          <li><input type="checkbox" id="h4"><label for="h4">Note any you still struggle with (ask tutor Friday)</label></li>
+          <li><input type="checkbox" id="h5"><label for="h5">Mark "French Session 3 ✅" in app</label></li>
+        </ul>
+      </div>
+
+      <div class="day-block">
+        <div class="day-title">Friday, March 28 <span class="time-badge">9:00 - 10:00 AM</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="f1"><label for="f1">Recall all 8 from memory (final check)</label></li>
+          <li><input type="checkbox" id="f2"><label for="f2">Build simple sentences with 3+ phrases</label></li>
+          <li><input type="checkbox" id="f3"><label for="f3">Practice pronunciation (30 min focus)</label></li>
+          <li><input type="checkbox" id="f4"><label for="f4">Mark "French Session 4 ✅" in app</label></li>
+        </ul>
+      </div>
+
+      <div class="day-block">
+        <div class="day-title">Friday, March 28 <span class="time-badge">After 1:00 PM (Optional)</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="fo1"><label for="fo1">Use all 8 phrases in a voice memo to yourself</label></li>
+          <li><input type="checkbox" id="fo2"><label for="fo2">Listen back — how natural does it sound?</label></li>
+        </ul>
+      </div>
+
+      <div class="day-block">
+        <div class="day-title">Friday, March 28 <span class="time-badge">6:00 PM</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="ft1"><label for="ft1">🎯 Tutor session — Apply everything you learned</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WORK DEADLINES -->
+    <div class="section">
+      <h2>📋 Work Deadlines This Week</h2>
+
+      <div class="day-block work">
+        <div class="day-title">Thursday, March 27 (End of Day) <span class="time-badge work">Deadline</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="wk1"><label for="wk1">Collect final food count from form responses</label></li>
+          <li><input type="checkbox" id="wk2"><label for="wk2">Send final count to Simon (180 people confirmed)</label></li>
+          <li><input type="checkbox" id="wk3"><label for="wk3">Note: ~10 min task</label></li>
+        </ul>
+      </div>
+
+      <div class="day-block work">
+        <div class="day-title">Friday, March 28 (End of Day) <span class="time-badge work">Deadline</span></div>
+        <ul class="task-list">
+          <li><input type="checkbox" id="wk4"><label for="wk4">2:00 - 3:00 PM: Finalize optional calendar (1 hour)</label></li>
+          <li><input type="checkbox" id="wk5"><label for="wk5">Send calendar to stakeholders</label></li>
+          <li><input type="checkbox" id="wk6"><label for="wk6">Send reminder email to business owners (presentations due Monday)</label></li>
+          <li><input type="checkbox" id="wk7"><label for="wk7">Note: ~10 min email task</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- NEXT WEEK PREVIEW -->
+    <div class="section">
+      <h2>📅 Next Week (April 1-2)</h2>
+      <div class="highlight">
+        <h3>PI Planning Event</h3>
+        <p>Your 3 months of French prep + tutor sessions start properly. Week 1 is your foundation. Complete this week, and you'll be ready for Week 2.</p>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div class="highlight">
+      <h3>💡 Tips for Success</h3>
+      <p>
+        ✅ <strong>Track in the app:</strong> Mark each French session as complete in your TCF Study Plan<br>
+        ✅ <strong>No distractions:</strong> Silence your phone during French time<br>
+        ✅ <strong>Spaced retrieval:</strong> Each day, recall WITHOUT looking first (that's where the memory builds)<br>
+        ✅ <strong>Pronunciation matters:</strong> Say it aloud — your ears train your mouth<br>
+        ✅ <strong>You can do this:</strong> You have a tutor + a plan + 1 hour each session. That's enough.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>Created for your TCF CLB 7 journey • Printable • Bookmark this page</p>
+      <p>Last updated: March 24, 2026</p>
+    </div>
+  </div>
+</body>
+</html>
