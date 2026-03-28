@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TCF Canada — 12-Week CLB 5 Study Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
   :root {
     --blue: #0f4dd9;
     --blue-light: #dbeafe;
@@ -19,16 +21,14 @@
     --purple-light: #edebfe;
     --cyan: #06b6d4;
     --cyan-light: #cffafe;
-    --cyan: #06b6d4;
-    --cyan-light: #cffafe;
     --gray: #64748b;
     --gray-light: #f1f5f9;
     --dark: #0f172a;
     --card-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-    --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.15);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: var(--dark); }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: var(--dark); }
+  h1, h2, h3, h4, h5, h6 { font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
   /* Header */
   .header { background: linear-gradient(135deg, #1a56db 0%, #6c2bd9 100%); color: white; padding: 28px 32px; }
@@ -171,6 +171,14 @@
   .quiz-progress-bar { height: 6px; background: #e5e7eb; border-radius: 6px; margin-top: 10px; }
   .quiz-progress-fill { height: 100%; background: var(--green); border-radius: 6px; transition: width 0.3s; }
 
+  /* Quiz Loading State */
+  .quiz-loading { text-align: center; padding: 24px; }
+  .quiz-skeleton { height: 32px; background: #e5e7eb; border-radius: 8px; margin-bottom: 12px; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
   /* TCF Prompts */
   .tcf-prompt { background: var(--yellow-light); border-left: 4px solid var(--yellow); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 12px; }
   .tcf-prompt-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--yellow); margin-bottom: 6px; }
@@ -200,6 +208,7 @@
 
   .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
   .tab-btn { padding: 10px 18px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+  .tab-btn:hover { color: var(--blue); background: rgba(15, 77, 217, 0.04); border-radius: 4px 4px 0 0; }
   .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
@@ -335,16 +344,6 @@
     to { opacity: 1; transform: translateX(0); }
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-  }
-
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
   /* Staggered animations for cards */
   .week-header { animation: fadeInUp 0.6s ease-out forwards; }
   .card { animation: fadeInUp 0.6s ease-out forwards; }
@@ -419,7 +418,6 @@
   }
 
   .phase-badge:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
@@ -430,7 +428,15 @@
 
   /* ===== FOCUS STATES (Accessibility) ===== */
   button:focus-visible,
-  input:focus-visible {
+  input:focus-visible,
+  a:focus-visible,
+  .vocab-card:focus-visible,
+  .day-header:focus-visible,
+  .task-item:focus-visible,
+  .clb5-item:focus-visible,
+  .video-card-header:focus-visible,
+  .overview-panel-header:focus-visible,
+  .clb5-panel-header:focus-visible {
     outline: 2px solid var(--blue);
     outline-offset: 2px;
   }
@@ -440,9 +446,15 @@
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      animation: none !important;
+      transition: none !important;
+    }
+    .progress-fill,
+    .clb5-progress-fill {
+      transition: none !important;
+    }
+    .quiz-progress-fill {
+      transition: none !important;
     }
   }
 
@@ -652,23 +664,6 @@
     }
   }
 
-  /* ===== PREFERS-REDUCED-MOTION (Already present, reinforced) ===== */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation: none !important;
-      transition: none !important;
-    }
-
-    .card,
-    .stat-chip,
-    .meta-tag {
-      backdrop-filter: blur(3px);
-    }
-  }
-
-
   @media (max-width: 640px) {
     .header h1 { font-size: 26px; }
     .card { padding: 18px; }
@@ -693,7 +688,7 @@
 
 <!-- Program Overview Panel -->
 <div class="overview-panel" id="overview-panel">
-  <div class="overview-panel-header" onclick="toggleOverviewPanel()">
+  <div class="overview-panel-header" onclick="toggleOverviewPanel()" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
     <span class="overview-panel-title" id="overview-panel-title">📋 Program Overview</span>
     <span class="overview-panel-toggle" id="overview-panel-toggle">▼ Show</span>
   </div>
@@ -752,7 +747,7 @@
 </div>
 
 <div class="clb5-panel" id="clb5-panel">
-  <div class="clb5-panel-header" onclick="toggleCLB5Panel()">
+  <div class="clb5-panel-header" onclick="toggleCLB5Panel()" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
     <span class="clb5-panel-title" id="clb5-panel-title">🎯 CLB 5 Success Checklist</span>
     <span class="clb5-panel-score" id="clb5-panel-score">0 / 9</span>
     <span class="clb5-panel-toggle" id="clb5-panel-toggle">▼ Show</span>
@@ -3167,7 +3162,7 @@ function renderCLB5Panel() {
     g.items.forEach((item, ii) => {
       const key = getCLB5Key(gi, ii);
       const checked = !!state[key];
-      html += `<div class="clb5-item ${checked ? 'checked' : ''}" onclick="toggleCLB5Item(${gi},${ii},this)">
+      html += `<div class="clb5-item ${checked ? 'checked' : ''}" onclick="toggleCLB5Item(${gi},${ii},this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
         <div class="clb5-checkbox"></div>
         <span class="clb5-item-text">${item}</span>
       </div>`;
@@ -3343,7 +3338,7 @@ function buildDaySection(w, day, di, state, wES) {
   const esDays = wES && wES.days;
   return `
     <div class="day-section">
-      <div class="day-header ${allDone ? 'completed-day' : ''}" onclick="toggleDay(this)">
+      <div class="day-header ${allDone ? 'completed-day' : ''}" onclick="toggleDay(this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
         <span>${dayEmoji}</span>
         <span class="day-name">${dayLabel}</span>
         <span class="day-time">~${day.time}</span>
@@ -3355,7 +3350,7 @@ function buildDaySection(w, day, di, state, wES) {
           const done = !!state[key];
           const doneDate = state[getTaskDateKey(w.number, di, ti)] || '';
           const taskText = (esDays && esDays[di] && esDays[di].tasks[ti]) ? esDays[di].tasks[ti].text : task.text;
-          return `<div class="task-item ${done ? 'done' : ''}" onclick="toggleTask(${w.number}, ${di}, ${ti}, this)">
+          return `<div class="task-item ${done ? 'done' : ''}" onclick="toggleTask(${w.number}, ${di}, ${ti}, this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
             <div class="task-checkbox"></div>
             <span class="task-time-badge">${task.time}</span>
             <span class="task-text">${linkify(taskText)}</span>${done && doneDate ? `<span class="task-date-badge">✓ ${doneDate}</span>` : ''}
@@ -3374,7 +3369,7 @@ function buildVocabSection(w, idx, wES) {
       ${w.vocab.map((v, vi) => {
         const translation = (esVocab && esVocab[vi]) ? esVocab[vi] : v.en;
         return `
-        <div class="vocab-card" id="vc-${idx}-${vi}" onclick="toggleVocab(${idx}, ${vi})">
+        <div class="vocab-card" id="vc-${idx}-${vi}" onclick="toggleVocab(${idx}, ${vi})" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
           <div class="vocab-french">${v.fr}</div>
           <div class="vocab-translation">${translation}</div>
           <div class="vocab-hint">${t.tapReveal}</div>
@@ -3437,7 +3432,7 @@ function buildVideoCard(w, videoHref, wES) {
     : '';
   return `
   <div class="video-card">
-    <div class="video-card-header" onclick="toggleVideoCard('${id}', this)">
+    <div class="video-card-header" onclick="toggleVideoCard('${id}', this)" tabindex="0" role="button" onkeydown="if(event.key==='Enter'||event.key===' ')this.click()">
       <span class="video-card-title">${t.videoCardTitle}: ${w.video}</span>
       <span class="video-card-duration">⏱ ${vd.duration}</span>
       ${watchBtn}
@@ -3594,8 +3589,20 @@ function switchTab(btn, tabId) {
   // Init quiz if switching to quiz tab
   const idx = currentWeekIdx;
   if (tabId.startsWith('quiz-')) {
-    if (!quizState[idx]) initQuiz(idx);
-    renderQuiz(idx);
+    const quizArea = document.getElementById(`quiz-area-${idx}`);
+    if (quizArea) {
+      // Show loading state
+      quizArea.innerHTML = `<div class="quiz-loading"><div class="quiz-skeleton"></div><div class="quiz-skeleton"></div><div class="quiz-skeleton" style="width: 60%; margin-left: auto; margin-right: auto;"></div></div>`;
+      // Initialize and render after brief delay for visual feedback
+      setTimeout(() => {
+        if (!quizState[idx]) initQuiz(idx);
+        renderQuiz(idx);
+      }, 150);
+    } else {
+      // Fallback if element not found
+      if (!quizState[idx]) initQuiz(idx);
+      renderQuiz(idx);
+    }
   }
 }
 
