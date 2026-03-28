@@ -171,14 +171,6 @@
   .quiz-progress-bar { height: 6px; background: #e5e7eb; border-radius: 6px; margin-top: 10px; }
   .quiz-progress-fill { height: 100%; background: var(--green); border-radius: 6px; transition: width 0.3s; }
 
-  /* Quiz Loading State */
-  .quiz-loading { text-align: center; padding: 24px; }
-  .quiz-skeleton { height: 32px; background: #e5e7eb; border-radius: 8px; margin-bottom: 12px; animation: pulse 1.5s ease-in-out infinite; }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
   /* TCF Prompts */
   .tcf-prompt { background: var(--yellow-light); border-left: 4px solid var(--yellow); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 12px; }
   .tcf-prompt-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--yellow); margin-bottom: 6px; }
@@ -3589,20 +3581,8 @@ function switchTab(btn, tabId) {
   // Init quiz if switching to quiz tab
   const idx = currentWeekIdx;
   if (tabId.startsWith('quiz-')) {
-    const quizArea = document.getElementById(`quiz-area-${idx}`);
-    if (quizArea) {
-      // Show loading state
-      quizArea.innerHTML = `<div class="quiz-loading"><div class="quiz-skeleton"></div><div class="quiz-skeleton"></div><div class="quiz-skeleton" style="width: 60%; margin-left: auto; margin-right: auto;"></div></div>`;
-      // Initialize and render after brief delay for visual feedback
-      setTimeout(() => {
-        if (!quizState[idx]) initQuiz(idx);
-        renderQuiz(idx);
-      }, 150);
-    } else {
-      // Fallback if element not found
-      if (!quizState[idx]) initQuiz(idx);
-      renderQuiz(idx);
-    }
+    if (!quizState[idx]) initQuiz(idx);
+    renderQuiz(idx);
   }
 }
 
