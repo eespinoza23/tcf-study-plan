@@ -3013,7 +3013,7 @@ const weeksES = {
 // STATE (localStorage for persistence)
 // ============================================================
 function getState() {
-  try { return JSON.parse(localStorage.getItem('tcf_state') || '{}'); } catch { return {}; }
+  return safeLocalStorageGet('tcf_state', {});
 }
 function saveState(state) {
   localStorage.setItem('tcf_state', JSON.stringify(state));
@@ -3806,6 +3806,59 @@ function showToast(msg, duration=2800) {
 }
 
 // ============================================================
+// SECURITY: localStorage safe access wrapper
+// ============================================================
+function safeLocalStorageGet(key, defaultValue = null) {
+  try {
+    const item = localStorage.getItem(key);
+    if (!item) return defaultValue;
+    return JSON.parse(item);
+  } catch (e) {
+    console.warn(`Failed to parse localStorage[${key}]:`, e);
+    return defaultValue;
+  }
+}
+
+// ============================================================
+// SECURITY: URL validation for Google Drive links
+// ============================================================
+function isValidDriveUrl(url) {
+  try {
+    const u = new URL(url);
+    // Only allow Google Drive or Google Docs URLs
+    return u.hostname.includes('drive.google.com') || 
+           u.hostname.includes('docs.google.com');
+  } catch (e) {
+    return false;
+  }
+}
+
+// ============================================================
+// SECURITY: Progress state validation schema
+// ============================================================
+function validateProgressState(state) {
+  if (!state || typeof state !== 'object') return false;
+  if (!Array.isArray(state.weeks)) return false;
+  if (!Array.isArray(state.clb5)) return false;
+
+  // Validate weeks array structure
+  const weeksValid = state.weeks.every(w =>
+    typeof w.num === 'number' &&
+    w.num >= 1 && w.num <= 12 &&
+    typeof w.done === 'boolean' &&
+    (!w.date || /^\d{4}-\d{2}-\d{2}$/.test(w.date))
+  );
+
+  // Validate clb5 array structure
+  const clb5Valid = state.clb5.every(c =>
+    typeof c.id === 'string' &&
+    typeof c.done === 'boolean'
+  );
+
+  return weeksValid && clb5Valid;
+}
+
+// ============================================================
 // EXPORT / IMPORT PROGRESS
 // ============================================================
 function exportProgress() {
@@ -3825,6 +3878,13 @@ function importProgress() {
   if (!code || !code.trim()) return;
   try {
     const state = JSON.parse(atob(code.trim()));
+    
+    // SECURITY: Validate imported state structure
+    if (!validateProgressState(state)) {
+      showToast('>> Invalid progress code format.');
+      return;
+    }
+    
     saveState(state);
     buildNav();
     updateProgress();
@@ -3863,7 +3923,7 @@ const driveFields = [
 ];
 
 function getDriveLinks() {
-  try { return JSON.parse(localStorage.getItem(DRIVE_STORAGE_KEY) || '{}'); } catch { return {}; }
+  return safeLocalStorageGet(DRIVE_STORAGE_KEY, {});
 }
 
 function resolveLink(localHref, driveKey) {
@@ -3900,10 +3960,26 @@ function closeSettings() {
 
 function saveDriveLinks() {
   const dl = {};
+  const invalidLinks = [];
+  
   driveFields.forEach(f => {
     const val = (document.getElementById(`di-${f.key}`)?.value || '').trim();
-    if (val) dl[f.key] = val;
+    if (val) {
+      // SECURITY: Validate Drive URL before saving
+      if (!isValidDriveUrl(val)) {
+        invalidLinks.push(f.label);
+        return;
+      }
+      dl[f.key] = val;
+    }
   });
+  
+  // Show error if any invalid URLs were found
+  if (invalidLinks.length > 0) {
+    showToast(`>> Invalid Drive URLs for: ${invalidLinks.join(', ')}. Use Google Drive share links only.`);
+    return;
+  }
+  
   localStorage.setItem(DRIVE_STORAGE_KEY, JSON.stringify(dl));
   closeSettings();
   // Refresh current week to update resource bar
