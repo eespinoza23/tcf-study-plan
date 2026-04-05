@@ -392,11 +392,19 @@
     padding: 12px 10px;
     transition: all 0.2s;
     border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
   }
 
   .checklist-item:hover {
-    background: rgba(15, 77, 217, 0.04);
+    background: rgba(15, 77, 217, 0.06);
   }
+
+  .checklist-item input[type="checkbox"] {
+    width: 16px; height: 16px; cursor: pointer; accent-color: #1a56db; flex-shrink: 0;
+  }
+
+  .checklist-item.checked span { text-decoration: line-through; color: #94a3b8; }
 
   .checklist-item::before {
     content: none;
@@ -3712,7 +3720,14 @@ function buildTCFSection(w, wES) {
     </div>
     <div style="margin-top:16px;background:#f9fafb;border-radius:10px;padding:16px;">
       <div style="font-size:13px;font-weight:600;margin-bottom:10px;">${t.checklistTitle}</div>
-      ${t.checklist.map(item => `<div class="checklist-item"><span>☐</span><span style="font-size:13px">${item}</span></div>`).join('')}
+      ${t.checklist.map((item, idx) => {
+        const key = `w${w.number}_cl_${idx}`;
+        const checked = !!getState()[key];
+        return `<div class="checklist-item${checked?' checked':''}" id="cli-${w.number}-${idx}" onclick="toggleChecklist(${w.number},${idx})">
+          <input type="checkbox" ${checked?'checked':''} onclick="event.stopPropagation();toggleChecklist(${w.number},${idx})">
+          <span style="font-size:13px">${item}</span>
+        </div>`;
+      }).join('')}
     </div>
   </div>`;
 }
@@ -3796,6 +3811,20 @@ function buildSessionSection(w, wES) {
 function toggleDay(header) {
   const tasks = header.nextElementSibling;
   tasks.classList.toggle('open');
+}
+
+function toggleChecklist(weekNum, idx) {
+  const state = getState();
+  const key = `w${weekNum}_cl_${idx}`;
+  state[key] = !state[key];
+  saveState(state);
+  syncEngine.save();
+  const item = document.getElementById(`cli-${weekNum}-${idx}`);
+  if (item) {
+    item.classList.toggle('checked', !!state[key]);
+    const cb = item.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = !!state[key];
+  }
 }
 
 function toggleTask(weekNum, di, ti, el) {
