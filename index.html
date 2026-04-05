@@ -294,6 +294,12 @@
   .sync-btn.export { background: #22c55e; color: white; }
   .sync-btn.import { background: #3b82f6; color: white; }
   .sync-btn.settings { background: #8b5cf6; color: white; margin-left: auto; }
+  .sync-btn.cloud { background: #475569; color: white; }
+  .sync-btn.cloud.sync-ok { background: #16a34a; }
+  .sync-btn.cloud.sync-err { background: #dc2626; }
+  .sync-btn.cloud.sync-busy { opacity: .65; }
+  .sync-err-msg { color: #dc2626; font-size: 12px; margin-bottom: 8px; padding: 8px 10px; background: #fee2e2; border-radius: 6px; display: none; }
+  .sync-hint { font-size: 11px; color: #64748b; margin-top: 4px; }
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
   .modal-overlay.open { display: flex; }
@@ -692,6 +698,7 @@
 <!-- Sync Bar (content filled by JS after lang loads) -->
 <div class="sync-bar" id="sync-bar">
   <span id="sync-label"></span>
+  <button class="sync-btn cloud" id="btn-sync" onclick="openSyncModal()">☁ Setup Sync</button>
   <button class="sync-btn export" id="btn-export" onclick="exportProgress()"></button>
   <button class="sync-btn import" id="btn-import" onclick="importProgress()"></button>
   <button class="sync-btn settings" id="btn-settings" onclick="openSettings()"></button>
@@ -729,6 +736,51 @@
 
 <!-- Toast notification -->
 <div class="toast" id="toast"></div>
+
+<!-- SYNC MODAL -->
+<div class="modal-overlay" id="sync-modal-overlay" onclick="if(event.target===this)closeSyncModal()">
+  <div class="modal" style="max-width:460px">
+    <div id="sync-setup-view">
+      <div class="modal-header">
+        <h3>☁ Cloud Sync Setup</h3>
+        <button class="modal-close" onclick="closeSyncModal()">×</button>
+      </div>
+      <div style="padding:20px 24px">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">Sync progress across devices using a private GitHub Gist. Requires a free GitHub account.</p>
+        <div class="sync-err-msg" id="sync-err-msg"></div>
+        <label style="font-size:12px;font-weight:700;color:#374151;display:block;margin-bottom:5px">GitHub Personal Access Token</label>
+        <input style="width:100%;padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12px;outline:none" id="sync-pat" type="password" placeholder="ghp_...">
+        <p class="sync-hint"><a href="https://github.com/settings/tokens/new?scopes=gist&description=TCF+Study+Plan+Sync" target="_blank" style="color:#4f46e5">Create token on GitHub ↗</a> — select only the <strong>gist</strong> scope.</p>
+        <label style="font-size:12px;font-weight:700;color:#374151;display:block;margin-top:12px;margin-bottom:5px">Gist ID <span style="font-weight:400;color:#94a3b8">(leave blank to create new)</span></label>
+        <input style="width:100%;padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12px;outline:none" id="sync-gist-in" placeholder="Paste Gist ID from your first device">
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn btn-primary" id="sync-connect-btn" onclick="doSyncConnect()">Connect</button>
+          <button class="btn btn-secondary" onclick="closeSyncModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div id="sync-settings-view" style="display:none">
+      <div class="modal-header">
+        <h3>☁ Sync Settings</h3>
+        <button class="modal-close" onclick="closeSyncModal()">×</button>
+      </div>
+      <div style="padding:20px 24px">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">Progress syncs automatically to a private GitHub Gist.</p>
+        <label style="font-size:12px;font-weight:700;color:#374151;display:block;margin-bottom:5px">Gist ID <span style="font-size:11px;color:#64748b">(paste on another device to connect)</span></label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input style="width:100%;padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:11px;font-family:monospace;outline:none;flex:1" id="sync-gist-display" readonly>
+          <button class="btn btn-secondary" onclick="copySyncGistId()" style="flex-shrink:0">Copy</button>
+        </div>
+        <label style="font-size:12px;font-weight:700;color:#374151;display:block;margin-top:12px;margin-bottom:5px">Token</label>
+        <p style="font-size:12px;color:#64748b">••••••••••••••••&nbsp;<button onclick="switchToSetupView()" style="background:none;border:none;color:#4f46e5;cursor:pointer;font-size:12px;padding:0">Re-enter ↗</button></p>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn" style="background:#fee2e2;color:#dc2626;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:13px" onclick="doDisconnect()">Disconnect</button>
+          <button class="btn btn-secondary" onclick="closeSyncModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="progress-section">
   <div class="progress-label">
@@ -3018,6 +3070,146 @@ function getState() {
 function saveState(state) {
   localStorage.setItem('tcf_state', JSON.stringify(state));
 }
+
+// ============================================================
+// SYNC ENGINE
+// ============================================================
+const syncEngine = (() => {
+  const PAT_KEY = 'tcf_pat';
+  const GID_KEY = 'tcf_gist_id';
+  const TS_KEY  = 'tcf_last_sync';
+  const API     = 'https://api.github.com/gists';
+
+  let _status = 'unconfigured';
+  let _timer  = null;
+
+  const pat = () => localStorage.getItem(PAT_KEY) || '';
+  const gid = () => localStorage.getItem(GID_KEY) || '';
+
+  function collectState() {
+    return {
+      tcf_state:       localStorage.getItem('tcf_state')       || '{}',
+      tcf_drive_links: localStorage.getItem('tcf_drive_links') || '{}',
+      tcf_lang:        localStorage.getItem('tcf_lang')        || 'en',
+    };
+  }
+
+  function applyRemoteState(state) {
+    if (state.tcf_state)       localStorage.setItem('tcf_state',       state.tcf_state);
+    if (state.tcf_drive_links) localStorage.setItem('tcf_drive_links', state.tcf_drive_links);
+    if (state.tcf_lang)        localStorage.setItem('tcf_lang',        state.tcf_lang);
+  }
+
+  function setStatus(s) {
+    _status = s;
+    const btn = document.getElementById('btn-sync');
+    if (!btn) return;
+    const labels = {
+      unconfigured: '☁ Setup Sync',
+      syncing:      '⟳ Syncing…',
+      synced:       '☁ Synced',
+      error:        '⚠ Sync error',
+      auth_error:   '⚠ Token invalid',
+    };
+    btn.textContent = labels[s] || '☁ Sync';
+    btn.classList.remove('sync-ok','sync-err','sync-busy');
+    if (s === 'synced')                       btn.classList.add('sync-ok');
+    if (s === 'error' || s === 'auth_error')  btn.classList.add('sync-err');
+    if (s === 'syncing')                      btn.classList.add('sync-busy');
+  }
+
+  function authHeaders() {
+    return { Authorization: `Bearer ${pat()}`, Accept: 'application/vnd.github.v3+json' };
+  }
+
+  async function _write() {
+    const now = new Date().toISOString();
+    const body = JSON.stringify({
+      files: { 'progress.json': { content: JSON.stringify({ lastModified: now, state: collectState() }) } }
+    });
+    const r = await fetch(`${API}/${gid()}`, {
+      method: 'PATCH',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body
+    });
+    if (r.status === 401) { setStatus('auth_error'); throw new Error('auth'); }
+    if (!r.ok) { setStatus('error'); throw new Error('write'); }
+    localStorage.setItem(TS_KEY, now);
+  }
+
+  async function init() {
+    if (!pat() || !gid()) { setStatus('unconfigured'); return; }
+    setStatus('syncing');
+    try {
+      const r = await fetch(`${API}/${gid()}`, { headers: authHeaders() });
+      if (r.status === 401) { setStatus('auth_error'); return; }
+      if (!r.ok) { setStatus('error'); return; }
+      const data = await r.json();
+      const raw  = data.files?.['progress.json']?.content;
+      if (raw) {
+        const remote  = JSON.parse(raw);
+        const localTs = localStorage.getItem(TS_KEY) || '0';
+        if (remote.lastModified > localTs) {
+          applyRemoteState(remote.state);
+          localStorage.setItem(TS_KEY, remote.lastModified);
+          updateProgress();
+        } else {
+          await _write();
+        }
+      } else {
+        await _write();
+      }
+      setStatus('synced');
+    } catch(e) {
+      if (_status !== 'auth_error') setStatus('error');
+    }
+  }
+
+  function save() {
+    if (!pat() || !gid()) return;
+    setStatus('syncing');
+    clearTimeout(_timer);
+    _timer = setTimeout(async () => {
+      try { await _write(); setStatus('synced'); }
+      catch(e) { /* status set inside _write */ }
+    }, 2000);
+  }
+
+  async function setup(newPat, newGid = null) {
+    if (!newGid) {
+      const r = await fetch(API, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${newPat}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description: 'TCF Study Plan — Progress Sync',
+          public: false,
+          files: { 'progress.json': { content: JSON.stringify({ lastModified: new Date().toISOString(), state: collectState() }) } }
+        })
+      });
+      if (r.status === 401) throw new Error('auth_error');
+      if (!r.ok) throw new Error('create_failed');
+      const d = await r.json();
+      newGid = d.id;
+    } else {
+      const r = await fetch(`${API}/${newGid}`, {
+        headers: { Authorization: `Bearer ${newPat}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (r.status === 401) throw new Error('auth_error');
+      if (!r.ok) throw new Error('fetch_failed');
+    }
+    localStorage.setItem(PAT_KEY, newPat);
+    localStorage.setItem(GID_KEY, newGid);
+    return newGid;
+  }
+
+  function disconnect() {
+    localStorage.removeItem(PAT_KEY);
+    localStorage.removeItem(GID_KEY);
+    setStatus('unconfigured');
+  }
+
+  return { init, save, setup, disconnect, getStatus: () => _status, getGistId: gid };
+})();
 function getTaskKey(weekNum, dayIdx, taskIdx) {
   return `w${weekNum}_d${dayIdx}_t${taskIdx}`;
 }
@@ -3171,6 +3363,7 @@ function toggleCLB5Item(gi, ii, el) {
   const key = getCLB5Key(gi, ii);
   state[key] = !state[key];
   saveState(state);
+  syncEngine.save();
   el.classList.toggle('checked', !!state[key]);
   // Re-render score and progress without rebuilding whole body
   renderCLB5Panel();
@@ -3508,6 +3701,7 @@ function toggleTask(weekNum, di, ti, el) {
     delete state[dateKey];
   }
   saveState(state);
+  syncEngine.save();
   el.classList.toggle('done', state[key]);
 
   // Update date badge — placed AFTER .task-text so it is not crossed out
@@ -3566,6 +3760,7 @@ function toggleWeekComplete(idx) {
     delete state[dateKey];
   }
   saveState(state);
+  syncEngine.save();
   buildNav();
   updateProgress();
   showWeek(idx);
@@ -3795,6 +3990,76 @@ setTimeout(() => {
   if (firstDay) { firstDay.click(); }
 }, 100);
 
+syncEngine.init();
+
+// ============================================================
+// SYNC MODAL FUNCTIONS
+// ============================================================
+function openSyncModal() {
+  const s = syncEngine.getStatus();
+  if (s === 'unconfigured' || s === 'auth_error') {
+    switchToSetupView();
+    document.getElementById('sync-pat').value = '';
+    document.getElementById('sync-gist-in').value = '';
+    const errEl = document.getElementById('sync-err-msg');
+    if (s === 'auth_error') {
+      errEl.textContent = 'Token expired or invalid — please re-enter.';
+      errEl.style.display = 'block';
+    } else {
+      errEl.style.display = 'none';
+    }
+  } else if (s === 'error') {
+    syncEngine.init();
+    return;
+  } else {
+    switchToSettingsView();
+    document.getElementById('sync-gist-display').value = syncEngine.getGistId();
+  }
+  document.getElementById('sync-modal-overlay').classList.add('open');
+}
+function closeSyncModal() { document.getElementById('sync-modal-overlay').classList.remove('open'); }
+function switchToSetupView() {
+  document.getElementById('sync-setup-view').style.display = '';
+  document.getElementById('sync-settings-view').style.display = 'none';
+}
+function switchToSettingsView() {
+  document.getElementById('sync-setup-view').style.display = 'none';
+  document.getElementById('sync-settings-view').style.display = '';
+}
+async function doSyncConnect() {
+  const pat    = document.getElementById('sync-pat').value.trim();
+  const gistId = document.getElementById('sync-gist-in').value.trim() || null;
+  const btn    = document.getElementById('sync-connect-btn');
+  const errEl  = document.getElementById('sync-err-msg');
+  if (!pat) { errEl.textContent = 'Please enter your GitHub token.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Connecting…';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+  try {
+    await syncEngine.setup(pat, gistId);
+    closeSyncModal();
+    showToast('✅ Sync connected!');
+    syncEngine.init();
+  } catch(e) {
+    errEl.textContent = e.message === 'auth_error'
+      ? 'Invalid token or missing "gist" scope. Please check and try again.'
+      : 'Connection failed. Check your internet connection and try again.';
+    errEl.style.display = 'block';
+  } finally {
+    btn.textContent = 'Connect';
+    btn.disabled = false;
+  }
+}
+function copySyncGistId() {
+  navigator.clipboard.writeText(document.getElementById('sync-gist-display').value)
+    .then(() => showToast('✅ Gist ID copied!'));
+}
+function doDisconnect() {
+  syncEngine.disconnect();
+  closeSyncModal();
+  showToast('Sync disconnected.');
+}
+
 // ============================================================
 // TOAST
 // ============================================================
@@ -3981,6 +4246,7 @@ function saveDriveLinks() {
   }
   
   localStorage.setItem(DRIVE_STORAGE_KEY, JSON.stringify(dl));
+  syncEngine.save();
   closeSettings();
   // Refresh current week to update resource bar
   showWeek(currentWeekIdx);
