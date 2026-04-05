@@ -818,8 +818,9 @@ const T = {
     statWeeks:'📅 12 Weeks', statVideos:'🎬 12 Video Tutorials', statSessions:'📚 24 Coaching Sessions', statTarget:'🎯 Target: CLB 5',
     onboarding:'▶ Watch Onboarding Video',
     syncLabel:'📲 Cross-device sync:',
-    exportBtn:'⬆ Export Progress', importBtn:'⬇ Import Progress', settingsBtn:'⚙️ Google Drive Links',
+    settingsBtn:'⚙️ Google Drive Links',
     langBtn:'🇻🇪 Español',
+    syncBtn: { unconfigured:'☁ Setup Sync', syncing:'⟳ Syncing…', synced:'☁ Synced', error:'⚠ Sync error', auth_error:'⚠ Token invalid' },
     progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
     tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice', tabSession:'👩‍🏫 Coaching Sessions',
     videoCardTitle:'🎬 This Week\'s Video Tutorial', videoLearnLabel:'What you\'ll learn', videoWhyLabel:'💡 Why it matters', videoShowDetails:'▼ Show details', videoHideDetails:'▲ Hide details', videoWatchBtn:'▶ Watch',
@@ -901,6 +902,7 @@ const T = {
     onboarding:'▶ Ver Video de Bienvenida',
     syncLabel:'📲 Sincronización:', exportBtn:'⬆ Exportar Progreso', importBtn:'⬇ Importar Progreso', settingsBtn:'⚙️ Links de Drive',
     langBtn:'🇬🇧 English',
+    syncBtn: { unconfigured:'☁ Configurar Sync', syncing:'⟳ Sincronizando…', synced:'☁ Sincronizado', error:'⚠ Error de sync', auth_error:'⚠ Token inválido' },
     progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
     tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF', tabSession:'👩‍🏫 Sesiones de Coaching',
     videoCardTitle:'🎬 Video Tutorial de esta Semana', videoLearnLabel:'Lo que aprenderás', videoWhyLabel:'💡 Por qué importa', videoShowDetails:'▼ Ver detalles', videoHideDetails:'▲ Ocultar detalles', videoWatchBtn:'▶ Ver',
@@ -3221,14 +3223,7 @@ const syncEngine = (() => {
     _status = s;
     const btn = document.getElementById('btn-sync');
     if (!btn) return;
-    const labels = {
-      unconfigured: '☁ Setup Sync',
-      syncing:      '⟳ Syncing…',
-      synced:       '☁ Synced',
-      error:        '⚠ Sync error',
-      auth_error:   '⚠ Token invalid',
-    };
-    btn.textContent = labels[s] || '☁ Sync';
+    btn.textContent = (t.syncBtn && t.syncBtn[s]) || '☁ Sync';
     btn.classList.remove('sync-ok','sync-err','sync-busy');
     if (s === 'synced')                       btn.classList.add('sync-ok');
     if (s === 'error' || s === 'auth_error')  btn.classList.add('sync-err');
@@ -3267,9 +3262,15 @@ const syncEngine = (() => {
         const remote  = JSON.parse(raw);
         const localTs = localStorage.getItem(TS_KEY) || '0';
         if (remote.lastModified > localTs) {
+          // Merge: union of checked items so no device ever loses progress
+          const localState  = JSON.parse(localStorage.getItem('tcf_state') || '{}');
+          const remoteState = JSON.parse(remote.state?.tcf_state || '{}');
+          Object.keys(localState).forEach(k => { if (localState[k] === true) remoteState[k] = true; });
+          remote.state.tcf_state = JSON.stringify(remoteState);
           applyRemoteState(remote.state);
           localStorage.setItem(TS_KEY, remote.lastModified);
           updateProgress();
+          await _write(); // push merged state back to Gist
         } else {
           await _write();
         }
