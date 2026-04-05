@@ -287,17 +287,13 @@
   .res-chip.pdf   { background: var(--red-light); color: #991b1b; }
   .res-chip.ext   { background: var(--green-light); color: #065f46; }
   /* Sync bar */
-  .sync-bar { background: #0f172a; padding: 8px 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .sync-bar span { color: #94a3b8; font-size: 12px; }
-  .sync-btn { padding: 5px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: opacity 0.2s; }
-  .sync-btn:hover { opacity: 0.85; }
-  .sync-btn.export { background: #22c55e; color: white; }
-  .sync-btn.import { background: #3b82f6; color: white; }
-  .sync-btn.settings { background: #8b5cf6; color: white; margin-left: auto; }
-  .sync-btn.cloud { background: #475569; color: white; }
-  .sync-btn.cloud.sync-ok { background: #16a34a; }
-  .sync-btn.cloud.sync-err { background: #dc2626; }
-  .sync-btn.cloud.sync-busy { opacity: .65; }
+  .header-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 20px; }
+  .btn-ghost { background: rgba(255,255,255,.15); color: white; padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all .15s; }
+  .btn-ghost:hover { background: rgba(255,255,255,.28); }
+  #btn-sync { background: #475569; color: white; padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all .15s; }
+  #btn-sync.sync-ok { background: #16a34a; }
+  #btn-sync.sync-err { background: #dc2626; }
+  #btn-sync.sync-busy { opacity: .65; }
   .sync-err-msg { color: #dc2626; font-size: 12px; margin-bottom: 8px; padding: 8px 10px; background: #fee2e2; border-radius: 6px; display: none; }
   .sync-hint { font-size: 11px; color: #64748b; margin-top: 4px; }
   /* Modal */
@@ -682,6 +678,11 @@
     <div id="stat-target" class="stat-chip">🎯 Target: CLB 5</div>
     <a id="onboard-link" href="#" target="_blank" class="stat-chip" style="background:rgba(255,255,255,0.25);text-decoration:none;">▶ Watch Onboarding Video</a>
   </div>
+  <div class="header-controls">
+    <button id="btn-sync" onclick="openSyncModal()">☁ Setup Sync</button>
+    <button class="btn-ghost" id="btn-settings" onclick="openSettings()"></button>
+    <button class="btn-ghost" id="btn-lang" onclick="setLang(getLang()==='en'?'es':'en')"></button>
+  </div>
 </div>
 
 <!-- Program Overview Panel -->
@@ -693,14 +694,6 @@
   <div class="overview-panel-body" id="overview-panel-body">
     <!-- Rendered by JS -->
   </div>
-</div>
-
-<!-- Sync Bar (content filled by JS after lang loads) -->
-<div class="sync-bar" id="sync-bar">
-  <span id="sync-label"></span>
-  <button class="sync-btn cloud" id="btn-sync" onclick="openSyncModal()">☁ Setup Sync</button>
-  <button class="sync-btn settings" id="btn-settings" onclick="openSettings()"></button>
-  <button class="sync-btn" id="btn-lang" onclick="setLang(getLang()==='en'?'es':'en')" style="background:#f59e0b;color:#1c1917;margin-left:auto;"></button>
 </div>
 
 <!-- Settings Modal -->
@@ -4013,7 +4006,6 @@ function skipQuestion(idx) {
 // APPLY TRANSLATIONS TO STATIC HTML ELEMENTS
 // ============================================================
 function applyTranslations() {
-  document.getElementById('sync-label').textContent = t.syncLabel;
   document.getElementById('btn-settings').textContent = t.settingsBtn;
   document.getElementById('btn-lang').textContent = t.langBtn;
   document.getElementById('modal-title').textContent = t.settingsTitle;
