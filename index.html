@@ -699,8 +699,6 @@
 <div class="sync-bar" id="sync-bar">
   <span id="sync-label"></span>
   <button class="sync-btn cloud" id="btn-sync" onclick="openSyncModal()">☁ Setup Sync</button>
-  <button class="sync-btn export" id="btn-export" onclick="exportProgress()"></button>
-  <button class="sync-btn import" id="btn-import" onclick="importProgress()"></button>
   <button class="sync-btn settings" id="btn-settings" onclick="openSettings()"></button>
   <button class="sync-btn" id="btn-lang" onclick="setLang(getLang()==='en'?'es':'en')" style="background:#f59e0b;color:#1c1917;margin-left:auto;"></button>
 </div>
@@ -4016,8 +4014,6 @@ function skipQuestion(idx) {
 // ============================================================
 function applyTranslations() {
   document.getElementById('sync-label').textContent = t.syncLabel;
-  document.getElementById('btn-export').textContent = t.exportBtn;
-  document.getElementById('btn-import').textContent = t.importBtn;
   document.getElementById('btn-settings').textContent = t.settingsBtn;
   document.getElementById('btn-lang').textContent = t.langBtn;
   document.getElementById('modal-title').textContent = t.settingsTitle;
@@ -4239,42 +4235,6 @@ function validateProgressState(state) {
   );
 
   return weeksValid && clb5Valid;
-}
-
-// ============================================================
-// EXPORT / IMPORT PROGRESS
-// ============================================================
-function exportProgress() {
-  try {
-    const state = getState();
-    const code = btoa(JSON.stringify(state));
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(code).then(() => showToast(t.exportToast));
-    } else {
-      prompt(t.exportToast, code);
-    }
-  } catch(e) { showToast('❌ Export failed. Please try again.'); }
-}
-
-function importProgress() {
-  const code = prompt('Paste your progress code here (from your other device):');
-  if (!code || !code.trim()) return;
-  try {
-    const state = JSON.parse(atob(code.trim()));
-    
-    // SECURITY: Validate imported state structure
-    if (!validateProgressState(state)) {
-      showToast('>> Invalid progress code format.');
-      return;
-    }
-    
-    saveState(state);
-    buildNav();
-    updateProgress();
-    renderCLB5Panel();
-    showWeek(currentWeekIdx);
-    showToast(t.importToast);
-  } catch(e) { showToast(t.importError); }
 }
 
 // ============================================================
