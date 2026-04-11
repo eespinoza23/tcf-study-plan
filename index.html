@@ -294,6 +294,8 @@
   #btn-sync.sync-ok { background: #16a34a; }
   #btn-sync.sync-err { background: #dc2626; }
   #btn-sync.sync-busy { opacity: .65; }
+  #btn-sync.sync-pending { background: #d97706; }
+  #btn-sync.sync-offline { background: #6b7280; }
   .sync-err-msg { color: #dc2626; font-size: 12px; margin-bottom: 8px; padding: 8px 10px; background: #fee2e2; border-radius: 6px; display: none; }
   .sync-hint { font-size: 11px; color: #64748b; margin-top: 4px; }
   /* Modal */
@@ -820,7 +822,7 @@ const T = {
     syncLabel:'📲 Cross-device sync:',
     settingsBtn:'⚙️ Google Drive Links',
     langBtn:'🇻🇪 Español',
-    syncBtn: { unconfigured:'☁ Setup Sync', syncing:'⟳ Syncing…', synced:'☁ Synced', error:'⚠ Sync error', auth_error:'⚠ Token invalid' },
+    syncBtn: { unconfigured:'☁ Setup Sync', syncing:'⟳ Syncing…', synced:'☁ Synced', error:'⚠ Sync error', auth_error:'⚠ Token invalid', pending:'⟳ Pending sync', offline:'⚡ Offline' },
     progressLabel:'Overall Progress', progressText:(n)=>`${n} / 12 weeks complete`,
     tabDaily:'📅 Daily Plan', tabVocab:'📚 Vocabulary', tabQuiz:'✏️ Vocab Quiz', tabTCF:'🎯 TCF Practice', tabSession:'👩‍🏫 Coaching Sessions',
     videoCardTitle:'🎬 This Week\'s Video Tutorial', videoLearnLabel:'What you\'ll learn', videoWhyLabel:'💡 Why it matters', videoShowDetails:'▼ Show details', videoHideDetails:'▲ Hide details', videoWatchBtn:'▶ Watch',
@@ -902,7 +904,7 @@ const T = {
     onboarding:'▶ Ver Video de Bienvenida',
     syncLabel:'📲 Sincronización:', exportBtn:'⬆ Exportar Progreso', importBtn:'⬇ Importar Progreso', settingsBtn:'⚙️ Links de Drive',
     langBtn:'🇬🇧 English',
-    syncBtn: { unconfigured:'☁ Configurar Sync', syncing:'⟳ Sincronizando…', synced:'☁ Sincronizado', error:'⚠ Error de sync', auth_error:'⚠ Token inválido' },
+    syncBtn: { unconfigured:'☁ Configurar Sync', syncing:'⟳ Sincronizando…', synced:'☁ Sincronizado', error:'⚠ Error de sync', auth_error:'⚠ Token inválido', pending:'⟳ Sync pendiente', offline:'⚡ Sin conexión' },
     progressLabel:'Progreso General', progressText:(n)=>`${n} / 12 semanas completadas`,
     tabDaily:'📅 Plan Diario', tabVocab:'📚 Vocabulario', tabQuiz:'✏️ Examen', tabTCF:'🎯 Práctica TCF', tabSession:'👩‍🏫 Sesiones de Coaching',
     videoCardTitle:'🎬 Video Tutorial de esta Semana', videoLearnLabel:'Lo que aprenderás', videoWhyLabel:'💡 Por qué importa', videoShowDetails:'▼ Ver detalles', videoHideDetails:'▲ Ocultar detalles', videoWatchBtn:'▶ Ver',
@@ -3191,6 +3193,64 @@ function saveState(state) {
 }
 
 // ============================================================
+// PERSISTENCE DB — IndexedDB wrapper for resilient auth storage
+// ============================================================
+const PersistenceDB = (() => {
+  const DB_NAME = 'app_persistence_v1';
+  let db = null;
+
+  function open() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = (e) => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains('auth')) {
+          d.createObjectStore('auth', { keyPath: 'key' });
+        }
+      };
+      req.onsuccess = (e) => { db = e.target.result; resolve(db); };
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function getDB() { return db || (db = await open()); }
+
+  async function get(key) {
+    try {
+      const d = await getDB();
+      return await new Promise((resolve) => {
+        const req = d.transaction('auth', 'readonly').objectStore('auth').get(key);
+        req.onsuccess = () => resolve(req.result?.value ?? null);
+        req.onerror = () => resolve(null);
+      });
+    } catch(e) { return null; }
+  }
+
+  async function set(key, value) {
+    try {
+      const d = await getDB();
+      await new Promise((resolve, reject) => {
+        const req = d.transaction('auth', 'readwrite').objectStore('auth').put({ key, value });
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+      });
+    } catch(e) { /* IndexedDB unavailable (Private Browsing) — fallback to cookie */ }
+  }
+
+  async function del(key) {
+    try {
+      const d = await getDB();
+      await new Promise((resolve) => {
+        d.transaction('auth', 'readwrite').objectStore('auth').delete(key);
+        resolve();
+      });
+    } catch(e) {}
+  }
+
+  return { get, set, del };
+})();
+
+// ============================================================
 // SYNC ENGINE
 // ============================================================
 const syncEngine = (() => {
@@ -3198,26 +3258,49 @@ const syncEngine = (() => {
   const GID_KEY = 'tcf_gist_id';
   const TS_KEY  = 'tcf_last_sync';
   const API     = 'https://api.github.com/gists';
+  const RETRY_DELAYS = [2000, 5000, 15000, 30000];
 
   let _status = 'unconfigured';
-  let _timer  = null;
+  let _writeTimer = null;
+  let _retryTimer = null;
+  let _retryCount = 0;
+  let _pat = null;
+  let _gid = null;
 
-  // PAT and Gist ID stored in cookies (1-year expiry) so mobile browsers
-  // don't wipe them via ITP / aggressive data clearing.
   function cookieGet(name) {
     const m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
     return m ? decodeURIComponent(m[1]) : '';
   }
   function cookieSet(name, value, days) {
     const exp = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${exp}; path=/; SameSite=Strict; Secure`;
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${exp}; path=/; SameSite=Lax`;
   }
   function cookieDel(name) {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict; Secure`;
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
   }
 
-  const pat = () => cookieGet(PAT_KEY);
-  const gid = () => cookieGet(GID_KEY);
+  async function loadAuth() {
+    _pat = await PersistenceDB.get(PAT_KEY) || cookieGet(PAT_KEY) || null;
+    _gid = await PersistenceDB.get(GID_KEY) || cookieGet(GID_KEY) || null;
+    if (_pat && !(await PersistenceDB.get(PAT_KEY))) await PersistenceDB.set(PAT_KEY, _pat);
+    if (_gid && !(await PersistenceDB.get(GID_KEY))) await PersistenceDB.set(GID_KEY, _gid);
+  }
+
+  async function saveAuth(pat, gid) {
+    _pat = pat; _gid = gid;
+    await PersistenceDB.set(PAT_KEY, pat);
+    await PersistenceDB.set(GID_KEY, gid);
+    cookieSet(PAT_KEY, pat, 365);
+    cookieSet(GID_KEY, gid, 365);
+  }
+
+  async function clearAuth() {
+    _pat = null; _gid = null;
+    await PersistenceDB.del(PAT_KEY);
+    await PersistenceDB.del(GID_KEY);
+    cookieDel(PAT_KEY);
+    cookieDel(GID_KEY);
+  }
 
   function collectState() {
     return {
@@ -3233,58 +3316,77 @@ const syncEngine = (() => {
     if (state.tcf_lang)        localStorage.setItem('tcf_lang',        state.tcf_lang);
   }
 
+  function safeParse(val, fallback) {
+    if (!val) return fallback;
+    if (typeof val === 'object') return val;
+    try { return JSON.parse(val); } catch(e) { return fallback; }
+  }
+
   function setStatus(s) {
     _status = s;
     const btn = document.getElementById('btn-sync');
     if (!btn) return;
     btn.textContent = (t.syncBtn && t.syncBtn[s]) || '☁ Sync';
-    btn.classList.remove('sync-ok','sync-err','sync-busy');
-    if (s === 'synced')                       btn.classList.add('sync-ok');
-    if (s === 'error' || s === 'auth_error')  btn.classList.add('sync-err');
-    if (s === 'syncing')                      btn.classList.add('sync-busy');
+    btn.classList.remove('sync-ok','sync-err','sync-busy','sync-pending','sync-offline');
+    if (s === 'synced')                        btn.classList.add('sync-ok');
+    if (s === 'error' || s === 'auth_error')   btn.classList.add('sync-err');
+    if (s === 'syncing')                       btn.classList.add('sync-busy');
+    if (s === 'pending' || s === 'offline')    btn.classList.add('sync-pending');
   }
 
   function authHeaders() {
-    return { Authorization: `Bearer ${pat()}`, Accept: 'application/vnd.github.v3+json' };
+    return { Authorization: `Bearer ${_pat}`, Accept: 'application/vnd.github.v3+json' };
   }
 
   async function _write() {
     const now = new Date().toISOString();
-    const body = JSON.stringify({
-      files: { 'progress.json': { content: JSON.stringify({ lastModified: now, state: collectState() }) } }
-    });
-    const r = await fetch(`${API}/${gid()}`, {
+    const r = await fetch(`${API}/${_gid}`, {
       method: 'PATCH',
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
-      body
+      body: JSON.stringify({ files: { 'progress.json': { content: JSON.stringify({ lastModified: now, state: collectState() }) } } })
     });
     if (r.status === 401) { setStatus('auth_error'); throw new Error('auth'); }
-    if (!r.ok) { setStatus('error'); throw new Error('write'); }
+    if (!r.ok) throw new Error('write_failed');
     localStorage.setItem(TS_KEY, now);
   }
 
+  function scheduleRetry() {
+    clearTimeout(_retryTimer);
+    if (_retryCount >= RETRY_DELAYS.length) { setStatus('error'); return; }
+    const delay = RETRY_DELAYS[_retryCount++];
+    setStatus('pending');
+    _retryTimer = setTimeout(async () => {
+      if (!_pat || !_gid) { setStatus('unconfigured'); return; }
+      try { await _write(); _retryCount = 0; setStatus('synced'); }
+      catch(e) { if (_status !== 'auth_error') scheduleRetry(); }
+    }, delay);
+  }
+
   async function init() {
-    if (!pat() || !gid()) { setStatus('unconfigured'); return; }
+    await loadAuth();
+    if (!_pat || !_gid) { setStatus('unconfigured'); return; }
     setStatus('syncing');
     try {
-      const r = await fetch(`${API}/${gid()}`, { headers: authHeaders() });
+      const r = await fetch(`${API}/${_gid}`, { headers: authHeaders() });
       if (r.status === 401) { setStatus('auth_error'); return; }
-      if (!r.ok) { setStatus('error'); return; }
+      if (!r.ok) { setStatus('error'); scheduleRetry(); return; }
+
       const data = await r.json();
-      const raw  = data.files?.['progress.json']?.content;
+      const raw = data.files?.['progress.json']?.content;
+
       if (raw) {
-        const remote  = JSON.parse(raw);
+        const remote = JSON.parse(raw);
         const localTs = localStorage.getItem(TS_KEY) || '0';
+
         if (remote.lastModified > localTs) {
-          // Merge: union of checked items so no device ever loses progress
-          const localState  = JSON.parse(localStorage.getItem('tcf_state') || '{}');
-          const remoteState = JSON.parse(remote.state?.tcf_state || '{}');
-          Object.keys(localState).forEach(k => { if (localState[k] === true) remoteState[k] = true; });
-          remote.state.tcf_state = JSON.stringify(remoteState);
+          const localState  = safeParse(localStorage.getItem('tcf_state'), {});
+          const remoteState = safeParse(remote.state?.tcf_state, {});
+          const merged = Object.assign({}, localState, remoteState);
+          remote.state.tcf_state = JSON.stringify(merged);
           applyRemoteState(remote.state);
           localStorage.setItem(TS_KEY, remote.lastModified);
           updateProgress();
-          await _write(); // push merged state back to Gist
+          await _write();
         } else {
           await _write();
         }
@@ -3293,17 +3395,17 @@ const syncEngine = (() => {
       }
       setStatus('synced');
     } catch(e) {
-      if (_status !== 'auth_error') setStatus('error');
+      if (_status !== 'auth_error') { setStatus('error'); scheduleRetry(); }
     }
   }
 
   function save() {
-    if (!pat() || !gid()) return;
-    setStatus('syncing');
-    clearTimeout(_timer);
-    _timer = setTimeout(async () => {
-      try { await _write(); setStatus('synced'); }
-      catch(e) { /* status set inside _write */ }
+    clearTimeout(_writeTimer);
+    _writeTimer = setTimeout(async () => {
+      if (!_pat || !_gid) return;
+      setStatus('syncing');
+      try { await _write(); _retryCount = 0; setStatus('synced'); }
+      catch(e) { if (_status !== 'auth_error') scheduleRetry(); }
     }, 2000);
   }
 
@@ -3320,27 +3422,33 @@ const syncEngine = (() => {
       });
       if (r.status === 401) throw new Error('auth_error');
       if (!r.ok) throw new Error('create_failed');
-      const d = await r.json();
-      newGid = d.id;
+      newGid = (await r.json()).id;
     } else {
-      const r = await fetch(`${API}/${newGid}`, {
-        headers: { Authorization: `Bearer ${newPat}`, Accept: 'application/vnd.github.v3+json' }
-      });
+      const r = await fetch(`${API}/${newGid}`, { headers: { Authorization: `Bearer ${newPat}`, Accept: 'application/vnd.github.v3+json' } });
       if (r.status === 401) throw new Error('auth_error');
       if (!r.ok) throw new Error('fetch_failed');
     }
-    cookieSet(PAT_KEY, newPat, 365);
-    cookieSet(GID_KEY, newGid, 365);
+    await saveAuth(newPat, newGid);
     return newGid;
   }
 
-  function disconnect() {
-    cookieDel(PAT_KEY);
-    cookieDel(GID_KEY);
+  async function disconnect() {
+    await clearAuth();
     setStatus('unconfigured');
   }
 
-  return { init, save, setup, disconnect, getStatus: () => _status, getGistId: gid };
+  window.addEventListener('online', () => {
+    if (_status === 'error' || _status === 'pending' || _status === 'offline') {
+      _retryCount = 0;
+      scheduleRetry();
+    }
+  });
+
+  window.addEventListener('offline', () => {
+    if (_status === 'syncing' || _status === 'pending') setStatus('offline');
+  });
+
+  return { init, save, setup, disconnect, getStatus: () => _status, getGistId: () => _gid };
 })();
 function getTaskKey(weekNum, dayIdx, taskIdx) {
   return `w${weekNum}_d${dayIdx}_t${taskIdx}`;
